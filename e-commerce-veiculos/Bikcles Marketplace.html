@@ -1,0 +1,4291 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BIKCLES — Encontre o veículo perfeito para você</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0c0d10;
+      --bg-2: #14161b;
+      --surface: #1a1d23;
+      --surface-2: #22262e;
+      --line: #2a2e36;
+      --paper: #f5f6f8;
+      --paper-2: #eef0f3;
+      --ink: #0c0d10;
+      --ink-2: #3a3f48;
+      --muted: #8c93a0;
+      --accent: #ff3b1f;
+      --accent-2: #ff7a3a;
+      --gold: #ffb627;
+      --green: #2bd47b;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0
+    }
+
+    html,
+    body {
+      background: var(--paper);
+      color: var(--ink);
+      font-family: 'Inter', system-ui, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      line-height: 1.5
+    }
+
+    img {
+      display: block;
+      max-width: 100%
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none
+    }
+
+    button {
+      font-family: inherit;
+      cursor: pointer;
+      border: none;
+      background: none
+    }
+
+    .wrap {
+      max-width: 1320px;
+      margin: 0 auto;
+      padding: 0 32px
+    }
+
+    .display {
+      font-family: 'Archivo', sans-serif;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1.0
+    }
+
+    .eyebrow {
+      font-family: 'Archivo', sans-serif;
+      font-size: 11px;
+      letter-spacing: .32em;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: var(--accent)
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 14px 24px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 13px;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      transition: transform .15s, background .2s, color .2s, box-shadow .2s;
+      font-family: 'Archivo', sans-serif
+    }
+
+    .btn-accent {
+      background: var(--accent);
+      color: #fff;
+      box-shadow: 0 8px 20px -8px rgba(255, 59, 31, .6)
+    }
+
+    .btn-accent:hover {
+      background: #ff5436;
+      transform: translateY(-1px)
+    }
+
+    .btn-dark {
+      background: var(--ink);
+      color: #fff
+    }
+
+    .btn-dark:hover {
+      background: #22262e
+    }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--ink);
+      border: 1.5px solid var(--ink)
+    }
+
+    .btn-ghost:hover {
+      background: var(--ink);
+      color: #fff
+    }
+
+    /* ======== TOP STRIP ======== */
+    .topbar {
+      background: var(--ink);
+      color: #cfd3db;
+      font-size: 12px
+    }
+
+    .topbar-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0;
+      font-family: 'Archivo', sans-serif;
+      letter-spacing: .06em
+    }
+
+    .topbar .promo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 600
+    }
+
+    .topbar .promo .pill {
+      background: var(--accent);
+      color: #fff;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .1em;
+      text-transform: uppercase
+    }
+
+    .topbar .right {
+      display: flex;
+      align-items: center;
+      gap: 24px
+    }
+
+    .topbar .right a {
+      display: inline-flex;
+      gap: 6px;
+      align-items: center;
+      color: #cfd3db;
+      transition: color .2s
+    }
+
+    .topbar .right a:hover {
+      color: var(--accent-2)
+    }
+
+    .topbar .sep {
+      width: 1px;
+      height: 14px;
+      background: #2a2e36
+    }
+
+    /* ======== HEADER ======== */
+    header.main {
+      background: #fff;
+      border-bottom: 1px solid #e6e8ec;
+      position: sticky;
+      top: 0;
+      z-index: 50
+    }
+
+    .head-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 18px;
+      padding-bottom: 18px;
+      gap: 32px
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: 'Archivo', sans-serif;
+      font-weight: 900;
+      font-size: 24px;
+      letter-spacing: .08em
+    }
+
+    .logo .mark {
+      width: 42px;
+      height: 42px;
+      border-radius: 10px;
+      background: var(--ink);
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      position: relative;
+      overflow: hidden
+    }
+
+    .logo .mark::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, transparent 60%, rgba(255, 59, 31, .3))
+    }
+
+    .logo .name {
+      color: var(--ink)
+    }
+
+    .logo .name span {
+      color: var(--accent)
+    }
+
+    nav.menu {
+      display: flex;
+      gap: 4px;
+      align-items: center
+    }
+
+    nav.menu a {
+      padding: 10px 16px;
+      font-family: 'Archivo', sans-serif;
+      font-weight: 700;
+      font-size: 13px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: #3a3f48;
+      border-radius: 6px;
+      transition: background .2s, color .2s;
+      position: relative
+    }
+
+    nav.menu a:hover {
+      background: #f5f6f8;
+      color: var(--ink)
+    }
+
+    nav.menu a.active {
+      color: var(--accent)
+    }
+
+    nav.menu a.active::after {
+      content: "";
+      position: absolute;
+      left: 16px;
+      right: 16px;
+      bottom: 2px;
+      height: 2px;
+      background: var(--accent);
+      border-radius: 2px
+    }
+
+    .head-cta {
+      display: flex;
+      gap: 10px;
+      align-items: center
+    }
+
+    .head-phone {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-family: 'Archivo', sans-serif;
+      font-weight: 700;
+      font-size: 13px;
+      color: var(--ink-2);
+      letter-spacing: .04em;
+      white-space: nowrap;
+      padding-right: 10px;
+      border-right: 1.5px solid #e6e8ec;
+      transition: color .2s
+    }
+
+    .head-phone svg {
+      color: var(--accent);
+      flex-shrink: 0
+    }
+
+    .head-phone:hover {
+      color: var(--accent)
+    }
+
+    .icon-btn {
+      width: 42px;
+      height: 42px;
+      border-radius: 8px;
+      background: #f5f6f8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--ink);
+      transition: background .2s
+    }
+
+    .icon-btn:hover {
+      background: var(--ink);
+      color: #fff
+    }
+
+    .cart-badge {
+      position: relative
+    }
+
+    .cart-badge::after {
+      content: "3";
+      position: absolute;
+      top: -4px;
+      right: -4px;
+      width: 18px;
+      height: 18px;
+      background: var(--accent);
+      color: #fff;
+      border-radius: 50%;
+      font-size: 10px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid #fff
+    }
+
+    /* ======== HERO ======== */
+    .hero {
+      background: var(--ink);
+      color: #fff;
+      position: relative;
+      overflow: hidden;
+      padding: 80px 0 140px
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse at 80% 20%, rgba(255, 59, 31, .18), transparent 50%),
+        radial-gradient(ellipse at 10% 80%, rgba(255, 122, 58, .08), transparent 50%),
+        url('https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?w=1800&q=80&auto=format');
+      background-size: cover;
+      background-position: center;
+      opacity: .35
+    }
+
+    .hero-bg::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, var(--ink) 0%, rgba(12, 13, 16, .4) 70%, transparent 100%)
+    }
+
+    .hero-content {
+      max-width: 720px
+    }
+
+    .hero h1 {
+      font-size: 80px;
+      line-height: .95
+    }
+
+    .hero h1 .accent {
+      color: var(--accent);
+      font-style: italic
+    }
+
+    .hero h1 .stroke {
+      -webkit-text-stroke: 1.5px var(--accent);
+      color: transparent
+    }
+
+    .hero p.lead {
+      margin-top: 24px;
+      color: #b9bec8;
+      font-size: 17px;
+      max-width: 480px;
+      line-height: 1.6
+    }
+
+    .hero-meta {
+      margin-top: 32px;
+      display: flex;
+      gap: 48px
+    }
+
+    .hero-meta div .n {
+      font-family: 'Archivo', sans-serif;
+      font-size: 36px;
+      font-weight: 800;
+      color: #fff;
+      line-height: 1
+    }
+
+    .hero-meta div .n span {
+      color: var(--accent)
+    }
+
+    .hero-meta div .l {
+      font-size: 11px;
+      letter-spacing: .32em;
+      text-transform: uppercase;
+      color: #8c93a0;
+      margin-top: 6px;
+      font-weight: 600
+    }
+
+    /* search card */
+    .search-card {
+      background: #fff;
+      color: var(--ink);
+      border-radius: 16px;
+      box-shadow: 0 30px 80px -20px rgba(0, 0, 0, .6);
+      overflow: hidden;
+      position: relative
+    }
+
+    .search-tabs {
+      display: flex;
+      background: #f5f6f8
+    }
+
+    .search-tab {
+      flex: 1;
+      padding: 18px 20px;
+      font-family: 'Archivo', sans-serif;
+      font-weight: 700;
+      font-size: 13px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: #8c93a0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      border-bottom: 3px solid transparent;
+      transition: color .2s, background .2s, border-color .2s
+    }
+
+    .search-tab:hover {
+      color: var(--ink-2)
+    }
+
+    .search-tab.active {
+      background: #fff;
+      color: var(--accent);
+      border-bottom-color: var(--accent)
+    }
+
+    .search-body {
+      padding: 28px
+    }
+
+    .search-body .head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px
+    }
+
+    .search-body .head h3 {
+      font-family: 'Archivo', sans-serif;
+      font-size: 20px;
+      font-weight: 800
+    }
+
+    .search-body .head .badge {
+      background: #eef9f2;
+      color: #1a8348;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      padding: 6px 12px;
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      gap: 6px
+    }
+
+    .search-body .head .badge .dot {
+      width: 6px;
+      height: 6px;
+      background: #2bd47b;
+      border-radius: 50%
+    }
+
+    .search-fields {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 14px
+    }
+
+    .field {
+      position: relative;
+      background: #f5f6f8;
+      border: 1.5px solid #f5f6f8;
+      border-radius: 10px;
+      padding: 10px 16px 12px;
+      transition: border-color .2s, background .2s
+    }
+
+    .field:focus-within {
+      border-color: var(--accent);
+      background: #fff
+    }
+
+    .field label {
+      display: block;
+      font-size: 10px;
+      letter-spacing: .24em;
+      text-transform: uppercase;
+      color: #8c93a0;
+      font-weight: 700;
+      margin-bottom: 2px
+    }
+
+    .field select,
+    .field input {
+      width: 100%;
+      background: transparent;
+      border: none;
+      outline: none;
+      font-family: inherit;
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--ink);
+      appearance: none
+    }
+
+    .field::after {
+      content: "▾";
+      position: absolute;
+      right: 16px;
+      top: 50%;
+      transform: translateY(-30%);
+      color: #8c93a0;
+      font-size: 14px;
+      pointer-events: none
+    }
+
+    .field.no-arrow::after {
+      display: none
+    }
+
+    .search-row-2 {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      margin-top: 6px
+    }
+
+    .btn-search {
+      background: var(--accent);
+      color: #fff;
+      width: 100%;
+      padding: 18px;
+      border-radius: 10px;
+      font-family: 'Archivo', sans-serif;
+      font-weight: 800;
+      font-size: 14px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      box-shadow: 0 12px 30px -10px rgba(255, 59, 31, .5);
+      transition: background .2s, transform .15s
+    }
+
+    .btn-search:hover {
+      background: #ff5436;
+      transform: translateY(-1px)
+    }
+
+    .btn-search .count {
+      background: #fff;
+      color: var(--accent);
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 800
+    }
+
+    .search-extras {
+      margin-top: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 12px;
+      color: #8c93a0;
+      border-top: 1px solid #eef0f3;
+      padding-top: 16px
+    }
+
+    .brand-strip {
+      display: flex;
+      gap: 14px;
+      align-items: center
+    }
+
+    .brand-strip span {
+      font-weight: 600;
+      color: var(--ink-2)
+    }
+
+    .brand-pill {
+      padding: 4px 10px;
+      background: #f5f6f8;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--ink-2);
+      letter-spacing: .04em
+    }
+
+    /* ======== SEARCH FLOAT ======== */
+    .search-float {
+      position: relative;
+      z-index: 10;
+      margin-top: -80px
+    }
+
+    .search-float .search-card {
+      max-width: 980px;
+      margin: 0 auto;
+      box-shadow: 0 40px 80px -20px rgba(0, 0, 0, .22)
+    }
+
+    .search-float .search-fields {
+      grid-template-columns: repeat(4, 1fr)
+    }
+
+    /* ======== CATEGORIES ======== */
+    .cats {
+      padding: 64px 0 32px;
+      background: var(--paper)
+    }
+
+    .cats-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 36px
+    }
+
+    .cats-head h2 {
+      font-family: 'Archivo', sans-serif;
+      font-size: 36px;
+      font-weight: 800;
+      color: var(--ink)
+    }
+
+    .cats-head .filter-link {
+      font-family: 'Archivo', sans-serif;
+      font-weight: 700;
+      font-size: 13px;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      gap: 10px
+    }
+
+    .cats-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 16px
+    }
+
+    .cat {
+      background: #fff;
+      border: 1px solid #e6e8ec;
+      border-radius: 14px;
+      padding: 22px;
+      transition: transform .2s, box-shadow .2s, border-color .2s;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      min-height: 180px;
+      position: relative;
+      overflow: hidden
+    }
+
+    .cat:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 40px -16px rgba(0, 0, 0, .15);
+      border-color: var(--accent)
+    }
+
+    .cat .ico {
+      width: 48px;
+      height: 48px;
+      background: #fff5f2;
+      color: var(--accent);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center
+    }
+
+    .cat .lbl {
+      font-family: 'Archivo', sans-serif;
+      font-weight: 800;
+      font-size: 15px;
+      color: var(--ink);
+      line-height: 1.2;
+      margin-top: auto
+    }
+
+    .cat .sub {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 4px
+    }
+
+    .cat.featured {
+      background: linear-gradient(135deg, var(--ink), #1a1d23);
+      color: #fff;
+      border-color: transparent
+    }
+
+    .cat.featured .ico {
+      background: rgba(255, 59, 31, .18);
+      color: var(--accent)
+    }
+
+    .cat.featured .lbl {
+      color: #fff
+    }
+
+    .cat.featured .sub {
+      color: #b9bec8
+    }
+
+    .cat.featured::after {
+      content: "";
+      position: absolute;
+      right: -30px;
+      bottom: -30px;
+      width: 120px;
+      height: 120px;
+      background: radial-gradient(circle, rgba(255, 59, 31, .4), transparent 70%)
+    }
+
+    /* ======== BRANDS ======== */
+    .brands {
+      padding: 80px 0 24px;
+      background: var(--paper)
+    }
+
+    .brands-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 32px
+    }
+
+    .brands-head h2 {
+      font-family: 'Archivo', sans-serif;
+      font-size: 36px;
+      font-weight: 800;
+      color: var(--ink)
+    }
+
+    .brands-nav {
+      display: flex;
+      gap: 8px;
+      align-items: center
+    }
+
+    .brands-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: #fff;
+      border: 1.5px solid #e6e8ec;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--ink);
+      cursor: pointer;
+      transition: background .2s, border-color .2s
+    }
+
+    .brands-btn:hover {
+      background: var(--ink);
+      color: #fff;
+      border-color: var(--ink)
+    }
+
+    .brands-track {
+      display: flex;
+      gap: 28px;
+      overflow-x: auto;
+      scroll-behavior: smooth;
+      scrollbar-width: none;
+      padding: 6px 2px
+    }
+
+    .brands-track::-webkit-scrollbar {
+      display: none
+    }
+
+    .brand-item {
+      flex: 0 0 100px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      transition: transform .2s
+    }
+
+    .brand-item:hover {
+      transform: translateY(-4px)
+    }
+
+    .brand-logo {
+      width: 88px;
+      height: 88px;
+      border-radius: 50%;
+      border: 2px solid #e6e8ec;
+      overflow: hidden;
+      background: #fff;
+      transition: border-color .2s, box-shadow .2s
+    }
+
+    .brand-logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: grayscale(70%);
+      transition: filter .2s
+    }
+
+    .brand-item:hover .brand-logo {
+      border-color: var(--accent);
+      box-shadow: 0 8px 24px -8px rgba(255, 59, 31, .28)
+    }
+
+    .brand-item:hover .brand-logo img {
+      filter: grayscale(0%)
+    }
+
+    .brand-lbl {
+      font-family: 'Archivo', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--ink-2);
+      text-align: center
+    }
+
+    /* ======== LISTINGS ======== */
+    .listings {
+      padding: 60px 0;
+      background: var(--paper)
+    }
+
+    .list-head {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-bottom: 32px;
+      gap: 32px
+    }
+
+    .list-head h2 {
+      font-family: 'Archivo', sans-serif;
+      font-size: 42px;
+      font-weight: 800;
+      color: var(--ink);
+      line-height: 1
+    }
+
+    .list-head h2 .accent-bar {
+      display: inline-block;
+      width: 6px;
+      height: 32px;
+      background: var(--accent);
+      border-radius: 3px;
+      margin-right: 14px;
+      vertical-align: -3px
+    }
+
+    .list-head .filters {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap
+    }
+
+    .chip {
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-family: 'Archivo', sans-serif;
+      font-weight: 700;
+      font-size: 12px;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      background: #fff;
+      border: 1px solid #e6e8ec;
+      color: var(--ink-2);
+      transition: all .2s;
+      cursor: pointer
+    }
+
+    .chip:hover {
+      border-color: var(--ink)
+    }
+
+    .chip.active {
+      background: var(--ink);
+      color: #fff;
+      border-color: var(--ink)
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid #e6e8ec;
+      transition: transform .25s, box-shadow .25s;
+      display: flex;
+      flex-direction: column;
+      position: relative
+    }
+
+    .card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 30px 50px -20px rgba(0, 0, 0, .18)
+    }
+
+    .card .img {
+      aspect-ratio: 4/3;
+      background: #f5f6f8;
+      position: relative;
+      overflow: hidden
+    }
+
+    .card .img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform .4s
+    }
+
+    .card:hover .img img {
+      transform: scale(1.06)
+    }
+    .card:hover .cc-track img {
+      transform: none
+    }
+
+    .card .badge-tag {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      background: var(--accent);
+      color: #fff;
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-family: 'Archivo', sans-serif;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      z-index: 2
+    }
+
+    .card .badge-tag.gold {
+      background: var(--gold);
+      color: var(--ink)
+    }
+
+    .card .fav {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      width: 36px;
+      height: 36px;
+      background: rgba(255, 255, 255, .95);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--ink-2);
+      transition: color .2s, background .2s;
+      z-index: 2
+    }
+
+    .card .fav:hover {
+      color: var(--accent);
+      background: #fff
+    }
+
+    /* ---- Card Carousel ---- */
+    .cc-track{display:flex;height:100%;width:100%;transition:transform .38s cubic-bezier(.25,1,.5,1)}
+    .cc-track img{flex:0 0 100%;width:100%;height:100%;object-fit:cover;pointer-events:none}
+    .cc-btn{position:absolute;top:50%;transform:translateY(-50%);width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.88);border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;opacity:0;transition:opacity .2s,background .15s;z-index:4;color:var(--ink)}
+    .cc-btn:hover{background:#fff}
+    .card:hover .cc-btn{opacity:1}
+    .cc-prev{left:10px}
+    .cc-next{right:10px}
+    .cc-dots{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);display:flex;gap:5px;z-index:4}
+    .cc-dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.5);cursor:pointer;transition:all .25s;border:none;padding:0}
+    .cc-dot.active{background:#fff;width:16px;border-radius:3px}
+    .card .body {
+      padding: 18px 18px 16px;
+      display: flex;
+      flex-direction: column;
+      flex: 1
+    }
+
+    .card .brand-line {
+      font-size: 11px;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 700
+    }
+
+    .card h3 {
+      font-family: 'Archivo', sans-serif;
+      font-size: 16px;
+      font-weight: 800;
+      line-height: 1.2;
+      color: var(--ink);
+      margin-top: 6px;
+      text-transform: uppercase
+    }
+
+    .card h3 .light {
+      font-weight: 500;
+      color: var(--ink-2);
+      text-transform: none;
+      font-size: 13px;
+      display: block;
+      margin-top: 2px;
+      letter-spacing: 0
+    }
+
+    .card .specs {
+      display: flex;
+      gap: 14px;
+      margin-top: 12px;
+      color: var(--ink-2);
+      font-size: 12px
+    }
+
+    .card .specs span {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 600
+    }
+
+    .card .specs svg {
+      color: var(--muted)
+    }
+
+    .card .price-row {
+      margin-top: 14px;
+      padding-top: 14px;
+      border-top: 1px dashed #e6e8ec;
+      display: flex;
+      justify-content: space-between;
+      align-items: center
+    }
+
+    .card .price {
+      font-family: 'Archivo', sans-serif;
+      font-weight: 800;
+      font-size: 22px;
+      color: var(--ink);
+      line-height: 1
+    }
+
+    .card .price .small {
+      font-size: 11px;
+      color: var(--muted);
+      font-weight: 600;
+      display: block;
+      margin-bottom: 2px;
+      letter-spacing: .1em;
+      text-transform: uppercase
+    }
+
+    .card .price del {
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 500;
+      display: block;
+      margin-top: 2px
+    }
+
+    .card .buy {
+      padding: 10px 16px;
+      background: var(--ink);
+      color: #fff;
+      border-radius: 8px;
+      font-family: 'Archivo', sans-serif;
+      font-weight: 800;
+      font-size: 11px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: background .2s
+    }
+
+    .card .buy:hover {
+      background: var(--accent)
+    }
+
+    .list-cta {
+      display: flex;
+      justify-content: center;
+      margin-top: 48px
+    }
+
+    /* ======== RECENT SEARCHES ======== */
+    .recent {
+      padding: 60px 0;
+      background: #fff;
+      border-top: 1px solid #e6e8ec;
+      border-bottom: 1px solid #e6e8ec
+    }
+
+    .recent .list-head h2 {
+      font-size: 36px
+    }
+
+    /* ======== SERVICES ======== */
+    .services {
+      padding: 80px 0;
+      background: var(--ink);
+      color: #fff;
+      position: relative;
+      overflow: hidden
+    }
+
+    .services::before {
+      content: "";
+      position: absolute;
+      left: -100px;
+      top: 50%;
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, rgba(255, 59, 31, .15), transparent 70%);
+      transform: translateY(-50%)
+    }
+
+    .services-head {
+      text-align: center;
+      margin-bottom: 56px;
+      position: relative
+    }
+
+    .services-head .eyebrow {
+      color: var(--accent-2)
+    }
+
+    .services-head h2 {
+      font-family: 'Archivo', sans-serif;
+      font-size: 48px;
+      font-weight: 800;
+      color: #fff;
+      margin-top: 14px;
+      line-height: 1
+    }
+
+    .services-head h2 .accent {
+      color: var(--accent)
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      position: relative
+    }
+
+    .svc {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 32px 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      transition: transform .25s, border-color .25s, background .25s;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden
+    }
+
+    .svc:hover {
+      transform: translateY(-6px);
+      border-color: var(--accent);
+      background: #1f2229
+    }
+
+    .svc .ico {
+      width: 60px;
+      height: 60px;
+      border-radius: 14px;
+      background: rgba(255, 59, 31, .12);
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background .25s
+    }
+
+    .svc:hover .ico {
+      background: var(--accent);
+      color: #fff
+    }
+
+    .svc h4 {
+      font-family: 'Archivo', sans-serif;
+      font-size: 18px;
+      font-weight: 800;
+      color: #fff;
+      line-height: 1.2;
+      text-transform: uppercase;
+      letter-spacing: .04em
+    }
+
+    .svc p {
+      font-size: 13px;
+      color: #8c93a0;
+      line-height: 1.55
+    }
+
+    .svc .arrow {
+      margin-top: auto;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--accent);
+      font-family: 'Archivo', sans-serif;
+      font-weight: 700;
+      font-size: 11px;
+      letter-spacing: .18em;
+      text-transform: uppercase
+    }
+
+    /* ======== TESTIMONIALS ======== */
+    .testi {
+      padding: 80px 0;
+      background: var(--paper)
+    }
+
+    .testi-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 48px;
+      gap: 32px
+    }
+
+    .testi-head h2 {
+      font-family: 'Archivo', sans-serif;
+      font-size: 42px;
+      font-weight: 800;
+      color: var(--ink);
+      line-height: 1
+    }
+
+    .testi-head .stars-overall {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 6px
+    }
+
+    .testi-head .stars-overall .stars {
+      color: var(--gold);
+      font-size: 18px
+    }
+
+    .testi-head .stars-overall .meta {
+      font-size: 12px;
+      color: var(--ink-2);
+      font-weight: 600
+    }
+
+    .testi-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px
+    }
+
+    .testi-card {
+      background: #fff;
+      border-radius: 18px;
+      padding: 36px;
+      border: 1px solid #e6e8ec;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      position: relative;
+      overflow: hidden
+    }
+
+    .testi-card::before {
+      content: "\201D";
+      position: absolute;
+      top: -30px;
+      right: 30px;
+      font-family: 'Archivo', sans-serif;
+      font-size: 200px;
+      color: var(--accent);
+      opacity: .08;
+      line-height: 1;
+      font-weight: 900
+    }
+
+    .testi-card .stars {
+      color: var(--gold);
+      font-size: 16px;
+      letter-spacing: 2px
+    }
+
+    .testi-card blockquote {
+      font-size: 16px;
+      color: #3a3f48;
+      line-height: 1.65
+    }
+
+    .testi-card .author {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-top: auto;
+      padding-top: 18px;
+      border-top: 1px solid #eef0f3
+    }
+
+    .testi-card .author img {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      object-fit: cover
+    }
+
+    .testi-card .author .n {
+      font-family: 'Archivo', sans-serif;
+      font-weight: 800;
+      font-size: 15px;
+      color: var(--ink)
+    }
+
+    .testi-card .author .r {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 2px
+    }
+
+    /* ======== ABOUT / MOTORIZA ======== */
+    .about {
+      padding: 0;
+      background: var(--ink);
+      position: relative;
+      overflow: hidden
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 560px;
+      align-items: stretch
+    }
+
+    .about-img {
+      background: url('https://images.unsplash.com/photo-1558981806-ec527fa84c39?w=1400&q=80&auto=format') center/cover;
+      position: relative
+    }
+
+    .about-img::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, transparent 60%, var(--ink))
+    }
+
+    .about-img .float-stat {
+      position: absolute;
+      left: 32px;
+      bottom: 32px;
+      background: rgba(12, 13, 16, .85);
+      backdrop-filter: blur(10px);
+      padding: 20px 26px;
+      border-radius: 14px;
+      border: 1px solid rgba(255, 255, 255, .1);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 18px
+    }
+
+    .about-img .float-stat .n {
+      font-family: 'Archivo', sans-serif;
+      font-size: 34px;
+      font-weight: 800;
+      color: var(--accent);
+      line-height: 1
+    }
+
+    .about-img .float-stat .l {
+      font-size: 11px;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      font-weight: 700;
+      line-height: 1.3
+    }
+
+    .about-content {
+      padding: 80px 64px 80px 80px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      color: #fff
+    }
+
+    .about-content .brand-mini {
+      font-family: 'Archivo', sans-serif;
+      font-weight: 900;
+      font-size: 14px;
+      letter-spacing: .4em;
+      color: var(--muted);
+      margin-bottom: 14px
+    }
+
+    .about-content h2 {
+      font-family: 'Archivo', sans-serif;
+      font-size: 54px;
+      font-weight: 900;
+      line-height: .95;
+      color: #fff;
+      text-transform: uppercase;
+      letter-spacing: -.02em
+    }
+
+    .about-content h2 .accent {
+      color: var(--accent);
+      font-style: italic
+    }
+
+    .about-content p {
+      margin-top: 22px;
+      color: #b9bec8;
+      font-size: 15px;
+      line-height: 1.7;
+      max-width: 520px
+    }
+
+    .about-content .actions {
+      margin-top: 36px;
+      display: flex;
+      gap: 14px;
+      align-items: center
+    }
+
+    .about-content .stats {
+      margin-top: 48px;
+      display: flex;
+      gap: 48px;
+      border-top: 1px solid var(--line);
+      padding-top: 32px
+    }
+
+    .about-content .stats div .n {
+      font-family: 'Archivo', sans-serif;
+      font-size: 30px;
+      font-weight: 800;
+      color: #fff;
+      line-height: 1
+    }
+
+    .about-content .stats div .n span {
+      color: var(--accent)
+    }
+
+    .about-content .stats div .l {
+      font-size: 11px;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 600;
+      margin-top: 6px
+    }
+
+    /* ======== FOOTER ======== */
+    footer {
+      background: #070809;
+      color: #8c93a0;
+      padding: 80px 0 24px
+    }
+
+    .foot-grid {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr 1fr 1fr;
+      gap: 64px;
+      margin-bottom: 56px
+    }
+
+    .foot .logo .name {
+      color: #fff
+    }
+
+    .foot p.about-blurb {
+      margin-top: 20px;
+      font-size: 14px;
+      line-height: 1.7;
+      max-width: 320px
+    }
+
+    .foot .socials {
+      margin-top: 24px;
+      display: flex;
+      gap: 10px
+    }
+
+    .foot .socials a {
+      width: 40px;
+      height: 40px;
+      background: #14161b;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #cfd3db;
+      transition: background .2s, color .2s
+    }
+
+    .foot .socials a:hover {
+      background: var(--accent);
+      color: #fff
+    }
+
+    .foot h5 {
+      font-family: 'Archivo', sans-serif;
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: #fff;
+      margin-bottom: 18px
+    }
+
+    footer ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      font-size: 14px
+    }
+
+    footer ul a:hover {
+      color: var(--accent)
+    }
+
+    .foot .ct {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      font-size: 14px
+    }
+
+    .foot .ct div {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start
+    }
+
+    .foot .ct svg {
+      color: var(--accent);
+      margin-top: 3px;
+      flex-shrink: 0
+    }
+
+    .copy {
+      padding-top: 24px;
+      border-top: 1px solid #14161b;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      color: #5a606b
+    }
+
+    .copy .pays {
+      display: flex;
+      gap: 8px
+    }
+
+    .copy .pays span {
+      padding: 4px 10px;
+      border: 1px solid #14161b;
+      border-radius: 4px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .08em;
+      color: #8c93a0
+    }
+
+    /* ======== VEHICLE PAGE ======== */
+    .vp-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 300;
+      background: var(--paper);
+      display: flex;
+      flex-direction: column;
+      transform: translateY(100%);
+      transition: transform .45s cubic-bezier(.25, 1, .5, 1);
+      overflow: hidden
+    }
+
+    .vp-overlay.open {
+      transform: translateY(0)
+    }
+
+    .vp-header {
+      background: #fff;
+      border-bottom: 1px solid #e6e8ec;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 14px 32px;
+      flex-shrink: 0
+    }
+
+    .vp-back {
+      background: var(--ink);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      padding: 10px 20px;
+      font-family: 'Archivo', sans-serif;
+      font-weight: 800;
+      font-size: 12px;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: background .2s;
+      flex-shrink: 0
+    }
+
+    .vp-back:hover {
+      background: #1e2128
+    }
+
+    .vp-crumb {
+      font-size: 13px;
+      color: var(--muted);
+      font-weight: 600;
+      flex: 1
+    }
+
+    .vp-crumb b {
+      color: var(--ink)
+    }
+
+    .vp-header-acts {
+      display: flex;
+      gap: 8px;
+      flex-shrink: 0
+    }
+
+    .vp-icon-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: #f5f6f8;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--ink);
+      transition: background .2s, color .2s
+    }
+
+    .vp-icon-btn:hover {
+      background: var(--ink);
+      color: #fff
+    }
+
+    .vp-icon-btn.faved {
+      color: var(--accent) !important;
+      background: #fff5f2 !important
+    }
+
+    .vp-scroll {
+      overflow-y: auto;
+      flex: 1
+    }
+
+    .vp-hero {
+      background: var(--ink);
+      padding: 56px 0
+    }
+
+    .vp-hero-inner {
+      max-width: 1320px;
+      margin: 0 auto;
+      padding: 0 32px;
+      display: grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap: 48px;
+      align-items: start
+    }
+
+    .vp-gallery {
+      display: flex;
+      flex-direction: column;
+      gap: 14px
+    }
+
+    .vp-main-img {
+      aspect-ratio: 16/10;
+      border-radius: 16px;
+      overflow: hidden;
+      position: relative;
+      background: #1a1d24
+    }
+
+    .vp-main-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform .4s
+    }
+
+    .vp-main-img:hover img {
+      transform: scale(1.04)
+    }
+
+    .vp-badge-abs {
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      padding: 5px 14px;
+      border-radius: 20px;
+      font-family: 'Archivo', sans-serif;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: .18em;
+      text-transform: uppercase
+    }
+
+    .vp-badge-abs.novo {
+      background: var(--accent);
+      color: #fff
+    }
+
+    .vp-badge-abs.top {
+      background: var(--gold);
+      color: var(--ink)
+    }
+
+    .vp-thumbs {
+      display: flex;
+      gap: 10px
+    }
+
+    .vp-thumb {
+      flex: 1;
+      aspect-ratio: 4/3;
+      border-radius: 10px;
+      overflow: hidden;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: border-color .2s, opacity .2s;
+      opacity: .5
+    }
+
+    .vp-thumb:hover {
+      opacity: .85
+    }
+
+    .vp-thumb.active {
+      border-color: var(--accent);
+      opacity: 1
+    }
+
+    .vp-thumb-all {
+      position: relative
+    }
+
+    .vp-thumb-all-label {
+      position: absolute;
+      inset: 0;
+      background: rgba(12, 13, 16, .62);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      color: #fff;
+      font-family: 'Archivo', sans-serif;
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      border-radius: 8px
+    }
+
+    /* Lightbox */
+    .vp-lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 350;
+      background: rgba(0, 0, 0, .96);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .25s
+    }
+
+    .vp-lightbox.open {
+      opacity: 1;
+      pointer-events: all
+    }
+
+    .vp-lb-close {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, .1);
+      border: none;
+      color: #fff;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background .2s
+    }
+
+    .vp-lb-close:hover {
+      background: rgba(255, 255, 255, .25)
+    }
+
+    .vp-lb-img-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      max-width: 88vw;
+      max-height: 72vh
+    }
+
+    .vp-lb-img-wrap img {
+      max-width: 100%;
+      max-height: 72vh;
+      object-fit: contain;
+      border-radius: 10px
+    }
+
+    .vp-lb-nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, .1);
+      border: none;
+      color: #fff;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background .2s
+    }
+
+    .vp-lb-nav:hover {
+      background: rgba(255, 255, 255, .22)
+    }
+
+    .vp-lb-prev {
+      left: 24px
+    }
+
+    .vp-lb-next {
+      right: 24px
+    }
+
+    .vp-lb-bottom {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      margin-top: 20px
+    }
+
+    .vp-lb-thumbs {
+      display: flex;
+      gap: 10px
+    }
+
+    .vp-lb-thumb {
+      width: 64px;
+      height: 48px;
+      border-radius: 8px;
+      overflow: hidden;
+      cursor: pointer;
+      border: 2px solid transparent;
+      opacity: .45;
+      transition: all .2s;
+      flex-shrink: 0
+    }
+
+    .vp-lb-thumb:hover {
+      opacity: .8
+    }
+
+    .vp-lb-thumb.active {
+      border-color: #fff;
+      opacity: 1
+    }
+
+    .vp-lb-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover
+    }
+
+    .vp-lb-counter {
+      font-size: 12px;
+      color: rgba(255, 255, 255, .5);
+      font-weight: 600;
+      letter-spacing: .08em
+    }
+
+    .vp-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover
+    }
+
+    .vp-side {
+      display: flex;
+      flex-direction: column;
+      gap: 20px
+    }
+
+    .vp-tags {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap
+    }
+
+    .vp-tag {
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-family: 'Archivo', sans-serif;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: .14em;
+      text-transform: uppercase
+    }
+
+    .vp-tag.accent {
+      background: var(--accent);
+      color: #fff
+    }
+
+    .vp-tag.gold {
+      background: var(--gold);
+      color: var(--ink)
+    }
+
+    .vp-tag.neutral {
+      background: rgba(255, 255, 255, .1);
+      color: #c8cdd8
+    }
+
+    .vp-tag.green {
+      background: rgba(43, 212, 123, .15);
+      color: #2bd47b
+    }
+
+    .vp-make {
+      font-size: 11px;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: #8c93a0;
+      font-weight: 700
+    }
+
+    .vp-model {
+      font-family: 'Archivo', sans-serif;
+      font-size: 32px;
+      font-weight: 900;
+      color: #fff;
+      line-height: 1;
+      text-transform: uppercase;
+      margin-top: 4px
+    }
+
+    .vp-trim {
+      font-size: 14px;
+      font-weight: 500;
+      color: #8c93a0;
+      margin-top: 4px
+    }
+
+    .vp-price-section {
+      padding: 4px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0
+    }
+
+    .vp-price-val {
+      font-family: 'Archivo', sans-serif;
+      font-size: 48px;
+      font-weight: 900;
+      color: #fff;
+      line-height: 1
+    }
+
+    .vp-price-val .cur {
+      font-size: 20px;
+      vertical-align: top;
+      margin-top: 8px;
+      display: inline-block;
+      margin-right: 2px;
+      opacity: .7
+    }
+
+    .vp-fipe-line {
+      font-size: 13px;
+      color: #6b7280;
+      font-weight: 600;
+      margin-top: 10px
+    }
+
+    .vp-fipe-line del {
+      color: #4b5563
+    }
+
+    .vp-fipe-ok {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: rgba(43, 212, 123, .12);
+      color: #2bd47b;
+      padding: 2px 8px;
+      border-radius: 20px;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: .08em;
+      margin-left: 8px
+    }
+
+    .vp-contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px
+    }
+
+    .vp-cbtn {
+      padding: 13px 8px;
+      border-radius: 12px;
+      border: 1.5px solid rgba(255, 255, 255, .12);
+      background: rgba(255, 255, 255, .05);
+      font-family: 'Archivo', sans-serif;
+      font-weight: 700;
+      font-size: 11px;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      color: #c8cdd8;
+      transition: all .2s
+    }
+
+    .vp-cbtn:hover {
+      border-color: rgba(255, 255, 255, .3);
+      background: rgba(255, 255, 255, .1);
+      color: #fff
+    }
+
+    .vp-cbtn.wpp {
+      border-color: rgba(37, 211, 102, .3);
+      color: #25D366
+    }
+
+    .vp-cbtn.wpp:hover {
+      background: rgba(37, 211, 102, .12);
+      border-color: #25D366
+    }
+
+    .vp-finance-btn {
+      width: 100%;
+      padding: 16px 24px;
+      border: none;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: #fff;
+      font-family: 'Archivo', sans-serif;
+      font-weight: 800;
+      font-size: 13px;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      box-shadow: 0 12px 28px -10px rgba(255, 59, 31, .5);
+      transition: opacity .2s, transform .15s
+    }
+
+    .vp-finance-btn:hover {
+      opacity: .9;
+      transform: translateY(-1px)
+    }
+
+    .vp-details {
+      max-width: 1320px;
+      margin: 0 auto;
+      padding: 48px 32px
+    }
+
+    /* ---- Suggestions ---- */
+    .vp-sug {
+      background: var(--paper);
+      padding: 48px 0;
+      border-top: 1px solid #e6e8ec
+    }
+
+    .vp-sug-inner {
+      max-width: 1320px;
+      margin: 0 auto;
+      padding: 0 32px
+    }
+
+    .vp-sug-title {
+      font-family: 'Archivo', sans-serif;
+      font-size: 22px;
+      font-weight: 900;
+      color: var(--ink);
+      margin-bottom: 24px
+    }
+
+    .vp-sug-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px
+    }
+
+    /* ---- Contact/Map ---- */
+    .vp-contact {
+      background: var(--ink);
+      padding: 56px 0
+    }
+
+    .vp-contact-inner {
+      max-width: 1320px;
+      margin: 0 auto;
+      padding: 0 32px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      align-items: start
+    }
+
+    .vp-map-wrap {
+      border-radius: 16px;
+      overflow: hidden;
+      aspect-ratio: 16/10;
+      background: #1a1d24;
+      position: relative
+    }
+
+    .vp-map-wrap iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      filter: grayscale(.3)
+    }
+
+    .vp-contact-info {
+      display: flex;
+      flex-direction: column;
+      gap: 0
+    }
+
+    .vp-contact-label {
+      font-size: 11px;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      font-weight: 800;
+      margin-bottom: 14px
+    }
+
+    .vp-contact-heading {
+      font-family: 'Archivo', sans-serif;
+      font-size: 28px;
+      font-weight: 900;
+      color: #fff;
+      line-height: 1.15;
+      margin-bottom: 32px
+    }
+
+    .vp-contact-item {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 16px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, .07)
+    }
+
+    .vp-contact-item:last-child {
+      border-bottom: none
+    }
+
+    .vp-contact-item-ico {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, .07);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0
+    }
+
+    .vp-contact-item-ico.wpp {
+      background: rgba(37, 211, 102, .12);
+      color: #25D366
+    }
+
+    .vp-contact-item-ico.acc {
+      background: rgba(255, 59, 31, .12);
+      color: var(--accent)
+    }
+
+    .vp-contact-item svg {
+      color: #8c93a0
+    }
+
+    .vp-contact-item-ico.wpp svg,
+    .vp-contact-item-ico.acc svg {
+      color: inherit
+    }
+
+    .vp-contact-item-lbl {
+      font-size: 11px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: #8c93a0;
+      font-weight: 700;
+      margin-bottom: 3px
+    }
+
+    .vp-contact-item-val {
+      font-family: 'Archivo', sans-serif;
+      font-weight: 700;
+      font-size: 14px;
+      color: #fff
+    }
+
+    .vp-contact-item-val a {
+      color: #fff;
+      text-decoration: none
+    }
+
+    .vp-contact-item-val a:hover {
+      color: var(--accent-2)
+    }
+
+    .vp-main-col {
+      display: flex;
+      flex-direction: column;
+      gap: 24px
+    }
+
+    .vp-card {
+      background: #fff;
+      border-radius: 16px;
+      border: 1px solid #e6e8ec;
+      overflow: hidden
+    }
+
+    .vp-card-head {
+      padding: 18px 24px;
+      border-bottom: 1px solid #e6e8ec;
+      display: flex;
+      align-items: center;
+      gap: 10px
+    }
+
+    .vp-card-title {
+      font-family: 'Archivo', sans-serif;
+      font-weight: 800;
+      font-size: 15px;
+      color: var(--ink)
+    }
+
+    .vp-card-icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      background: #f5f6f8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--accent)
+    }
+
+    .vp-card-body {
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 0
+    }
+
+    .vp-section {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      padding: 24px 0
+    }
+
+    .vp-section:first-child {
+      padding-top: 0
+    }
+
+    .vp-section:last-child {
+      padding-bottom: 0
+    }
+
+    .vp-section+.vp-section {
+      border-top: 1px solid #f0f1f3
+    }
+
+    .vp-section-title {
+      font-family: 'Archivo', sans-serif;
+      font-weight: 800;
+      font-size: 15px;
+      color: var(--ink)
+    }
+
+    .vp-spec-list {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px
+    }
+
+    .vp-spec-item {
+      background: #f9fafb;
+      border-radius: 12px;
+      padding: 14px 16px;
+      border: 1px solid #f0f1f3
+    }
+
+    .vp-spec-key {
+      font-size: 10px;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 700;
+      margin-bottom: 4px
+    }
+
+    .vp-spec-val {
+      font-family: 'Archivo', sans-serif;
+      font-weight: 800;
+      font-size: 14px;
+      color: var(--ink)
+    }
+
+    .vp-opt-list {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px
+    }
+
+    .vp-opt-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+      color: var(--ink);
+      font-weight: 500;
+      padding: 10px 14px;
+      background: #f9fafb;
+      border-radius: 10px;
+      border: 1px solid #f0f1f3
+    }
+
+    .vp-opt-item svg {
+      color: var(--green);
+      flex-shrink: 0
+    }
+
+    .vp-warranty {
+      display: flex;
+      align-items: center;
+      gap: 16px
+    }
+
+    .vp-warranty-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      background: #fff5f2;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--accent);
+      flex-shrink: 0
+    }
+
+    .vp-warranty-title {
+      font-family: 'Archivo', sans-serif;
+      font-weight: 800;
+      font-size: 15px;
+      color: var(--ink)
+    }
+
+    .vp-warranty-sub {
+      font-size: 13px;
+      color: var(--muted);
+      font-weight: 500;
+      margin-top: 3px
+    }
+
+    .vp-desc {
+      font-size: 14px;
+      line-height: 1.75;
+      color: #4a5168;
+      font-weight: 500;
+      margin: 0
+    }
+
+    /* ======== FINANCING MODAL ======== */
+    .fin-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 400;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity .25s
+    }
+
+    .fin-overlay.open {
+      pointer-events: all;
+      opacity: 1
+    }
+
+    .fin-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(12, 13, 16, .6);
+      backdrop-filter: blur(4px)
+    }
+
+    .fin-sheet {
+      position: relative;
+      width: 100%;
+      max-width: 540px;
+      background: #fff;
+      border-radius: 20px;
+      padding: 36px;
+      transform: scale(.96) translateY(16px);
+      transition: transform .3s cubic-bezier(.25, 1, .5, 1);
+      max-height: 90vh;
+      overflow-y: auto
+    }
+
+    .fin-overlay.open .fin-sheet {
+      transform: scale(1) translateY(0)
+    }
+
+    .fin-title {
+      font-family: 'Archivo', sans-serif;
+      font-size: 22px;
+      font-weight: 900;
+      color: var(--ink);
+      margin-bottom: 6px
+    }
+
+    .fin-sub {
+      font-size: 13px;
+      color: var(--muted);
+      font-weight: 500;
+      margin-bottom: 10px
+    }
+
+    .fin-secure {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      color: #2bd47b;
+      font-weight: 700;
+      background: #eef9f2;
+      padding: 8px 14px;
+      border-radius: 8px;
+      margin-bottom: 24px
+    }
+
+    .fin-form {
+      display: flex;
+      flex-direction: column;
+      gap: 16px
+    }
+
+    .fin-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px
+    }
+
+    .fin-field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px
+    }
+
+    .fin-label {
+      font-size: 11px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 700
+    }
+
+    .fin-input {
+      padding: 13px 16px;
+      border: 1.5px solid #e6e8ec;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--ink);
+      font-family: 'Inter', sans-serif;
+      outline: none;
+      transition: border-color .2s
+    }
+
+    .fin-input:focus {
+      border-color: var(--accent)
+    }
+
+    .fin-submit {
+      width: 100%;
+      padding: 16px;
+      border: none;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: #fff;
+      font-family: 'Archivo', sans-serif;
+      font-weight: 800;
+      font-size: 13px;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      cursor: pointer;
+      margin-top: 8px;
+      transition: opacity .2s
+    }
+
+    .fin-submit:hover {
+      opacity: .9
+    }
+
+    .fin-close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: none;
+      background: #f5f6f8;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--ink);
+      transition: background .2s
+    }
+
+    .fin-close:hover {
+      background: #e6e8ec
+    }
+
+    .card {
+      cursor: pointer
+    }
+
+    /* ======== RESPONSIVE ======== */
+    @media (min-width:1101px) and (max-width:1380px) {
+      .card .price {
+        font-size: 17px
+      }
+
+      .card .buy {
+        padding: 8px 12px;
+        font-size: 10px
+      }
+    }
+
+    @media (max-width:1100px) {
+      .wrap {
+        padding: 0 24px
+      }
+
+      nav.menu {
+        display: none
+      }
+
+      .hero h1 {
+        font-size: 54px
+      }
+
+      .hero-grid,
+      .about-grid {
+        grid-template-columns: 1fr;
+        gap: 40px
+      }
+
+      .about-img {
+        min-height: 320px
+      }
+
+      .about-content {
+        padding: 48px 24px
+      }
+
+      .cards,
+      .services-grid,
+      .cats-grid {
+        grid-template-columns: repeat(2, 1fr)
+      }
+
+      .testi-grid,
+      .foot-grid {
+        grid-template-columns: 1fr
+      }
+
+      .topbar-inner {
+        flex-direction: column;
+        gap: 6px;
+        padding: 8px 0
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ============ TOP STRIP ============ -->
+  <div class="topbar">
+    <div class="wrap topbar-inner">
+      <div class="promo">
+        <span class="pill">5% OFF</span>
+        <span>5% de desconto nos pagamentos à vista</span>
+      </div>
+      <div class="right">
+        <a href="tel:+551199999999"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2">
+            <path
+              d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+          </svg> +55 (11) 9999-9999</a>
+        <span class="sep"></span>
+        <a href="tel:+554188888888"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2">
+            <path
+              d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+          </svg> +55 (41) 8888-8888</a>
+        <span class="sep"></span>
+        <a href="#"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="8" r="4" />
+            <path d="M4 21c1-4 4.5-7 8-7s7 3 8 7" />
+          </svg> Minha conta</a>
+        <a href="#"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path
+              d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+          </svg> Favoritos</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ HEADER ============ -->
+  <header class="main">
+    <div class="wrap head-inner">
+      <a href="#" class="logo">
+        <span class="mark">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+            <circle cx="6" cy="17" r="3" />
+            <circle cx="18" cy="17" r="3" />
+            <path d="M14 6l-3 6 5 5h2v-2l-4-4 2-2h2V6z" stroke="currentColor" stroke-width="0" fill="currentColor" />
+          </svg>
+        </span>
+        <span class="name">BIK<span>CLES</span></span>
+      </a>
+      <nav class="menu">
+        <a href="#" class="active">Zero Km</a>
+        <a href="#">Seminovos</a>
+        <a href="#">Financie</a>
+        <a href="#">Sobre</a>
+      </nav>
+      <div class="head-cta">
+        <a href="tel:+556133446118" class="head-phone">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path
+              d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+          </svg>
+          (61) 3344-6118
+        </a>
+        <a href="#" class="icon-btn" aria-label="Buscar">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8" />
+            <path d="m21 21-4.3-4.3" />
+          </svg>
+        </a>
+        <a href="#" class="btn btn-accent">Anunciar veículo</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ============ HERO ============ -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="wrap">
+      <div class="hero-content">
+        <span class="eyebrow" style="color:var(--accent-2)">Marketplace de veículos</span>
+        <h1 class="display" style="margin-top:18px">
+          Aqui você<br />encontra o<br /><span class="accent">veículo</span> <span
+            class="stroke">perfeito</span><br />para você
+        </h1>
+        <p class="lead">Consulte veículos novos, seminovos e usados com o melhor preço — selecionados, vistoriados e
+          prontos para rodar.</p>
+        <div class="hero-meta">
+          <div>
+            <div class="n">+<span>2.4k</span></div>
+            <div class="l">Veículos<br />disponíveis</div>
+          </div>
+          <div>
+            <div class="n"><span>340</span></div>
+            <div class="l">Lojas<br />parceiras</div>
+          </div>
+          <div>
+            <div class="n"><span>98%</span></div>
+            <div class="l">Aprovação<br />de financiamento</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SEARCH FLOAT ============ -->
+  <div class="search-float">
+    <div class="wrap">
+      <div class="search-card">
+        <div class="search-tabs">
+          <button class="search-tab active" onclick="setTab(this,'motos')">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="6" cy="17" r="3" />
+              <circle cx="18" cy="17" r="3" />
+              <path d="M14 6l-3 6 5 5h2v-2l-4-4 2-2h2V6z" />
+            </svg>
+            Motos
+          </button>
+          <button class="search-tab" onclick="setTab(this,'carros')">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M3 13l1.7-5a2 2 0 0 1 1.9-1.4h10.8a2 2 0 0 1 1.9 1.4L21 13" />
+              <path d="M3 13h18v5a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1v-1H7v1a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z" />
+              <circle cx="7" cy="16" r="1" />
+              <circle cx="17" cy="16" r="1" />
+            </svg>
+            Carros
+          </button>
+        </div>
+        <div class="search-body">
+          <div class="head">
+            <h3>Buscar ofertas</h3>
+            <div class="badge"><span class="dot"></span>25 ofertas hoje</div>
+          </div>
+          <div class="search-fields">
+            <div class="field">
+              <label>Marca</label>
+              <select>
+                <option>Kawasaki</option>
+                <option>Honda</option>
+                <option>Yamaha</option>
+                <option>BMW</option>
+                <option>Ducati</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Modelo</label>
+              <select>
+                <option>Selecione um modelo</option>
+                <option>Ninja 400</option>
+                <option>Z900</option>
+                <option>Versys 650</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Ano</label>
+              <select>
+                <option>De 2020 em diante</option>
+                <option>De 2015 em diante</option>
+                <option>Qualquer</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Preço máximo</label>
+              <select>
+                <option>Até R$ 50.000</option>
+                <option>Até R$ 30.000</option>
+                <option>Até R$ 70.000</option>
+                <option>Sem limite</option>
+              </select>
+            </div>
+          </div>
+          <button class="btn-search">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <circle cx="11" cy="11" r="8" />
+              <path d="m21 21-4.3-4.3" />
+            </svg>
+            Buscar ofertas <span class="count">25</span>
+          </button>
+          <div class="search-extras">
+            <div class="brand-strip">
+              <span>Marcas mais buscadas:</span>
+              <span class="brand-pill">Honda</span>
+              <span class="brand-pill">Kawasaki</span>
+              <span class="brand-pill">Yamaha</span>
+            </div>
+            <a href="#" style="color:var(--accent);font-weight:700">Busca avançada →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ BRANDS ============ -->
+  <section class="brands">
+    <div class="wrap">
+      <div class="brands-head">
+        <div>
+          <span class="eyebrow">Marcas</span>
+          <h2 style="margin-top:8px">Veja as marcas mais vendidas</h2>
+        </div>
+        <div class="brands-nav">
+          <button class="brands-btn" onclick="scrollBrands(-1)" aria-label="Anterior">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <path d="M15 18l-6-6 6-6" />
+            </svg>
+          </button>
+          <button class="brands-btn" onclick="scrollBrands(1)" aria-label="Próximo">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <path d="M9 18l6-6-6-6" />
+            </svg>
+          </button>
+        </div>
+      </div>
+      <div class="brands-track" id="brandsTrack">
+        <div class="brand-item">
+          <div class="brand-logo"><img
+              src="https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?w=200&q=80&auto=format" alt="Honda" />
+          </div>
+          <span class="brand-lbl">Honda</span>
+        </div>
+        <div class="brand-item">
+          <div class="brand-logo"><img
+              src="https://images.unsplash.com/photo-1449426468159-d96dbf08f19f?w=200&q=80&auto=format" alt="Triumph" />
+          </div>
+          <span class="brand-lbl">Triumph</span>
+        </div>
+        <div class="brand-item">
+          <div class="brand-logo"><img
+              src="https://images.unsplash.com/photo-1547549082-6bc09f2049ae?w=200&q=80&auto=format" alt="Yamaha" />
+          </div>
+          <span class="brand-lbl">Yamaha</span>
+        </div>
+        <div class="brand-item">
+          <div class="brand-logo"><img
+              src="https://images.unsplash.com/photo-1558981806-ec527fa84c39?w=200&q=80&auto=format" alt="Kawasaki" />
+          </div>
+          <span class="brand-lbl">Kawasaki</span>
+        </div>
+        <div class="brand-item">
+          <div class="brand-logo"><img
+              src="https://images.unsplash.com/photo-1599819811279-d5ad9cccf838?w=200&q=80&auto=format" alt="BMW" />
+          </div>
+          <span class="brand-lbl">BMW</span>
+        </div>
+        <div class="brand-item">
+          <div class="brand-logo"><img
+              src="https://images.unsplash.com/photo-1611241893603-3c359704e0ee?w=200&q=80&auto=format"
+              alt="Harley-Davidson" /></div>
+          <span class="brand-lbl">Harley</span>
+        </div>
+        <div class="brand-item">
+          <div class="brand-logo"><img
+              src="https://images.unsplash.com/photo-1558981359-219d6364c9c8?w=200&q=80&auto=format" alt="Suzuki" />
+          </div>
+          <span class="brand-lbl">Suzuki</span>
+        </div>
+        <div class="brand-item">
+          <div class="brand-logo"><img
+              src="https://images.unsplash.com/photo-1558980394-dbb977039a2e?w=200&q=80&auto=format" alt="Ducati" />
+          </div>
+          <span class="brand-lbl">Ducati</span>
+        </div>
+        <div class="brand-item">
+          <div class="brand-logo"><img
+              src="https://images.unsplash.com/photo-1558981852-426c349d07b2?w=200&q=80&auto=format"
+              alt="Royal Enfield" /></div>
+          <span class="brand-lbl">Royal Enfield</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CATEGORIES ============ -->
+  <section class="cats">
+    <div class="wrap">
+      <div class="cats-head">
+        <div>
+          <span class="eyebrow">Categorias</span>
+          <h2 style="margin-top:8px">Explore por categoria</h2>
+        </div>
+        <a href="#" class="filter-link">Ver todas
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M5 12h14M13 6l6 6-6 6" />
+          </svg>
+        </a>
+      </div>
+
+      <div class="cats-grid">
+        <div class="cat featured">
+          <div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2">
+              <circle cx="6" cy="17" r="3" />
+              <circle cx="18" cy="17" r="3" />
+              <path d="M14 6l-3 6 5 5h2v-2l-4-4 2-2h2V6z" />
+            </svg></div>
+          <div>
+            <div class="lbl">Motos abaixo da<br />tabela FIPE</div>
+            <div class="sub">312 ofertas exclusivas</div>
+          </div>
+        </div>
+        <div class="cat">
+          <div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2">
+              <path d="M3 13l1.7-5a2 2 0 0 1 1.9-1.4h10.8a2 2 0 0 1 1.9 1.4L21 13" />
+              <path d="M3 13h18v5H3z" />
+              <circle cx="7" cy="16" r="1" />
+              <circle cx="17" cy="16" r="1" />
+            </svg></div>
+          <div>
+            <div class="lbl">Carros abaixo<br />da tabela FIPE</div>
+            <div class="sub">186 ofertas</div>
+          </div>
+        </div>
+        <div class="cat">
+          <div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2">
+              <path d="M12 2v20M5 9l7-7 7 7" />
+            </svg></div>
+          <div>
+            <div class="lbl">Valor<br />até R$ 30k</div>
+            <div class="sub">428 veículos</div>
+          </div>
+        </div>
+        <div class="cat">
+          <div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2">
+              <rect x="2" y="6" width="20" height="12" rx="2" />
+              <path d="M6 12h.01M18 12h.01M12 9v6" />
+            </svg></div>
+          <div>
+            <div class="lbl">Valor R$ 30k<br />a R$ 50 mil</div>
+            <div class="sub">562 veículos</div>
+          </div>
+        </div>
+        <div class="cat">
+          <div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2">
+              <circle cx="12" cy="12" r="10" />
+              <path d="M12 8v8M8 12h8" />
+            </svg></div>
+          <div>
+            <div class="lbl">Valor R$ 50k<br />a R$ 70 mil</div>
+            <div class="sub">241 veículos</div>
+          </div>
+        </div>
+        <div class="cat">
+          <div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2">
+              <path d="M12 2 4 6v6c0 5 3.5 9 8 10 4.5-1 8-5 8-10V6l-8-4z" />
+            </svg></div>
+          <div>
+            <div class="lbl">Acima de<br />R$ 70 mil</div>
+            <div class="sub">Premium · 132</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FEATURED LISTINGS ============ -->
+  <section class="listings">
+    <div class="wrap">
+      <div class="list-head">
+        <h2><span class="accent-bar"></span>Ofertas em destaque</h2>
+        <div class="filters">
+          <button class="chip active">Todas</button>
+          <button class="chip">Esportivas</button>
+          <button class="chip">Naked</button>
+          <button class="chip">Custom</button>
+          <button class="chip">Trail</button>
+          <button class="chip">Scooter</button>
+        </div>
+      </div>
+
+      <div class="cards">
+        <!-- Card 1 -->
+        <article class="card">
+          <div class="img">
+            <span class="badge-tag">Novidade</span>
+            <img src="https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?w=600&q=80&auto=format"
+              alt="Honda CB 500F" />
+          </div>
+          <div class="body">
+            <div class="brand-line">Honda · Naked · Seminova</div>
+            <h3>CB 500F ABS<span class="light">Edição Limitada</span></h3>
+            <div class="specs">
+              <span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="4" width="18" height="18" rx="2" />
+                  <path d="M16 2v4M8 2v4M3 10h18" />
+                </svg>2014/2014</span>
+              <span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10" />
+                  <path d="M12 6v6l4 2" />
+                </svg>71.000 km</span>
+            </div>
+            <div class="price-row">
+              <div class="price"><span class="small">à partir de</span>R$ 28.500<del>R$ 32.000</del></div>
+              <a href="#" class="buy">Comprar →</a>
+            </div>
+          </div>
+        </article>
+
+        <!-- Card 2 -->
+        <article class="card">
+          <div class="img">
+            <span class="badge-tag gold">Top oferta</span>
+            <img src="https://images.unsplash.com/photo-1558981806-ec527fa84c39?w=600&q=80&auto=format"
+              alt="Kawasaki Ninja" />
+          </div>
+          <div class="body">
+            <div class="brand-line">Kawasaki · Esportiva · 0 km</div>
+            <h3>Ninja 400 ABS<span class="light">Lime Green Edition</span></h3>
+            <div class="specs">
+              <span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="4" width="18" height="18" rx="2" />
+                  <path d="M16 2v4M8 2v4M3 10h18" />
+                </svg>2024/2024</span>
+              <span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10" />
+                  <path d="M12 6v6l4 2" />
+                </svg>0 km</span>
+            </div>
+            <div class="price-row">
+              <div class="price"><span class="small">à partir de</span>R$ 39.900</div>
+              <a href="#" class="buy">Comprar →</a>
+            </div>
+          </div>
+        </article>
+
+        <!-- Card 3 -->
+        <article class="card">
+          <div class="img">
+            <span class="badge-tag">Novidade</span>
+            <img src="https://images.unsplash.com/photo-1547549082-6bc09f2049ae?w=600&q=80&auto=format" alt="Yamaha" />
+          </div>
+          <div class="body">
+            <div class="brand-line">Yamaha · Naked · Seminova</div>
+            <h3>MT-07 ABS<span class="light">Cyan Storm</span></h3>
+            <div class="specs">
+              <span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="4" width="18" height="18" rx="2" />
+                  <path d="M16 2v4M8 2v4M3 10h18" />
+                </svg>2022/2023</span>
+              <span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10" />
+                  <path d="M12 6v6l4 2" />
+                </svg>12.400 km</span>
+            </div>
+            <div class="price-row">
+              <div class="price"><span class="small">à partir de</span>R$ 47.200</div>
+              <a href="#" class="buy">Comprar →</a>
+            </div>
+          </div>
+        </article>
+
+        <!-- Card 4 -->
+        <article class="card">
+          <div class="img">
+            <span class="badge-tag">Novidade</span>
+            <img src="https://images.unsplash.com/photo-1599819811279-d5ad9cccf838?w=600&q=80&auto=format" alt="BMW" />
+          </div>
+          <div class="body">
+            <div class="brand-line">BMW · Trail · Seminova</div>
+            <h3>F 850 GS Adventure<span class="light">Rallye Pack</span></h3>
+            <div class="specs">
+              <span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="4" width="18" height="18" rx="2" />
+                  <path d="M16 2v4M8 2v4M3 10h18" />
+                </svg>2021/2022</span>
+              <span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10" />
+                  <path d="M12 6v6l4 2" />
+                </svg>34.800 km</span>
+            </div>
+            <div class="price-row">
+              <div class="price"><span class="small">à partir de</span>R$ 68.900</div>
+              <a href="#" class="buy">Comprar →</a>
+            </div>
+          </div>
+        </article>
+
+        <!-- second row -->
+        <article class="card">
+          <div class="img">
+            <span class="badge-tag">Novidade</span>
+            <img src="https://images.unsplash.com/photo-1558980394-dbb977039a2e?w=600&q=80&auto=format" alt="Ducati" />
+          </div>
+          <div class="body">
+            <div class="brand-line">Ducati · Esportiva · Seminova</div>
+            <h3>Panigale V2<span class="light">Italian Stripes</span></h3>
+            <div class="specs">
+              <span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="4" width="18" height="18" rx="2" />
+                  <path d="M16 2v4M8 2v4M3 10h18" />
+                </svg>2023/2023</span>
+              <span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10" />
+                  <path d="M12 6v6l4 2" />
+                </svg>3.200 km</span>
+            </div>
+            <div class="price-row">
+              <div class="price"><span class="small">à partir de</span>R$ 89.900</div>
+              <a href="#" class="buy">Comprar →</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="img">
+            <span class="badge-tag">Novidade</span>
+            <img src="https://images.unsplash.com/photo-1611241893603-3c359704e0ee?w=600&q=80&auto=format"
+              alt="Harley" />
+          </div>
+          <div class="body">
+            <div class="brand-line">Harley-Davidson · Custom · Seminova</div>
+            <h3>Iron 883<span class="light">Black Denim</span></h3>
+            <div class="specs">
+              <span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="4" width="18" height="18" rx="2" />
+                  <path d="M16 2v4M8 2v4M3 10h18" />
+                </svg>2020/2021</span>
+              <span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10" />
+                  <path d="M12 6v6l4 2" />
+                </svg>18.700 km</span>
+            </div>
+            <div class="price-row">
+              <div class="price"><span class="small">à partir de</span>R$ 52.000</div>
+              <a href="#" class="buy">Comprar →</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="img">
+            <span class="badge-tag gold">Top oferta</span>
+            <img src="https://images.unsplash.com/photo-1558981359-219d6364c9c8?w=600&q=80&auto=format" alt="Suzuki" />
+          </div>
+          <div class="body">
+            <div class="brand-line">Suzuki · Naked · Usada</div>
+            <h3>GSX-S 750<span class="light">Metallic Triton Blue</span></h3>
+            <div class="specs">
+              <span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="4" width="18" height="18" rx="2" />
+                  <path d="M16 2v4M8 2v4M3 10h18" />
+                </svg>2019/2020</span>
+              <span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10" />
+                  <path d="M12 6v6l4 2" />
+                </svg>22.500 km</span>
+            </div>
+            <div class="price-row">
+              <div class="price"><span class="small">à partir de</span>R$ 41.900<del>R$ 46.000</del></div>
+              <a href="#" class="buy">Comprar →</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="img">
+            <span class="badge-tag">Novidade</span>
+            <img src="https://images.unsplash.com/photo-1449426468159-d96dbf08f19f?w=600&q=80&auto=format"
+              alt="Triumph" />
+          </div>
+          <div class="body">
+            <div class="brand-line">Triumph · Custom · Seminova</div>
+            <h3>Bonneville T120<span class="light">Jet Black Edition</span></h3>
+            <div class="specs">
+              <span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="4" width="18" height="18" rx="2" />
+                  <path d="M16 2v4M8 2v4M3 10h18" />
+                </svg>2022/2022</span>
+              <span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10" />
+                  <path d="M12 6v6l4 2" />
+                </svg>9.100 km</span>
+            </div>
+            <div class="price-row">
+              <div class="price"><span class="small">à partir de</span>R$ 58.700</div>
+              <a href="#" class="buy">Comprar →</a>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <div class="list-cta">
+        <a href="#" class="btn btn-dark" style="padding:18px 40px;font-size:14px">Ver estoque completo
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M5 12h14M13 6l6 6-6 6" />
+          </svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ RECENT SEARCHES ============ -->
+  <section class="recent">
+    <div class="wrap">
+      <div class="list-head">
+        <h2><span class="accent-bar"></span>Últimas buscas</h2>
+        <a href="#" class="filter-link">Limpar histórico</a>
+      </div>
+      <div class="cards">
+        <article class="card">
+          <div class="img">
+            <span class="badge-tag">Visto</span>
+            <img src="https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?w=600&q=80&auto=format" alt="" />
+          </div>
+          <div class="body">
+            <div class="brand-line">Honda · Naked</div>
+            <h3>CB 500F ABS</h3>
+            <div class="specs"><span>2014/2014</span><span>71.000 km</span></div>
+            <div class="price-row">
+              <div class="price">R$ 28.500</div><a href="#" class="buy">Ver →</a>
+            </div>
+          </div>
+        </article>
+        <article class="card">
+          <div class="img">
+            <span class="badge-tag">Visto</span>
+            <img src="https://images.unsplash.com/photo-1547549082-6bc09f2049ae?w=600&q=80&auto=format" alt="" />
+          </div>
+          <div class="body">
+            <div class="brand-line">Yamaha · Naked</div>
+            <h3>MT-03</h3>
+            <div class="specs"><span>2023/2023</span><span>5.200 km</span></div>
+            <div class="price-row">
+              <div class="price">R$ 32.900</div><a href="#" class="buy">Ver →</a>
+            </div>
+          </div>
+        </article>
+        <article class="card">
+          <div class="img">
+            <span class="badge-tag">Visto</span>
+            <img src="https://images.unsplash.com/photo-1611241893603-3c359704e0ee?w=600&q=80&auto=format" alt="" />
+          </div>
+          <div class="body">
+            <div class="brand-line">Harley · Custom</div>
+            <h3>Forty-Eight</h3>
+            <div class="specs"><span>2021/2021</span><span>14.800 km</span></div>
+            <div class="price-row">
+              <div class="price">R$ 62.500</div><a href="#" class="buy">Ver →</a>
+            </div>
+          </div>
+        </article>
+        <article class="card">
+          <div class="img">
+            <span class="badge-tag">Visto</span>
+            <img src="https://images.unsplash.com/photo-1558981806-ec527fa84c39?w=600&q=80&auto=format" alt="" />
+          </div>
+          <div class="body">
+            <div class="brand-line">Kawasaki · Esportiva</div>
+            <h3>Z900</h3>
+            <div class="specs"><span>2022/2023</span><span>11.300 km</span></div>
+            <div class="price-row">
+              <div class="price">R$ 51.800</div><a href="#" class="buy">Ver →</a>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SERVICES ============ -->
+  <section class="services">
+    <div class="wrap">
+      <div class="services-head">
+        <span class="eyebrow">Serviços</span>
+        <h2>Serviços oferecidos pela <span class="accent">BIKCLES</span></h2>
+      </div>
+      <div class="services-grid">
+        <a href="#" class="svc">
+          <div class="ico"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2">
+              <circle cx="12" cy="12" r="10" />
+              <path d="M12 6v12M9 9h6M9 15h6" />
+            </svg></div>
+          <h4>Venda seu veículo</h4>
+          <p>Cadastre seu veículo na nossa plataforma e alcance milhares de compradores qualificados em todo o Brasil.
+          </p>
+          <span class="arrow">Anunciar →</span>
+        </a>
+        <a href="#" class="svc">
+          <div class="ico"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2">
+              <rect x="2" y="6" width="20" height="14" rx="2" />
+              <path d="M2 11h20M6 16h2M12 16h4" />
+            </svg></div>
+          <h4>Financiamento</h4>
+          <p>Simulação online em 2 minutos com as melhores taxas do mercado. 98% de aprovação para nossos clientes.</p>
+          <span class="arrow">Simular →</span>
+        </a>
+        <a href="#" class="svc">
+          <div class="ico"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+              <path d="M8 9h8M8 13h5" />
+            </svg></div>
+          <h4>Avaliação grátis</h4>
+          <p>Avaliação completa do seu veículo em até 24h, com vistoria técnica e laudo cataloráfico oficial.</p>
+          <span class="arrow">Avaliar →</span>
+        </a>
+        <a href="#" class="svc">
+          <div class="ico"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2">
+              <path d="M3 3h18v6H3zM3 15h18v6H3zM7 6h.01M7 18h.01" />
+            </svg></div>
+          <h4>Tabela FIPE</h4>
+          <p>Consulta gratuita e atualizada da Tabela FIPE direto na nossa plataforma. Compare preços em tempo real.</p>
+          <span class="arrow">Consultar →</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ TESTIMONIALS ============ -->
+  <section class="testi">
+    <div class="wrap">
+      <div class="testi-head">
+        <div>
+          <span class="eyebrow">Depoimentos</span>
+          <h2 style="margin-top:8px">O que nossos clientes dizem</h2>
+        </div>
+        <div class="stars-overall">
+          <div class="stars">★★★★★</div>
+          <div class="meta">4.9/5 · 2.341 avaliações</div>
+        </div>
+      </div>
+      <div class="testi-grid">
+        <article class="testi-card">
+          <div class="stars">★★★★★</div>
+          <blockquote>O salão está simplesmente incrível! Recentemente passou por várias melhorias que elevaram ainda
+            mais a qualidade do ambiente e dos serviços. O espaço está moderno, aconchegante e a equipe se destaca pelo
+            atendimento impecável, sempre muito atenciosa e profissional.</blockquote>
+          <div class="author">
+            <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=120&q=80&auto=format"
+              alt="Camilla" />
+            <div>
+              <div class="n">Camilla Marinho</div>
+              <div class="r">Comprou Honda CB 500F · São Paulo/SP</div>
+            </div>
+          </div>
+        </article>
+        <article class="testi-card">
+          <div class="stars">★★★★★</div>
+          <blockquote>A experiência com a maquiagem foi incrível! O profissional foi extremamente detalhista e
+            atencioso. Optei por um look freestyle e uma coloração, e apesar da minha insegurança inicial, ele me
+            explicou todo o processo com calma, o que me deixou super confiante.</blockquote>
+          <div class="author">
+            <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=120&q=80&auto=format"
+              alt="Abraão" />
+            <div>
+              <div class="n">Abraão Marinho</div>
+              <div class="r">Comprou Kawasaki Ninja 400 · Curitiba/PR</div>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ ABOUT (MOTORIZA HOUSE) ============ -->
+  <section class="about">
+    <div class="about-grid">
+      <div class="about-img">
+        <div class="float-stat">
+          <div>
+            <div class="n">+12</div>
+            <div class="l">Anos<br />na estrada</div>
+          </div>
+          <div style="width:1px;background:rgba(255,255,255,.15);height:40px"></div>
+          <div>
+            <div class="n">8.4k</div>
+            <div class="l">Pilotos<br />satisfeitos</div>
+          </div>
+        </div>
+      </div>
+      <div class="about-content">
+        <div class="brand-mini">MOTORIZA HOUSE</div>
+        <h2>Apaixonados<br />por <span class="accent">moto</span></h2>
+        <p>Nossa paixão por motos nos levou a criar um espaço para quem ama a estrada e busca segurança e estilo ao
+          pilotar. Percebemos a importância de equipamentos de qualidade e decidimos ajudar outros motociclistas a
+          encontrarem capacetes, jaquetas e acessórios ideais.</p>
+        <p>Hoje, somos mais do que uma loja — somos uma comunidade que valoriza adrenalina, proteção e liberdade. Aqui,
+          você encontra tudo para rodar com segurança e curtir cada quilômetro da sua aventura!</p>
+        <div class="actions">
+          <a href="#" class="btn btn-accent">Saiba mais
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <path d="M5 12h14M13 6l6 6-6 6" />
+            </svg>
+          </a>
+          <a href="#" class="btn" style="color:#fff;border:1.5px solid rgba(255,255,255,.2)">Nossa história</a>
+        </div>
+        <div class="stats">
+          <div>
+            <div class="n"><span>+50</span></div>
+            <div class="l">Marcas<br />parceiras</div>
+          </div>
+          <div>
+            <div class="n"><span>340</span></div>
+            <div class="l">Lojas<br />físicas</div>
+          </div>
+          <div>
+            <div class="n"><span>24/7</span></div>
+            <div class="l">Suporte<br />online</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FOOTER ============ -->
+  <footer>
+    <div class="wrap">
+      <div class="foot-grid">
+        <div>
+          <a href="#" class="logo">
+            <span class="mark"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+                <circle cx="6" cy="17" r="3" />
+                <circle cx="18" cy="17" r="3" />
+                <path d="M14 6l-3 6 5 5h2v-2l-4-4 2-2h2V6z" />
+              </svg></span>
+            <span class="name">BIK<span>CLES</span></span>
+          </a>
+          <p class="about-blurb">Marketplace líder em veículos novos, seminovos e usados. Mais que uma loja — uma
+            comunidade que valoriza adrenalina, proteção e liberdade.</p>
+          <div class="socials">
+            <a href="#"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                <path
+                  d="M22 12c0-5.5-4.5-10-10-10S2 6.5 2 12c0 5 3.7 9.1 8.4 9.9v-7H7.9V12h2.5V9.8c0-2.5 1.5-3.9 3.8-3.9 1.1 0 2.2.2 2.2.2v2.5h-1.3c-1.2 0-1.6.8-1.6 1.6V12h2.8l-.4 2.9h-2.3v7C18.3 21.1 22 17 22 12z" />
+              </svg></a>
+            <a href="#"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2">
+                <rect x="2" y="2" width="20" height="20" rx="5" />
+                <circle cx="12" cy="12" r="4" />
+                <circle cx="17.5" cy="6.5" r="1" fill="currentColor" />
+              </svg></a>
+            <a href="#"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                <path
+                  d="M19.6 6.5c-.7-.8-1.9-1.1-4.2-1.3C12.9 5 12.4 5 12 5s-.9 0-3.4.2c-2.3.2-3.5.5-4.2 1.3-.7.7-1 1.9-1.2 4.2-.1 2.5-.2 3-.2 3.4s.1.9.2 3.4c.2 2.3.5 3.5 1.2 4.2.7.8 1.9 1.1 4.2 1.3 2.5.2 3 .2 3.4.2s.9 0 3.4-.2c2.3-.2 3.5-.5 4.2-1.3.7-.7 1-1.9 1.2-4.2.1-2.5.2-3 .2-3.4s-.1-.9-.2-3.4c-.2-2.3-.5-3.5-1.2-4.2zM10 16V8l6 4-6 4z" />
+              </svg></a>
+            <a href="#"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                <path
+                  d="M17.5 14.4c-.3-.2-1.7-.8-2-.9-.3-.1-.5-.2-.7.2-.2.3-.8.9-1 1.1-.2.2-.3.2-.6.1-.3-.2-1.3-.5-2.5-1.5-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.6.1-.1.3-.3.4-.5.1-.2.2-.3.3-.5.1-.2.1-.4 0-.5-.1-.2-.7-1.7-.9-2.3-.3-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.2.2 2.1 3.2 5.1 4.5 2.5 1.1 3 .9 3.5.8.5-.1 1.7-.7 1.9-1.3.2-.6.2-1.2.2-1.3-.1-.1-.3-.2-.6-.4zM12 2C6.5 2 2 6.5 2 12c0 1.8.5 3.5 1.3 4.9L2 22l5.3-1.4c1.4.7 3 1.2 4.7 1.2 5.5 0 10-4.5 10-10S17.5 2 12 2z" />
+              </svg></a>
+          </div>
+        </div>
+        <div>
+          <h5>Navegação</h5>
+          <ul>
+            <li><a href="#">Zero Km</a></li>
+            <li><a href="#">Seminovos</a></li>
+            <li><a href="#">Financie</a></li>
+            <li><a href="#">Sobre</a></li>
+            <li><a href="#">Anunciar veículo</a></li>
+          </ul>
+        </div>
+        <div>
+          <h5>Categorias</h5>
+          <ul>
+            <li><a href="#">Motos abaixo da FIPE</a></li>
+            <li><a href="#">Carros abaixo da FIPE</a></li>
+            <li><a href="#">Até R$ 30 mil</a></li>
+            <li><a href="#">R$ 30k a R$ 50 mil</a></li>
+            <li><a href="#">R$ 50k a R$ 70 mil</a></li>
+            <li><a href="#">Acima de R$ 70 mil</a></li>
+          </ul>
+        </div>
+        <div>
+          <h5>Contato</h5>
+          <div class="ct">
+            <div><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path
+                  d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+              </svg>
+              <div>(61) 3344-6118</div>
+            </div>
+            <div><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="5" width="18" height="14" rx="2" />
+                <path d="M3 7l9 6 9-6" />
+              </svg>contato@bikcles.com.br</div>
+            <div><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                <circle cx="12" cy="10" r="3" />
+              </svg>SHCN 703, Bloco B — Brasília/DF</div>
+          </div>
+        </div>
+      </div>
+      <div class="copy">
+        <span>© 2024 BIKCLES Marketplace. Todos os direitos reservados.</span>
+        <div class="pays">
+          <span>VISA</span><span>MASTER</span><span>ELO</span><span>PIX</span><span>BOLETO</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ============ VEHICLE PAGE ============ -->
+  <div class="vp-overlay" id="vpOverlay">
+    <div class="vp-header">
+      <button class="vp-back" onclick="closeVehicle()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <path d="M19 12H5M12 5l-7 7 7 7" />
+        </svg>
+        Voltar
+      </button>
+      <div class="vp-crumb">Início &rsaquo; Motos &rsaquo; <b id="vpCrumb"></b></div>
+      <div class="vp-header-acts">
+        <button class="vp-icon-btn" id="vpFavBtn" onclick="toggleVpFav()" aria-label="Favoritar">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path
+              d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+          </svg>
+        </button>
+        <button class="vp-icon-btn" aria-label="Compartilhar">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="18" cy="5" r="3" />
+            <circle cx="6" cy="12" r="3" />
+            <circle cx="18" cy="19" r="3" />
+            <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
+            <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
+          </svg>
+        </button>
+        <button class="vp-icon-btn" onclick="closeVehicle()" aria-label="Fechar">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M18 6 6 18M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+    </div>
+    <div class="vp-scroll">
+      <!-- Dark hero: gallery + side info -->
+      <div class="vp-hero">
+        <div class="vp-hero-inner">
+          <div class="vp-gallery">
+            <div class="vp-main-img" onclick="openGallery(0)" style="cursor:zoom-in">
+              <img id="vpMainImg" src="" alt="" />
+              <span class="vp-badge-abs novo" id="vpBadgeAbs"></span>
+            </div>
+            <div class="vp-thumbs">
+              <div class="vp-thumb active" onclick="openGallery(0)"><img id="vpT0" src="" alt="" /></div>
+              <div class="vp-thumb" onclick="openGallery(1)"><img id="vpT1" src="" alt="" /></div>
+              <div class="vp-thumb" onclick="openGallery(2)"><img id="vpT2" src="" alt="" /></div>
+              <div class="vp-thumb vp-thumb-all" onclick="openGallery(3)">
+                <img id="vpT3" src="" alt="" />
+                <div class="vp-thumb-all-label">
+                  Mostrar todas
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="vp-side">
+            <div class="vp-tags" id="vpTags"></div>
+            <div>
+              <div class="vp-make" id="vpMake"></div>
+              <div class="vp-model" id="vpModel"></div>
+              <div class="vp-trim" id="vpTrim"></div>
+            </div>
+            <div class="vp-price-section">
+              <div class="vp-price-val"><span class="cur">R$</span><span id="vpPriceVal"></span></div>
+              <div class="vp-fipe-line" id="vpFipe"></div>
+            </div>
+            <div class="vp-contact-grid">
+              <button class="vp-cbtn wpp">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                  <path
+                    d="M17.5 14.4c-.3-.2-1.7-.8-2-.9-.3-.1-.5-.2-.7.2-.2.3-.8.9-1 1.1-.2.2-.3.2-.6.1-.3-.2-1.3-.5-2.5-1.5-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.6.1-.1.3-.3.4-.5.1-.2.2-.3.3-.5.1-.2.1-.4 0-.5-.1-.2-.7-1.7-.9-2.3-.3-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.2.2 2.1 3.2 5.1 4.5 2.5 1.1 3 .9 3.5.8.5-.1 1.7-.7 1.9-1.3.2-.6.2-1.2.2-1.3-.1-.1-.3-.2-.6-.4zM12 2C6.5 2 2 6.5 2 12c0 1.8.5 3.5 1.3 4.9L2 22l5.3-1.4c1.4.7 3 1.2 4.7 1.2 5.5 0 10-4.5 10-10S17.5 2 12 2z" />
+                </svg>
+                WhatsApp
+              </button>
+              <button class="vp-cbtn">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path
+                    d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+                </svg>
+                Ligar
+              </button>
+              <button class="vp-cbtn">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                  <circle cx="12" cy="10" r="3" />
+                </svg>
+                Como chegar
+              </button>
+            </div>
+            <button class="vp-finance-btn" onclick="openFinancing()">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <rect x="2" y="6" width="20" height="14" rx="2" />
+                <path d="M2 11h20M6 16h2M12 16h4" />
+              </svg>
+              Aprove seu financiamento online
+            </button>
+          </div>
+        </div>
+      </div>
+      <!-- Detail cards + sticky sidebar -->
+      <div class="vp-details">
+        <div class="vp-main-col">
+          <div class="vp-card">
+            <div class="vp-card-body">
+              <div class="vp-section">
+                <div class="vp-section-title">Ficha Técnica</div>
+                <div class="vp-spec-list" id="vpSpecList"></div>
+              </div>
+              <div class="vp-section">
+                <div class="vp-section-title">Opcionais</div>
+                <div class="vp-opt-list" id="vpOptList"></div>
+              </div>
+              <div class="vp-section">
+                <div class="vp-section-title">Garantia</div>
+                <div class="vp-warranty">
+                  <div class="vp-warranty-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                      <polyline points="9 12 11 14 15 10" />
+                    </svg>
+                  </div>
+                  <div>
+                    <div class="vp-warranty-title" id="vpWarrantyTitle"></div>
+                    <div class="vp-warranty-sub" id="vpWarrantySub"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="vp-section">
+                <div class="vp-section-title">+ Informações</div>
+                <p class="vp-desc" id="vpDesc"></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sugestões -->
+      <div class="vp-sug">
+        <div class="vp-sug-inner">
+          <div class="vp-sug-title">Você também pode gostar</div>
+          <div class="vp-sug-grid cards" id="vpSuggestions"></div>
+        </div>
+      </div>
+
+      <!-- Contato + Mapa -->
+      <div class="vp-contact">
+        <div class="vp-contact-inner">
+          <div class="vp-map-wrap">
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d245450.97774856657!2d-48.02820174999999!3d-15.7217175!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x935a3d18df9ae275%3A0xf1b0b8e9f9a4e4a5!2sBras%C3%ADlia%2C%20DF!5e0!3m2!1spt-BR!2sbr!4v1700000000000"
+              allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
+          </div>
+          <div class="vp-contact-info">
+            <div class="vp-contact-label">Fale conosco</div>
+            <div class="vp-contact-heading">Estamos prontos<br>para te atender</div>
+            <div class="vp-contact-item">
+              <div class="vp-contact-item-ico wpp">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                  <path
+                    d="M17.5 14.4c-.3-.2-1.7-.8-2-.9-.3-.1-.5-.2-.7.2-.2.3-.8.9-1 1.1-.2.2-.3.2-.6.1-.3-.2-1.3-.5-2.5-1.5-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.6.1-.1.3-.3.4-.5.1-.2.2-.3.3-.5.1-.2.1-.4 0-.5-.1-.2-.7-1.7-.9-2.3-.3-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.2.2 2.1 3.2 5.1 4.5 2.5 1.1 3 .9 3.5.8.5-.1 1.7-.7 1.9-1.3.2-.6.2-1.2.2-1.3-.1-.1-.3-.2-.6-.4zM12 2C6.5 2 2 6.5 2 12c0 1.8.5 3.5 1.3 4.9L2 22l5.3-1.4c1.4.7 3 1.2 4.7 1.2 5.5 0 10-4.5 10-10S17.5 2 12 2z" />
+                </svg>
+              </div>
+              <div>
+                <div class="vp-contact-item-lbl">WhatsApp</div>
+                <div class="vp-contact-item-val"><a href="https://wa.me/556133446118">(61) 3344-6118</a></div>
+              </div>
+            </div>
+            <div class="vp-contact-item">
+              <div class="vp-contact-item-ico">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path
+                    d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+                </svg>
+              </div>
+              <div>
+                <div class="vp-contact-item-lbl">Telefone</div>
+                <div class="vp-contact-item-val"><a href="tel:+556133446118">(61) 3344-6118</a></div>
+              </div>
+            </div>
+            <div class="vp-contact-item">
+              <div class="vp-contact-item-ico acc">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="2" y="4" width="20" height="16" rx="2" />
+                  <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+                </svg>
+              </div>
+              <div>
+                <div class="vp-contact-item-lbl">E-mail</div>
+                <div class="vp-contact-item-val"><a href="mailto:contato@bikcles.com.br">contato@bikcles.com.br</a>
+                </div>
+              </div>
+            </div>
+            <div class="vp-contact-item">
+              <div class="vp-contact-item-ico">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                  <circle cx="12" cy="10" r="3" />
+                </svg>
+              </div>
+              <div>
+                <div class="vp-contact-item-lbl">Endereço</div>
+                <div class="vp-contact-item-val">SHCN 703, Bloco B — Asa Norte, Brasília/DF</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer da página -->
+      <footer>
+        <div class="wrap">
+          <div class="foot-grid">
+            <div>
+              <a href="#" class="logo">
+                <span class="mark"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+                    <circle cx="6" cy="17" r="3" />
+                    <circle cx="18" cy="17" r="3" />
+                    <path d="M14 6l-3 6 5 5h2v-2l-4-4 2-2h2V6z" />
+                  </svg></span>
+                <span class="name">BIK<span>CLES</span></span>
+              </a>
+              <p class="about-blurb">Marketplace líder em veículos novos, seminovos e usados. Mais que uma loja — uma
+                comunidade que valoriza adrenalina, proteção e liberdade.</p>
+              <div class="socials">
+                <a href="#"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                    <path
+                      d="M22 12c0-5.5-4.5-10-10-10S2 6.5 2 12c0 5 3.7 9.1 8.4 9.9v-7H7.9V12h2.5V9.8c0-2.5 1.5-3.9 3.8-3.9 1.1 0 2.2.2 2.2.2v2.5h-1.3c-1.2 0-1.6.8-1.6 1.6V12h2.8l-.4 2.9h-2.3v7C18.3 21.1 22 17 22 12z" />
+                  </svg></a>
+                <a href="#"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2">
+                    <rect x="2" y="2" width="20" height="20" rx="5" />
+                    <circle cx="12" cy="12" r="4" />
+                    <circle cx="17.5" cy="6.5" r="1" fill="currentColor" />
+                  </svg></a>
+                <a href="#"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                    <path
+                      d="M19.6 6.5c-.7-.8-1.9-1.1-4.2-1.3C12.9 5 12.4 5 12 5s-.9 0-3.4.2c-2.3.2-3.5.5-4.2 1.3-.7.7-1 1.9-1.2 4.2-.1 2.5-.2 3-.2 3.4s.1.9.2 3.4c.2 2.3.5 3.5 1.2 4.2.7.8 1.9 1.1 4.2 1.3 2.5.2 3 .2 3.4.2s.9 0 3.4-.2c2.3-.2 3.5-.5 4.2-1.3.7-.7 1-1.9 1.2-4.2.1-2.5.2-3 .2-3.4s-.1-.9-.2-3.4c-.2-2.3-.5-3.5-1.2-4.2zM10 16V8l6 4-6 4z" />
+                  </svg></a>
+              </div>
+            </div>
+            <div>
+              <h5>Navegação</h5>
+              <ul>
+                <li><a href="#">Zero Km</a></li>
+                <li><a href="#">Seminovos</a></li>
+                <li><a href="#">Financie</a></li>
+                <li><a href="#">Sobre</a></li>
+                <li><a href="#">Anunciar veículo</a></li>
+              </ul>
+            </div>
+            <div>
+              <h5>Categorias</h5>
+              <ul>
+                <li><a href="#">Motos abaixo da FIPE</a></li>
+                <li><a href="#">Carros abaixo da FIPE</a></li>
+                <li><a href="#">Até R$ 30 mil</a></li>
+                <li><a href="#">R$ 30k a R$ 50 mil</a></li>
+                <li><a href="#">R$ 50k a R$ 70 mil</a></li>
+                <li><a href="#">Acima de R$ 70 mil</a></li>
+              </ul>
+            </div>
+            <div>
+              <h5>Contato</h5>
+              <div class="ct">
+                <div><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path
+                      d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+                  </svg>
+                  <div>(61) 3344-6118</div>
+                </div>
+                <div><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="5" width="18" height="14" rx="2" />
+                    <path d="M3 7l9 6 9-6" />
+                  </svg>contato@bikcles.com.br</div>
+                <div><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                    <circle cx="12" cy="10" r="3" />
+                  </svg>SHCN 703, Bloco B — Brasília/DF</div>
+              </div>
+            </div>
+          </div>
+          <div class="copy">
+            <span>&copy; 2025 BIKCLES Marketplace. Todos os direitos reservados.</span>
+            <div class="pays">
+              <span>VISA</span><span>MASTER</span><span>ELO</span><span>PIX</span><span>BOLETO</span>
+            </div>
+          </div>
+        </div>
+      </footer>
+
+    </div>
+
+    <!-- Lightbox galeria -->
+    <div class="vp-lightbox" id="vpLightbox">
+      <button class="vp-lb-close" onclick="closeLightbox()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <path d="M18 6 6 18M6 6l12 12" />
+        </svg>
+      </button>
+      <button class="vp-lb-nav vp-lb-prev" onclick="lbNav(-1)">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <path d="M15 18l-6-6 6-6" />
+        </svg>
+      </button>
+      <div class="vp-lb-img-wrap"><img id="vpLbImg" src="" alt="" /></div>
+      <button class="vp-lb-nav vp-lb-next" onclick="lbNav(1)">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <path d="M9 18l6-6-6-6" />
+        </svg>
+      </button>
+      <div class="vp-lb-bottom">
+        <div class="vp-lb-thumbs" id="vpLbThumbs"></div>
+        <div class="vp-lb-counter" id="vpLbCounter"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ FINANCING MODAL ============ -->
+  <div class="fin-overlay" id="finOverlay">
+    <div class="fin-backdrop" onclick="closeFinancing()"></div>
+    <div class="fin-sheet">
+      <button class="fin-close" onclick="closeFinancing()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <path d="M18 6 6 18M6 6l12 12" />
+        </svg>
+      </button>
+      <div class="fin-title">Simulação de Financiamento</div>
+      <div class="fin-sub">Preencha seus dados e nossa equipe entrará em contato.</div>
+      <div class="fin-secure">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+          <polyline points="9 12 11 14 15 10" />
+        </svg>
+        Seus dados estão protegidos com criptografia SSL
+      </div>
+      <form class="fin-form" onsubmit="return false">
+        <div class="fin-field">
+          <label class="fin-label">Nome Completo</label>
+          <input class="fin-input" type="text" placeholder="Seu nome completo" />
+        </div>
+        <div class="fin-row">
+          <div class="fin-field">
+            <label class="fin-label">Celular</label>
+            <input class="fin-input" type="tel" placeholder="(61) 00000-0000" />
+          </div>
+          <div class="fin-field">
+            <label class="fin-label">E-mail</label>
+            <input class="fin-input" type="email" placeholder="seu@email.com" />
+          </div>
+        </div>
+        <div class="fin-row">
+          <div class="fin-field">
+            <label class="fin-label">CPF</label>
+            <input class="fin-input" type="text" placeholder="000.000.000-00" />
+          </div>
+          <div class="fin-field">
+            <label class="fin-label">Data de Nascimento</label>
+            <input class="fin-input" type="date" />
+          </div>
+        </div>
+        <div class="fin-row">
+          <div class="fin-field">
+            <label class="fin-label">Valor de Entrada</label>
+            <input class="fin-input" type="text" placeholder="R$ 0,00" />
+          </div>
+          <div class="fin-field">
+            <label class="fin-label">Parcelas</label>
+            <select class="fin-input">
+              <option>12x</option>
+              <option>24x</option>
+              <option>36x</option>
+              <option>48x</option>
+              <option>60x</option>
+            </select>
+          </div>
+        </div>
+        <button class="fin-submit" type="submit">Solicitar Simulação Gratuita</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    function scrollBrands(dir) {
+      document.getElementById('brandsTrack').scrollBy({ left: dir * 320, behavior: 'smooth' });
+    }
+    function setTab(el, type) {
+      el.parentElement.querySelectorAll('.search-tab').forEach(t => t.classList.remove('active'));
+      el.classList.add('active');
+    }
+    document.querySelectorAll('.chip').forEach(c => {
+      c.addEventListener('click', () => {
+        c.parentElement.querySelectorAll('.chip').forEach(x => x.classList.remove('active'));
+        c.classList.add('active');
+      });
+    });
+
+    const IMGS = {
+      honda: 'https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?w=900&q=85&auto=format',
+      kawasaki: 'https://images.unsplash.com/photo-1558981806-ec527fa84c39?w=900&q=85&auto=format',
+      yamaha: 'https://images.unsplash.com/photo-1547549082-6bc09f2049ae?w=900&q=85&auto=format',
+      bmw: 'https://images.unsplash.com/photo-1599819811279-d5ad9cccf838?w=900&q=85&auto=format',
+      ducati: 'https://images.unsplash.com/photo-1558980394-dbb977039a2e?w=900&q=85&auto=format',
+      harley: 'https://images.unsplash.com/photo-1611241893603-3c359704e0ee?w=900&q=85&auto=format',
+      suzuki: 'https://images.unsplash.com/photo-1558981359-219d6364c9c8?w=900&q=85&auto=format',
+      triumph: 'https://images.unsplash.com/photo-1449426468159-d96dbf08f19f?w=900&q=85&auto=format',
+    };
+
+    const vehicles = [
+      {
+        make: 'Honda · Naked', model: 'CB 500F ABS', trim: 'Edição Limitada', year: '2014/2014', km: '71.000 km', city: 'São Paulo/SP', condition: 'Seminova', price: '28.500', fipe: '32.000', discount: '11% abaixo da FIPE', parcel: '12x R$ 2.613', badge: 'novo', badgeText: 'Novidade', tags: [{ t: 'Novidade', c: 'accent' }, { t: 'Seminova', c: 'neutral' }, { t: 'Financiável', c: 'green' }], imgs: [IMGS.honda, IMGS.kawasaki, IMGS.yamaha, IMGS.bmw], loc: 'São Paulo, SP — a 3,2 km de você',
+        specs: [{ k: 'Motor', v: '471cc Bicilíndrico' }, { k: 'Potência', v: '47 cv @ 8.600 rpm' }, { k: 'Torque', v: '43 Nm @ 7.000 rpm' }, { k: 'Peso', v: '192 kg' }, { k: 'Tanque', v: '17,7 litros' }, { k: 'Freios', v: 'Disco duplo ABS' }, { k: 'Cor', v: 'Grand Prix Red' }, { k: 'Transmissão', v: '6 marchas' }],
+        features: ['Sistema ABS de série', 'Injeção eletrônica PGM-FI', 'Painel digital com múltiplos modos', 'Freios a disco dianteiro e traseiro', 'Suspensão dianteira invertida 41mm', 'Iluminação LED dianteira e traseira', 'Documentação em dia — IPVA quitado', 'Revisão feita recentemente'],
+        parcels: [{ e: 'R$ 0', n: '12x', v: 'R$ 2.613', t: 'R$ 31.356' }, { e: 'R$ 5.000', n: '12x', v: 'R$ 2.154', t: 'R$ 30.848' }, { e: 'R$ 0', n: '24x', v: 'R$ 1.425', t: 'R$ 34.200' }, { e: 'R$ 5.000', n: '24x', v: 'R$ 1.175', t: 'R$ 33.200' }, { e: 'R$ 0', n: '36x', v: 'R$ 1.043', t: 'R$ 37.548' }]
+      },
+
+      {
+        make: 'Kawasaki · Esportiva', model: 'Ninja 400 ABS', trim: 'Lime Green Edition', year: '2024/2024', km: '0 km', city: 'Brasília/DF', condition: '0 km', price: '39.900', fipe: '42.800', discount: '7% abaixo da FIPE', parcel: '12x R$ 3.658', badge: 'top', badgeText: 'Top oferta', tags: [{ t: 'Top oferta', c: 'gold' }, { t: '0 km', c: 'green' }, { t: 'Financiável', c: 'green' }], imgs: [IMGS.kawasaki, IMGS.honda, IMGS.ducati, IMGS.yamaha], loc: 'Brasília, DF — a 1,5 km de você',
+        specs: [{ k: 'Motor', v: '399cc Bicilíndrico' }, { k: 'Potência', v: '45 cv @ 10.000 rpm' }, { k: 'Torque', v: '38 Nm @ 8.000 rpm' }, { k: 'Peso', v: '168 kg' }, { k: 'Tanque', v: '14 litros' }, { k: 'Freios', v: 'Disco duplo ABS' }, { k: 'Cor', v: 'Lime Green' }, { k: 'Transmissão', v: '6 marchas' }],
+        features: ['ABS de série (desligável)', 'Chassi Trellis de alta rigidez', 'Motor bicilíndrico paralelo mais leve', 'Quick shifter disponível', 'Painel TFT full color', 'Farol LED full-range', 'Nota fiscal de compra inclusa', 'Garantia de fábrica ativa'],
+        parcels: [{ e: 'R$ 0', n: '12x', v: 'R$ 3.658', t: 'R$ 43.896' }, { e: 'R$ 8.000', n: '12x', v: 'R$ 2.928', t: 'R$ 43.136' }, { e: 'R$ 0', n: '24x', v: 'R$ 1.994', t: 'R$ 47.856' }, { e: 'R$ 8.000', n: '24x', v: 'R$ 1.596', t: 'R$ 46.304' }, { e: 'R$ 0', n: '36x', v: 'R$ 1.459', t: 'R$ 52.524' }]
+      },
+
+      {
+        make: 'Yamaha · Naked', model: 'MT-07 ABS', trim: 'Cyan Storm', year: '2022/2023', km: '12.400 km', city: 'Curitiba/PR', condition: 'Seminova', price: '47.200', fipe: '51.000', discount: '7% abaixo da FIPE', parcel: '12x R$ 4.327', badge: 'novo', badgeText: 'Novidade', tags: [{ t: 'Novidade', c: 'accent' }, { t: 'Seminova', c: 'neutral' }, { t: 'Financiável', c: 'green' }], imgs: [IMGS.yamaha, IMGS.honda, IMGS.kawasaki, IMGS.suzuki], loc: 'Curitiba, PR — a 5,1 km de você',
+        specs: [{ k: 'Motor', v: '689cc Bicilíndrico' }, { k: 'Potência', v: '75 cv @ 9.000 rpm' }, { k: 'Torque', v: '68 Nm @ 6.500 rpm' }, { k: 'Peso', v: '184 kg' }, { k: 'Tanque', v: '14 litros' }, { k: 'Freios', v: 'Disco duplo ABS' }, { k: 'Cor', v: 'Cyan Storm' }, { k: 'Transmissão', v: '6 marchas' }],
+        features: ['D-Mode (3 modos de condução)', 'ABS de duplo canal', 'Forquilha invertida KYB 41mm', 'Painel LCD com shift light', 'Escape esportivo Arrow incluso', 'Revisão feita aos 12.000 km', 'Manual e nota fiscal originais', 'IPVA 2024 quitado'],
+        parcels: [{ e: 'R$ 0', n: '12x', v: 'R$ 4.327', t: 'R$ 51.924' }, { e: 'R$ 9.000', n: '12x', v: 'R$ 3.502', t: 'R$ 51.024' }, { e: 'R$ 0', n: '24x', v: 'R$ 2.359', t: 'R$ 56.616' }, { e: 'R$ 9.000', n: '24x', v: 'R$ 1.908', t: 'R$ 54.792' }, { e: 'R$ 0', n: '36x', v: 'R$ 1.725', t: 'R$ 62.100' }]
+      },
+
+      {
+        make: 'BMW · Trail', model: 'F 850 GS Adventure', trim: 'Rallye Pack', year: '2021/2022', km: '34.800 km', city: 'Rio de Janeiro/RJ', condition: 'Seminova', price: '68.900', fipe: '74.000', discount: '7% abaixo da FIPE', parcel: '12x R$ 6.315', badge: 'novo', badgeText: 'Novidade', tags: [{ t: 'Novidade', c: 'accent' }, { t: 'Seminova', c: 'neutral' }, { t: 'Revisada', c: 'green' }], imgs: [IMGS.bmw, IMGS.triumph, IMGS.harley, IMGS.ducati], loc: 'Rio de Janeiro, RJ — a 4,8 km de você',
+        specs: [{ k: 'Motor', v: '853cc Bicilíndrico' }, { k: 'Potência', v: '95 cv @ 8.250 rpm' }, { k: 'Torque', v: '92 Nm @ 6.250 rpm' }, { k: 'Peso', v: '229 kg' }, { k: 'Tanque', v: '23 litros' }, { k: 'Freios', v: 'Disco + ABS off-road' }, { k: 'Cor', v: 'Racing Blue' }, { k: 'Transmissão', v: '6 marchas' }],
+        features: ['ASC (controle de tração)', 'ABS Pro desligável por eixo', 'Modos de condução: Rain, Road, Dynamic, Enduro', 'Navegador GPS de série', 'Protetor de motor original', 'Maletas laterais incluídas', 'Histórico de revisões BMW', 'Pneus Metzeler semi-novos'],
+        parcels: [{ e: 'R$ 0', n: '12x', v: 'R$ 6.315', t: 'R$ 75.780' }, { e: 'R$ 14.000', n: '12x', v: 'R$ 5.032', t: 'R$ 74.384' }, { e: 'R$ 0', n: '24x', v: 'R$ 3.443', t: 'R$ 82.632' }, { e: 'R$ 14.000', n: '24x', v: 'R$ 2.741', t: 'R$ 79.784' }, { e: 'R$ 0', n: '36x', v: 'R$ 2.518', t: 'R$ 90.648' }]
+      },
+
+      {
+        make: 'Ducati · Esportiva', model: 'Panigale V2', trim: 'Italian Stripes', year: '2023/2023', km: '3.200 km', city: 'São Paulo/SP', condition: 'Seminova', price: '89.900', fipe: '96.000', discount: '6% abaixo da FIPE', parcel: '12x R$ 8.237', badge: 'top', badgeText: 'Top oferta', tags: [{ t: 'Top oferta', c: 'gold' }, { t: 'Seminova', c: 'neutral' }, { t: 'Garantia', c: 'green' }], imgs: [IMGS.ducati, IMGS.kawasaki, IMGS.yamaha, IMGS.honda], loc: 'São Paulo, SP — a 2,2 km de você',
+        specs: [{ k: 'Motor', v: '955cc L-twin Desmodue' }, { k: 'Potência', v: '155 cv @ 10.750 rpm' }, { k: 'Torque', v: '104 Nm @ 9.000 rpm' }, { k: 'Peso', v: '176 kg' }, { k: 'Tanque', v: '17 litros' }, { k: 'Freios', v: 'Brembo M4.32 monobloco' }, { k: 'Cor', v: 'Ducati Red' }, { k: 'Transmissão', v: '6 marchas + quickshifter' }],
+        features: ['Cornering ABS EVO', 'Traction Control EVO DTC', 'Wheelie Control EVO', 'Slide Control de série', 'Launch Control de série', 'Power Modes: Full, High, Medium, Low', 'Quickshifter Up & Down de série', 'Garantia Ducati até dez/2025'],
+        parcels: [{ e: 'R$ 0', n: '12x', v: 'R$ 8.237', t: 'R$ 98.844' }, { e: 'R$ 18.000', n: '12x', v: 'R$ 6.584', t: 'R$ 97.008' }, { e: 'R$ 0', n: '24x', v: 'R$ 4.490', t: 'R$ 107.760' }, { e: 'R$ 18.000', n: '24x', v: 'R$ 3.589', t: 'R$ 104.136' }, { e: 'R$ 0', n: '36x', v: 'R$ 3.284', t: 'R$ 118.224' }]
+      },
+
+      {
+        make: 'Harley-Davidson · Custom', model: 'Iron 883', trim: 'Black Denim', year: '2020/2021', km: '18.700 km', city: 'Porto Alegre/RS', condition: 'Seminova', price: '52.000', fipe: '57.000', discount: '9% abaixo da FIPE', parcel: '12x R$ 4.765', badge: 'novo', badgeText: 'Novidade', tags: [{ t: 'Novidade', c: 'accent' }, { t: 'Seminova', c: 'neutral' }, { t: 'Financiável', c: 'green' }], imgs: [IMGS.harley, IMGS.triumph, IMGS.bmw, IMGS.honda], loc: 'Porto Alegre, RS — a 6,0 km de você',
+        specs: [{ k: 'Motor', v: '883cc V-Twin Evolution' }, { k: 'Potência', v: '50 cv @ 6.000 rpm' }, { k: 'Torque', v: '74 Nm @ 3.750 rpm' }, { k: 'Peso', v: '253 kg' }, { k: 'Tanque', v: '12,5 litros' }, { k: 'Freios', v: 'Disco duplo ABS' }, { k: 'Cor', v: 'Black Denim' }, { k: 'Transmissão', v: '5 marchas' }],
+        features: ['Estilo Sportster clássico', 'ABS de série', 'Guidão pé-de-boi incluso', 'Passageiro solo — banco personalizado', 'Rodas Laced 19" (diant.) e 16" (tras.)', 'Exaustão esportiva Vance & Hines', 'Documentação e IPVA em dia', 'Manutenção em dia na rede H-D'],
+        parcels: [{ e: 'R$ 0', n: '12x', v: 'R$ 4.765', t: 'R$ 57.180' }, { e: 'R$ 10.000', n: '12x', v: 'R$ 3.848', t: 'R$ 56.176' }, { e: 'R$ 0', n: '24x', v: 'R$ 2.597', t: 'R$ 62.328' }, { e: 'R$ 10.000', n: '24x', v: 'R$ 2.138', t: 'R$ 61.312' }, { e: 'R$ 0', n: '36x', v: 'R$ 1.902', t: 'R$ 68.472' }]
+      },
+
+      {
+        make: 'Suzuki · Naked', model: 'GSX-S 750', trim: 'Metallic Triton Blue', year: '2019/2020', km: '22.500 km', city: 'Belo Horizonte/MG', condition: 'Usada', price: '41.900', fipe: '46.000', discount: '9% abaixo da FIPE', parcel: '12x R$ 3.841', badge: 'top', badgeText: 'Top oferta', tags: [{ t: 'Top oferta', c: 'gold' }, { t: 'Usada', c: 'neutral' }, { t: 'Revisada', c: 'green' }], imgs: [IMGS.suzuki, IMGS.yamaha, IMGS.kawasaki, IMGS.honda], loc: 'Belo Horizonte, MG — a 7,3 km de você',
+        specs: [{ k: 'Motor', v: '749cc 4 cilindros' }, { k: 'Potência', v: '114 cv @ 10.500 rpm' }, { k: 'Torque', v: '81 Nm @ 9.000 rpm' }, { k: 'Peso', v: '213 kg' }, { k: 'Tanque', v: '16 litros' }, { k: 'Freios', v: 'Disco duplo Brembo ABS' }, { k: 'Cor', v: 'Metallic Triton Blue' }, { k: 'Transmissão', v: '6 marchas' }],
+        features: ['Traction Control de série (desligável)', 'ABS de duplo canal', '3 modos de condução', 'Forquilha KYB ajustável', 'Escape Yoshimura incluso', 'Revisão completa realizada', 'Pneus novos Pirelli Diablo Rosso', 'Documentação em dia'],
+        parcels: [{ e: 'R$ 0', n: '12x', v: 'R$ 3.841', t: 'R$ 46.092' }, { e: 'R$ 8.000', n: '12x', v: 'R$ 3.107', t: 'R$ 45.284' }, { e: 'R$ 0', n: '24x', v: 'R$ 2.094', t: 'R$ 50.256' }, { e: 'R$ 8.000', n: '24x', v: 'R$ 1.692', t: 'R$ 48.608' }, { e: 'R$ 0', n: '36x', v: 'R$ 1.533', t: 'R$ 55.188' }]
+      },
+
+      {
+        make: 'Triumph · Custom', model: 'Bonneville T120', trim: 'Jet Black Edition', year: '2022/2022', km: '9.100 km', city: 'Campinas/SP', condition: 'Seminova', price: '58.700', fipe: '63.500', discount: '8% abaixo da FIPE', parcel: '12x R$ 5.381', badge: 'novo', badgeText: 'Novidade', tags: [{ t: 'Novidade', c: 'accent' }, { t: 'Seminova', c: 'neutral' }, { t: 'Garantia', c: 'green' }], imgs: [IMGS.triumph, IMGS.harley, IMGS.bmw, IMGS.suzuki], loc: 'Campinas, SP — a 4,0 km de você',
+        specs: [{ k: 'Motor', v: '1.200cc Bicilíndrico' }, { k: 'Potência', v: '80 cv @ 6.550 rpm' }, { k: 'Torque', v: '105 Nm @ 3.500 rpm' }, { k: 'Peso', v: '227 kg' }, { k: 'Tanque', v: '14,5 litros' }, { k: 'Freios', v: 'Disco Brembo ABS' }, { k: 'Cor', v: 'Jet Black' }, { k: 'Transmissão', v: '6 marchas' }],
+        features: ['2 modos de condução (Road e Rain)', 'ABS desligável', 'Assistente de arranque em rampa', 'Painel TFT colorido', 'Tomada USB de série', 'Espelhos e ponteiras cromadas originais', 'Garantia Triumph até 2025', 'Manutenção em dia na rede oficial'],
+        parcels: [{ e: 'R$ 0', n: '12x', v: 'R$ 5.381', t: 'R$ 64.572' }, { e: 'R$ 12.000', n: '12x', v: 'R$ 4.281', t: 'R$ 63.372' }, { e: 'R$ 0', n: '24x', v: 'R$ 2.934', t: 'R$ 70.416' }, { e: 'R$ 12.000', n: '24x', v: 'R$ 2.338', t: 'R$ 68.112' }, { e: 'R$ 0', n: '36x', v: 'R$ 2.148', t: 'R$ 77.328' }]
+      },
+    ];
+
+    const CHECK_SVG = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>`;
+
+    let lbImgs = [];
+    let lbIdx = 0;
+
+    function openGallery(startIdx) {
+      lbImgs = [
+        document.getElementById('vpT0').src,
+        document.getElementById('vpT1').src,
+        document.getElementById('vpT2').src,
+        document.getElementById('vpT3').src,
+      ];
+      lbIdx = startIdx;
+      renderLightbox();
+      document.getElementById('vpLightbox').classList.add('open');
+    }
+
+    function closeLightbox() {
+      document.getElementById('vpLightbox').classList.remove('open');
+    }
+
+    function lbNav(dir) {
+      lbIdx = (lbIdx + dir + lbImgs.length) % lbImgs.length;
+      renderLightbox();
+    }
+
+    function renderLightbox() {
+      document.getElementById('vpLbImg').src = lbImgs[lbIdx];
+      document.getElementById('vpLbCounter').textContent = `${lbIdx + 1} / ${lbImgs.length}`;
+      document.getElementById('vpLbThumbs').innerHTML = lbImgs.map((src, i) =>
+        `<div class="vp-lb-thumb ${i === lbIdx ? 'active' : ''}" onclick="lbIdx=${i};renderLightbox()"><img src="${src}" loading="lazy"/></div>`
+      ).join('');
+    }
+
+    function openVehicle(idx) {
+      const v = vehicles[idx];
+      if (!v) return;
+
+      document.getElementById('vpCrumb').textContent = v.model;
+      document.getElementById('vpMainImg').src = v.imgs[0];
+      v.imgs.forEach((src, i) => {
+        const t = document.getElementById('vpT' + i);
+        if (t) { t.src = src; t.parentElement.classList.toggle('active', i === 0); }
+      });
+      const b = document.getElementById('vpBadgeAbs');
+      b.textContent = v.badgeText; b.className = 'vp-badge-abs ' + v.badge;
+
+      document.getElementById('vpTags').innerHTML = v.tags.map(x => `<span class="vp-tag ${x.c}">${x.t}</span>`).join('');
+      document.getElementById('vpMake').textContent = v.make;
+      document.getElementById('vpModel').textContent = v.model;
+      document.getElementById('vpTrim').textContent = v.trim;
+
+      document.getElementById('vpPriceVal').textContent = v.price;
+      document.getElementById('vpFipe').innerHTML = `FIPE: <del>R$ ${v.fipe}</del><span class="vp-fipe-ok">▼ ${v.discount}</span>`;
+
+      document.getElementById('vpSpecList').innerHTML = v.specs.map(s =>
+        `<div class="vp-spec-item"><div class="vp-spec-key">${s.k}</div><div class="vp-spec-val">${s.v}</div></div>`
+      ).join('');
+
+      const optionals = v.features.slice(0, 6);
+      document.getElementById('vpOptList').innerHTML = optionals.map(f =>
+        `<div class="vp-opt-item">${CHECK_SVG}${f}</div>`
+      ).join('');
+
+      const warrantySpec = v.specs.find(s => s.k === 'Garantia');
+      document.getElementById('vpWarrantyTitle').textContent = warrantySpec ? warrantySpec.v : 'Garantia da Loja (3 meses)';
+      document.getElementById('vpWarrantySub').textContent = 'Cobertura para defeitos de fábrica e mecânicos';
+
+      document.getElementById('vpDesc').textContent =
+        `${v.model} ${v.trim} em excelente estado de conservação. ` +
+        v.features.slice(0, 3).join('. ') + '. ' +
+        `Localizado em ${v.city}. Entre em contato para mais informações e agende seu test drive.`;
+
+      document.getElementById('vpFavBtn').classList.remove('faved');
+      renderSuggestions(idx);
+
+      const overlay = document.getElementById('vpOverlay');
+      overlay.classList.add('open');
+      overlay.querySelector('.vp-scroll').scrollTop = 0;
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeVehicle() {
+      document.getElementById('vpOverlay').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    function vpThumb(el, idx) {
+      document.querySelectorAll('.vp-thumb').forEach(t => t.classList.remove('active'));
+      el.classList.add('active');
+      document.getElementById('vpMainImg').src = document.getElementById('vpT' + idx).src;
+    }
+
+    function toggleVpFav() {
+      document.getElementById('vpFavBtn').classList.toggle('faved');
+    }
+
+    function renderSuggestions(currentIdx) {
+      const calIcon = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>`;
+      const kmIcon = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>`;
+      const items = vehicles.map((v, i) => ({ v, i })).filter(({ i }) => i !== currentIdx).slice(0, 3);
+      document.getElementById('vpSuggestions').innerHTML = items.map(({ v, i }) => `
+        <article class="card" onclick="openVehicle(${i})" style="cursor:pointer">
+          <div class="img">
+            <span class="badge-tag">${v.badgeText}</span>
+            <img src="${v.imgs[0]}" alt="${v.model}" loading="lazy"/>
+          </div>
+          <div class="body">
+            <div class="brand-line">${v.make} · ${v.condition}</div>
+            <h3>${v.model}<span class="light">${v.trim}</span></h3>
+            <div class="specs">
+              <span>${calIcon}${v.year}</span>
+              <span>${kmIcon}${v.km}</span>
+            </div>
+            <div class="price-row">
+              <div class="price"><span class="small">à partir de</span>R$ ${v.price}<del>R$ ${v.fipe}</del></div>
+              <span class="buy">Ver moto →</span>
+            </div>
+          </div>
+        </article>`).join('');
+
+      document.querySelectorAll('#vpSuggestions .card').forEach((card, si) => {
+        const { v, i } = items[si];
+        buildCarousel(card, v, 'cc-sug-' + i);
+      });
+    }
+
+    function openFinancing() {
+      document.getElementById('finOverlay').classList.add('open');
+    }
+
+    function closeFinancing() {
+      document.getElementById('finOverlay').classList.remove('open');
+    }
+
+    document.querySelectorAll('.listings .card').forEach((card, i) => {
+      card.addEventListener('click', e => {
+        openVehicle(i);
+      });
+    });
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') {
+        if (document.getElementById('vpLightbox').classList.contains('open')) { closeLightbox(); return; }
+        closeFinancing();
+        closeVehicle();
+      }
+    });
+
+    function ccNav(trackId, dir) {
+      const track = document.getElementById(trackId);
+      const count = track.querySelectorAll('img').length;
+      ccGo(trackId, (parseInt(track.dataset.idx || 0) + dir + count) % count);
+    }
+
+    function ccGo(trackId, idx) {
+      const track = document.getElementById(trackId);
+      track.dataset.idx = idx;
+      track.style.transform = `translateX(-${idx * 100}%)`;
+      track.closest('.card').querySelectorAll('.cc-dot').forEach((d, i) => d.classList.toggle('active', i === idx));
+    }
+
+    function buildCarousel(card, v, trackId) {
+      const imgDiv = card.querySelector('.img');
+      const oldImg = imgDiv.querySelector('img');
+
+      const track = document.createElement('div');
+      track.className = 'cc-track';
+      track.id = trackId;
+      track.dataset.idx = '0';
+      v.imgs.forEach((src, si) => {
+        const img = document.createElement('img');
+        img.src = src; img.alt = v.model; if (si > 0) img.loading = 'lazy';
+        track.appendChild(img);
+      });
+      oldImg.replaceWith(track);
+
+      const prev = document.createElement('button');
+      prev.className = 'cc-btn cc-prev';
+      prev.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg>`;
+      prev.onclick = e => { e.stopPropagation(); ccNav(trackId, -1); };
+
+      const next = document.createElement('button');
+      next.className = 'cc-btn cc-next';
+      next.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg>`;
+      next.onclick = e => { e.stopPropagation(); ccNav(trackId, 1); };
+
+      const dotsDiv = document.createElement('div');
+      dotsDiv.className = 'cc-dots';
+      v.imgs.forEach((_, di) => {
+        const dot = document.createElement('button');
+        dot.className = 'cc-dot' + (di === 0 ? ' active' : '');
+        dot.onclick = e => { e.stopPropagation(); ccGo(trackId, di); };
+        dotsDiv.appendChild(dot);
+      });
+
+      imgDiv.appendChild(prev);
+      imgDiv.appendChild(next);
+      imgDiv.appendChild(dotsDiv);
+    }
+
+    function initCarousels() {
+      document.querySelectorAll('.listings .card').forEach((card, i) => {
+        const v = vehicles[i];
+        if (!v) return;
+        buildCarousel(card, v, 'cc-' + i);
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', initCarousels);
+  </script>
+
+</body>
+
+</html>

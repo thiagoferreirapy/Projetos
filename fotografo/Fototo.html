@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>FOTOTO — Agência de Talentos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Italiana&family=DM+Serif+Display:ital@0;1&family=Archivo:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --noir: #0B0B0B;
+    --noir-2: #141414;
+    --gold: #C6A46C;
+    --gold-soft: #D9BE8B;
+    --gold-deep: #A88445;
+    --bone: #F5F2EC;
+    --paper: #F5F5F5;
+    --ink: #1a1a1a;
+    --line: rgba(198, 164, 108, 0.35);
+    --line-dark: rgba(20,20,20,0.12);
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "Archivo", system-ui, -apple-system, sans-serif;
+    font-weight: 350;
+    font-feature-settings: "ss01", "ss02", "kern";
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overflow-x: hidden;
+  }
+  /* Type system
+     Display headlines  → Italiana (pure Didone, sharp thick/thin, Vogue-feel)
+     Editorial accents  → DM Serif Display (italic, with character)
+     Body & UI          → Archivo (refined grotesque, tight tracking)
+     Quote/secondary    → Cormorant Garamond italic
+  */
+  .display { font-family: "Italiana", "DM Serif Display", Georgia, serif; font-weight: 400; letter-spacing: 0.005em; }
+  .editorial { font-family: "DM Serif Display", "Italiana", Georgia, serif; font-weight: 400; }
+  .quote { font-family: "Cormorant Garamond", Georgia, serif; font-style: italic; font-weight: 400; }
+  .serif { font-family: "Italiana", "DM Serif Display", Georgia, serif; font-weight: 400; }
+  .grotesk { font-family: "Archivo", system-ui, sans-serif; }
+
+  /* Editorial micro-detail utilities */
+  .eyebrow {
+    font-family: "Archivo", sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.42em;
+    text-transform: uppercase;
+  }
+  .caps-tight {
+    text-transform: uppercase;
+    letter-spacing: -0.005em;
+  }
+  .ital-soft { font-family: "DM Serif Display", serif; font-style: italic; font-weight: 400; }
+  /* selection */
+  ::selection { background: var(--gold); color: var(--noir); }
+
+  /* Reveal animation */
+  .reveal { opacity: 0; transform: translateY(28px); transition: opacity 1.2s cubic-bezier(.2,.7,.2,1), transform 1.2s cubic-bezier(.2,.7,.2,1); }
+  .reveal.in { opacity: 1; transform: translateY(0); }
+  .reveal.delay-1 { transition-delay: .12s; }
+  .reveal.delay-2 { transition-delay: .24s; }
+  .reveal.delay-3 { transition-delay: .36s; }
+  .reveal.delay-4 { transition-delay: .48s; }
+  .reveal.delay-5 { transition-delay: .6s; }
+
+  /* Marquee */
+  @keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  /* Subtle gold rotate */
+  @keyframes spin-slow {
+    to { transform: rotate(360deg); }
+  }
+
+  /* Hover utilities */
+  .hover-zoom img { transition: transform 1.4s cubic-bezier(.2,.7,.2,1), filter .6s ease; }
+  .hover-zoom:hover img { transform: scale(1.04); }
+  .hover-color img { filter: grayscale(1); transition: filter .6s ease, transform 1.4s cubic-bezier(.2,.7,.2,1); }
+  .hover-color:hover img { filter: grayscale(0); }
+
+  /* shared link */
+  .link-underline {
+    position: relative;
+    display: inline-block;
+    padding-bottom: 4px;
+  }
+  .link-underline::after {
+    content: '';
+    position: absolute; left: 0; bottom: 0;
+    height: 1px; width: 100%;
+    background: currentColor;
+    transform-origin: left;
+    transition: transform .6s cubic-bezier(.2,.7,.2,1);
+  }
+  .link-underline:hover::after { transform: scaleX(0); transform-origin: right; }
+
+  /* page container */
+  .container {
+    width: 100%;
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 0 48px;
+  }
+  @media (max-width: 768px) {
+    .container { padding: 0 22px; }
+  }
+
+  /* utility */
+  .uppercase { text-transform: uppercase; }
+  .tracking-wide { letter-spacing: 0.18em; }
+  .tracking-wider { letter-spacing: 0.28em; }
+
+  /* hide scrollbars on horizontal marquee */
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+  .no-scrollbar { scrollbar-width: none; }
+
+  /* loader / cursor accent */
+  .gold-dot {
+    width: 6px; height: 6px; border-radius: 999px; background: var(--gold);
+    display: inline-block; vertical-align: middle;
+  }
+</style>
+
+<!-- React + Babel -->
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+</head>
+<body>
+  <div id="root"></div>
+
+  <!-- Components -->
+  <script type="text/babel" src="tweaks-panel.jsx"></script>
+  <script type="text/babel" src="components/Nav.jsx"></script>
+  <script type="text/babel" src="components/Hero.jsx"></script>
+  <script type="text/babel" src="components/Categories.jsx"></script>
+  <script type="text/babel" src="components/Featured.jsx"></script>
+  <script type="text/babel" src="components/CastCTA.jsx"></script>
+  <script type="text/babel" src="components/Articles.jsx"></script>
+  <script type="text/babel" src="components/Footer.jsx"></script>
+  <script type="text/babel" src="app.jsx"></script>
+</body>
+</html>
