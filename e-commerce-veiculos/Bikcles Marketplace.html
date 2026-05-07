@@ -2503,7 +2503,7 @@
     .vp-spec-list {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 16px
+      gap: 12px
     }
 
     .vp-spec-item {
@@ -2532,12 +2532,12 @@
     .vp-opt-list {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 10px
+      gap: 12px
     }
 
     .vp-opt-item {
       display: flex;
-      align-items: center;
+      align-items: flex-start;
       gap: 10px;
       font-size: 13px;
       color: var(--ink);
@@ -2752,7 +2752,122 @@
       cursor: pointer
     }
 
+    /* ======== HAMBURGER MENU ======== */
+    .ham-btn {
+      display: none;
+      width: 40px;
+      height: 40px;
+      background: #f5f6f8;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      flex-shrink: 0
+    }
+
+    .ham-btn span {
+      display: block;
+      width: 20px;
+      height: 2px;
+      background: var(--ink);
+      border-radius: 2px;
+      transition: transform .25s, opacity .25s
+    }
+
+    .ham-btn.open span:nth-child(1) {
+      transform: translateY(7px) rotate(45deg)
+    }
+
+    .ham-btn.open span:nth-child(2) {
+      opacity: 0
+    }
+
+    .ham-btn.open span:nth-child(3) {
+      transform: translateY(-7px) rotate(-45deg)
+    }
+
+    .mob-nav {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: #0c0d10;
+      z-index: 310;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 100px 32px 40px
+    }
+
+    .mob-nav.open {
+      display: flex
+    }
+
+    .mob-nav-links {
+      display: flex;
+      flex-direction: column;
+      gap: 0
+    }
+
+    .mob-nav-links a {
+      font-family: 'Poppins', sans-serif;
+      font-size: 26px;
+      font-weight: 500;
+      color: #fff;
+      text-decoration: none;
+      padding: 16px 0;
+      border-bottom: 1px solid rgba(255,255,255,.07);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: color .2s
+    }
+
+    .mob-nav-links a::after {
+      content: "→";
+      font-size: 20px;
+      color: rgba(255,255,255,.2);
+      transition: color .2s, transform .2s
+    }
+
+    .mob-nav-links a:hover,
+    .mob-nav-links a.active {
+      color: var(--accent)
+    }
+
+    .mob-nav-links a.active::after,
+    .mob-nav-links a:hover::after {
+      color: var(--accent);
+      transform: translateX(4px)
+    }
+
+    .mob-nav-bottom {
+      display: flex;
+      flex-direction: column;
+      gap: 14px
+    }
+
+    .mob-nav .mob-phone {
+      font-family: 'Poppins', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      color: #5a606b;
+      display: flex;
+      align-items: center;
+      gap: 8px
+    }
+
+    .mob-nav .mob-phone svg {
+      color: var(--accent)
+    }
+
     /* ======== RESPONSIVE ======== */
+
+    /* --- 1380px: slight card adjustments --- */
     @media (min-width:1101px) and (max-width:1380px) {
       .card .price {
         font-size: 17px
@@ -2764,6 +2879,7 @@
       }
     }
 
+    /* --- 1100px: tablet landscape --- */
     @media (max-width:1100px) {
       .wrap {
         padding: 0 24px
@@ -2771,6 +2887,10 @@
 
       nav.menu {
         display: none
+      }
+
+      .ham-btn {
+        display: flex
       }
 
       .hero h1 {
@@ -2806,6 +2926,396 @@
         flex-direction: column;
         gap: 6px;
         padding: 8px 0
+      }
+
+      .vp-page-layout {
+        grid-template-columns: 1fr;
+        padding: 24px 24px 48px
+      }
+
+      .vp-contact-card {
+        position: static
+      }
+
+      .vp-strip {
+        height: 360px
+      }
+    }
+
+    /* --- 900px: tablet portrait --- */
+    @media (max-width:900px) {
+      .hero h1 {
+        font-size: 44px
+      }
+
+      .hero {
+        padding: 60px 0 100px
+      }
+
+      .hero-meta {
+        gap: 32px
+      }
+
+      .cats-grid {
+        grid-template-columns: repeat(3, 1fr)
+      }
+
+      .vp-strip {
+        height: 300px
+      }
+
+      .vp-page-layout {
+        padding: 20px 16px 40px;
+        gap: 24px
+      }
+
+      .head-phone {
+        display: none
+      }
+
+      .search-fields,
+      .search-float .search-fields {
+        grid-template-columns: 1fr 1fr
+      }
+
+      .search-row-2 {
+        grid-template-columns: 1fr
+      }
+    }
+
+    /* --- 640px: mobile --- */
+    @media (max-width:640px) {
+
+      /* topbar */
+      .topbar {
+        display: none
+      }
+
+      /* header */
+      .wrap {
+        padding: 0 16px
+      }
+
+      .logo .mark {
+        width: 140px;
+        height: 42px;
+        margin-top: -6px;
+        margin-bottom: -6px
+      }
+
+      .head-inner {
+        padding-top: 0;
+        padding-bottom: 0;
+        gap: 12px;
+        height: 68px
+      }
+
+      .head-cta {
+        gap: 0;
+        align-self: stretch;
+        display: flex;
+        align-items: stretch
+      }
+
+      .head-cta .btn {
+        display: none
+      }
+
+      .icon-btn {
+        width: 52px;
+        height: 100%;
+        border-radius: 0;
+        background: transparent
+      }
+
+      .ham-btn {
+        width: 52px;
+        height: 100%;
+        border-radius: 0;
+        background: transparent
+      }
+
+      .head-phone {
+        display: none
+      }
+
+      /* hero */
+      .hero {
+        padding: 40px 0 72px
+      }
+
+      .hero h1 {
+        font-size: 32px;
+        line-height: 1.05
+      }
+
+      .hero p.lead {
+        font-size: 14px
+      }
+
+      .hero-meta {
+        gap: 16px;
+        flex-wrap: nowrap
+      }
+
+      .hero-meta div .n {
+        font-size: 26px
+      }
+
+      .hero-meta div .l {
+        font-size: 9px;
+        letter-spacing: .14em
+      }
+
+      .search-float {
+        margin-top: -48px
+      }
+
+      /* search card */
+      .search-card {
+        border-radius: 12px
+      }
+
+      .search-body {
+        padding: 20px
+      }
+
+      .search-body .head {
+        flex-wrap: wrap;
+        gap: 8px
+      }
+
+      .search-tabs {
+        overflow-x: auto
+      }
+
+      .search-tab {
+        padding: 14px 16px;
+        font-size: 11px;
+        flex-shrink: 0
+      }
+
+      .search-fields,
+      .search-float .search-fields {
+        grid-template-columns: 1fr
+      }
+
+      .search-row-2 {
+        grid-template-columns: 1fr
+      }
+
+      .field select {
+        font-size: 13px
+      }
+
+      .brand-strip {
+        flex-wrap: wrap;
+        gap: 8px
+      }
+
+      .search-extras {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px
+      }
+
+      /* listings — hide filter chips, show 1 card per row */
+      .list-head .filters {
+        display: none
+      }
+
+      .list-head {
+        flex-direction: column;
+        gap: 8px;
+        align-items: flex-start
+      }
+
+      .list-head h2 {
+        font-size: 28px
+      }
+
+      .cards {
+        grid-template-columns: 1fr
+      }
+
+      .services-grid {
+        grid-template-columns: 1fr
+      }
+
+      /* categories — 2 cols, no filter link */
+      .cats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px
+      }
+
+      .cat-card {
+        padding: 16px 10px
+      }
+
+      .cats-head .filter-link {
+        display: none
+      }
+
+      .cats-head h2 {
+        font-size: 26px
+      }
+
+      /* brands */
+      .brands-nav {
+        display: none
+      }
+
+      .brands-head {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px
+      }
+
+      .brands-head h2 {
+        font-size: 26px
+      }
+
+      /* about */
+      .about-grid {
+        min-height: auto
+      }
+
+      .about-img {
+        min-height: 220px
+      }
+
+      .about-content {
+        padding: 36px 20px 40px
+      }
+
+      .about-content .brand-mini {
+        font-size: 11px
+      }
+
+      .about-content h2 {
+        font-size: 34px;
+        line-height: 1.1
+      }
+
+      .about-content p {
+        font-size: 14px;
+        margin-top: 14px
+      }
+
+      .about-content .actions {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px
+      }
+
+      .about-content .actions .btn {
+        text-align: center;
+        justify-content: center
+      }
+
+      .about-content .stats {
+        margin-top: 32px;
+        padding-top: 24px;
+        gap: 24px;
+        flex-wrap: wrap
+      }
+
+      .about-content .stats div .n {
+        font-size: 24px
+      }
+
+      /* testimonials */
+      .testi-grid {
+        grid-template-columns: 1fr
+      }
+
+      /* contact/map section */
+      .vp-contact-inner {
+        grid-template-columns: 1fr;
+        gap: 32px;
+        padding: 0 16px
+      }
+
+      .vp-contact-heading {
+        font-size: 24px;
+        margin-bottom: 20px
+      }
+
+      .vp-map-wrap {
+        aspect-ratio: 16/9
+      }
+
+      /* footer */
+      .foot-grid {
+        grid-template-columns: 1fr;
+        gap: 40px
+      }
+
+      .copy {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 14px
+      }
+
+      .copy .pays {
+        flex-wrap: wrap
+      }
+
+      /* vehicle detail */
+      .vp-strip {
+        height: 220px;
+        grid-template-columns: 1fr
+      }
+
+      .vp-strip-img.side {
+        display: none
+      }
+
+      .vp-strip-prev {
+        left: 8px
+      }
+
+      .vp-strip-next {
+        right: 8px
+      }
+
+      .vp-page-layout {
+        padding: 16px 12px 32px;
+        gap: 20px
+      }
+
+      .vp-contact-card {
+        padding: 20px
+      }
+
+      .vp-model {
+        font-size: 22px
+      }
+
+      .vp-price {
+        font-size: 28px
+      }
+
+      .vp-contact-grid {
+        grid-template-columns: 1fr 1fr
+      }
+
+      .vp-spec-list {
+        grid-template-columns: repeat(2, 1fr)
+      }
+
+      #vpSuggestions.cards {
+        grid-template-columns: 1fr
+      }
+
+      .vp-breadcrumb {
+        padding: 12px 16px;
+        font-size: 12px
+      }
+
+      /* section headings */
+      .sect-title {
+        font-size: 28px
       }
     }
   </style>
@@ -2845,12 +3355,30 @@
     </div>
   </div>
 
+  <!-- mobile nav overlay -->
+  <div class="mob-nav" id="mobNav">
+    <div class="mob-nav-links">
+      <a href="#" class="active" onclick="closeMobileMenu()">Zero Km</a>
+      <a href="#" onclick="closeMobileMenu()">Seminovos</a>
+      <a href="#" onclick="closeMobileMenu()">Financie</a>
+      <a href="#" onclick="closeMobileMenu()">Sobre</a>
+    </div>
+    <div class="mob-nav-bottom">
+      <a href="tel:+556133446118" class="mob-phone">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+        </svg>
+        (61) 3344-6118
+      </a>
+      <a href="#" class="btn btn-accent" style="text-align:center;justify-content:center" onclick="closeMobileMenu()">Anunciar veículo</a>
+    </div>
+  </div>
+
   <!-- ============ HEADER ============ -->
   <header class="main">
     <div class="wrap head-inner">
       <a href="#" class="logo">
         <span class="mark"><img src="assets/logo.png" alt="Prime Torque" /></span>
-        <!-- <span class="name">PRIME <span>TORQUE</span></span> -->
       </a>
       <nav class="menu">
         <a href="#" class="active">Zero Km</a>
@@ -2873,6 +3401,9 @@
           </svg>
         </a>
         <a href="#" class="btn btn-accent">Anunciar veículo</a>
+        <button class="ham-btn" id="hamBtn" aria-label="Menu" onclick="toggleMobileMenu()">
+          <span></span><span></span><span></span>
+        </button>
       </div>
     </div>
   </header>
@@ -2987,7 +3518,7 @@
               <span class="brand-pill">Kawasaki</span>
               <span class="brand-pill">Yamaha</span>
             </div>
-            <a href="#" style="color:var(--accent);font-weight:700">Busca avançada →</a>
+            <!-- <a href="#" style="color:var(--accent);font-weight:700">Busca avançada →</a> -->
           </div>
         </div>
       </div>
@@ -3507,10 +4038,6 @@
           <span class="eyebrow">Depoimentos</span>
           <h2 style="margin-top:8px">O que nossos clientes dizem</h2>
         </div>
-        <div class="stars-overall">
-          <div class="stars">★★★★★</div>
-          <div class="meta">4.9/5 · 2.341 avaliações</div>
-        </div>
       </div>
       <div class="testi-grid">
         <article class="testi-card">
@@ -3545,7 +4072,7 @@
     </div>
   </section>
 
-  <!-- ============ ABOUT (MOTORIZA HOUSE) ============ -->
+  <!-- ============ ABOUT (PRIME TORQUE) ============ -->
   <section class="about">
     <div class="about-grid">
       <div class="about-img">
@@ -3562,7 +4089,7 @@
         </div>
       </div>
       <div class="about-content">
-        <div class="brand-mini">MOTORIZA HOUSE</div>
+        <div class="brand-mini">PRIME TORQUE</div>
         <h2>Apaixonados<br />por <span class="accent">moto</span></h2>
         <p>Nossa paixão por motos nos levou a criar um espaço para quem ama a estrada e busca segurança e estilo ao
           pilotar. Percebemos a importância de equipamentos de qualidade e decidimos ajudar outros motociclistas a
@@ -4068,6 +4595,19 @@
   </div>
 
   <script>
+    function toggleMobileMenu() {
+      const btn = document.getElementById('hamBtn');
+      const nav = document.getElementById('mobNav');
+      btn.classList.toggle('open');
+      nav.classList.toggle('open');
+      document.body.style.overflow = nav.classList.contains('open') ? 'hidden' : '';
+    }
+    function closeMobileMenu() {
+      document.getElementById('hamBtn').classList.remove('open');
+      document.getElementById('mobNav').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
     function scrollBrands(dir) {
       document.getElementById('brandsTrack').scrollBy({ left: dir * 320, behavior: 'smooth' });
     }
