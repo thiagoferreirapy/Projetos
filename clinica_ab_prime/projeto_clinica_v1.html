@@ -1,0 +1,1799 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Folha & Co. — Odontologia Integrativa</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --cream: #F2EFE6;
+  --cream-warm: #EBE6D8;
+  --cream-pure: #FAF7EF;
+  --sage: #7E8D6F;
+  --sage-deep: #5C6B4F;
+  --sage-soft: #A8B49A;
+  --sage-tint: #DDE2D4;
+  --graphite: #2A2D2A;
+  --graphite-soft: #4A4D48;
+  --ink: #1F211F;
+  --muted: #7A7B76;
+  --line: rgba(42,45,42,0.10);
+  --line-strong: rgba(42,45,42,0.20);
+}
+
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;background:var(--cream)}
+body{
+  background:var(--cream);
+  color:var(--ink);
+  font-family:'Inter',sans-serif;
+  font-weight:300;
+  font-size:15px;
+  line-height:1.65;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+  letter-spacing:-0.005em;
+}
+::selection{background:var(--sage);color:var(--cream)}
+
+/* ============== NAV ============== */
+nav{
+  position:fixed;
+  top:0;left:0;right:0;
+  z-index:100;
+  padding:24px 48px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  transition:all 0.45s ease;
+}
+nav .logo{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  text-decoration:none;
+  color:var(--cream);
+  transition:color 0.4s;
+}
+nav .logo-mark{
+  width:32px;height:32px;
+  border:1px solid currentColor;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:13px;
+  font-weight:400;
+  transition:all 0.4s;
+}
+nav .logo-text{
+  font-size:14px;
+  font-weight:500;
+  letter-spacing:-0.01em;
+}
+nav .logo-text span{
+  display:block;
+  font-size:10px;
+  font-weight:300;
+  opacity:0.7;
+  letter-spacing:0.02em;
+  margin-top:1px;
+}
+
+nav ul{
+  display:flex;
+  gap:36px;
+  list-style:none;
+}
+nav ul a{
+  color:var(--cream);
+  text-decoration:none;
+  font-size:13px;
+  font-weight:400;
+  opacity:0.85;
+  transition:all 0.3s;
+  letter-spacing:-0.005em;
+}
+nav ul a:hover{opacity:1}
+
+nav .nav-cta{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:11px 20px;
+  background:var(--cream);
+  color:var(--graphite);
+  text-decoration:none;
+  font-size:13px;
+  font-weight:500;
+  border-radius:100px;
+  transition:all 0.3s;
+}
+nav .nav-cta:hover{background:var(--sage);color:var(--cream)}
+nav .nav-cta::after{
+  content:'→';
+  font-size:14px;
+  transition:transform 0.3s;
+}
+nav .nav-cta:hover::after{transform:translateX(3px)}
+
+nav.scrolled{
+  background:rgba(242,239,230,0.92);
+  backdrop-filter:blur(18px);
+  padding:16px 48px;
+  border-bottom:1px solid var(--line);
+}
+nav.scrolled .logo{color:var(--graphite)}
+nav.scrolled ul a{color:var(--graphite)}
+nav.scrolled .nav-cta{
+  background:var(--graphite);
+  color:var(--cream);
+}
+nav.scrolled .nav-cta:hover{background:var(--sage)}
+
+/* ============== HERO ============== */
+.hero{
+  min-height:100vh;
+  position:relative;
+  display:flex;
+  align-items:flex-end;
+  overflow:hidden;
+  padding:0;
+}
+.hero-bg{
+  position:absolute;
+  inset:0;
+  z-index:0;
+}
+.hero-bg img{
+  width:100%;height:100%;
+  object-fit:cover;
+  object-position:center;
+}
+.hero-bg::after{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:
+    linear-gradient(180deg, rgba(42,45,42,0.4) 0%, transparent 25%, transparent 55%, rgba(42,45,42,0.85) 100%);
+}
+
+.hero-content{
+  position:relative;
+  z-index:2;
+  width:100%;
+  padding:48px 48px 64px;
+  color:var(--cream);
+}
+
+.hero-eyebrow{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  font-size:12px;
+  font-weight:400;
+  margin-bottom:32px;
+  padding:8px 14px;
+  background:rgba(250,247,239,0.12);
+  border:1px solid rgba(250,247,239,0.2);
+  border-radius:100px;
+  backdrop-filter:blur(8px);
+}
+.hero-eyebrow::before{
+  content:'';
+  width:6px;height:6px;
+  background:var(--sage-soft);
+  border-radius:50%;
+}
+
+.hero-title{
+  font-family:'Inter',sans-serif;
+  font-size:clamp(48px, 6.5vw, 110px);
+  line-height:0.98;
+  font-weight:300;
+  letter-spacing:-0.035em;
+  max-width:960px;
+  margin-bottom:32px;
+}
+.hero-title strong{
+  font-weight:500;
+}
+
+.hero-bottom{
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:48px;
+  align-items:end;
+  padding-top:32px;
+  border-top:1px solid rgba(250,247,239,0.2);
+}
+.hero-desc{
+  font-size:15px;
+  line-height:1.6;
+  max-width:440px;
+  opacity:0.88;
+}
+
+.hero-actions{
+  display:flex;
+  gap:12px;
+  align-items:center;
+}
+.btn{
+  padding:14px 26px;
+  font-size:13px;
+  font-weight:500;
+  text-decoration:none;
+  cursor:pointer;
+  transition:all 0.3s;
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  border-radius:100px;
+  border:1px solid transparent;
+  background:transparent;
+  letter-spacing:-0.005em;
+}
+.btn-primary{
+  background:var(--cream);
+  color:var(--graphite);
+}
+.btn-primary:hover{background:var(--sage);color:var(--cream)}
+.btn-primary::after{
+  content:'→';
+  font-size:15px;
+  transition:transform 0.3s;
+}
+.btn-primary:hover::after{transform:translateX(4px)}
+
+.btn-ghost{
+  color:var(--cream);
+  border-color:rgba(250,247,239,0.4);
+}
+.btn-ghost:hover{
+  background:rgba(250,247,239,0.1);
+  border-color:rgba(250,247,239,0.7);
+}
+
+/* ============== HALLMARKS (faixa de valores) ============== */
+.hallmarks{
+  background:var(--cream);
+  padding:64px 48px;
+  display:grid;
+  grid-template-columns:repeat(4, 1fr);
+  gap:48px;
+  border-bottom:1px solid var(--line);
+}
+.hallmark{
+  display:flex;
+  gap:18px;
+  align-items:flex-start;
+}
+.hallmark-num{
+  font-size:13px;
+  font-weight:500;
+  color:var(--sage-deep);
+  padding-top:2px;
+  letter-spacing:-0.01em;
+}
+.hallmark h4{
+  font-size:15px;
+  font-weight:500;
+  color:var(--graphite);
+  margin-bottom:6px;
+  letter-spacing:-0.01em;
+}
+.hallmark p{
+  font-size:13px;
+  color:var(--muted);
+  line-height:1.55;
+}
+
+/* ============== ABOUT ============== */
+.about{
+  background:var(--cream);
+  padding:140px 48px;
+  position:relative;
+}
+.about-inner{
+  max-width:1240px;
+  margin:0 auto;
+  display:grid;
+  grid-template-columns:1fr 1.2fr;
+  gap:96px;
+  align-items:center;
+}
+
+.about-image{
+  position:relative;
+  aspect-ratio:4/5;
+  overflow:hidden;
+  border-radius:4px;
+}
+.about-image img{
+  width:100%;height:100%;
+  object-fit:cover;
+}
+.about-image-label{
+  position:absolute;
+  bottom:16px;
+  left:16px;
+  background:rgba(250,247,239,0.92);
+  backdrop-filter:blur(10px);
+  padding:10px 16px;
+  border-radius:100px;
+  font-size:12px;
+  font-weight:500;
+  color:var(--graphite);
+  letter-spacing:-0.005em;
+}
+.about-image-label span{
+  color:var(--sage-deep);
+  margin-right:6px;
+}
+
+.about-tag{
+  display:inline-block;
+  font-size:12px;
+  font-weight:500;
+  color:var(--sage-deep);
+  margin-bottom:24px;
+  letter-spacing:0.05em;
+  text-transform:uppercase;
+}
+
+.about-content h2{
+  font-size:clamp(36px, 4vw, 56px);
+  font-weight:300;
+  line-height:1.05;
+  letter-spacing:-0.03em;
+  color:var(--graphite);
+  margin-bottom:32px;
+}
+.about-content h2 strong{font-weight:500;color:var(--sage-deep)}
+
+.about-content p{
+  font-size:16px;
+  line-height:1.75;
+  color:var(--graphite-soft);
+  margin-bottom:20px;
+  max-width:540px;
+}
+
+.about-stats{
+  display:grid;
+  grid-template-columns:repeat(3, 1fr);
+  gap:24px;
+  margin-top:48px;
+  padding-top:36px;
+  border-top:1px solid var(--line);
+}
+.stat-num{
+  font-size:38px;
+  font-weight:300;
+  color:var(--graphite);
+  letter-spacing:-0.03em;
+  line-height:1;
+  margin-bottom:6px;
+}
+.stat-num span{
+  font-size:18px;
+  color:var(--sage-deep);
+  margin-left:2px;
+}
+.stat-label{
+  font-size:12px;
+  color:var(--muted);
+  letter-spacing:-0.005em;
+}
+
+/* ============== TRATAMENTOS ============== */
+.treatments{
+  background:var(--cream-warm);
+  padding:140px 48px;
+  position:relative;
+}
+.treatments-header{
+  max-width:1240px;
+  margin:0 auto 80px;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:80px;
+  align-items:end;
+}
+.section-tag{
+  display:inline-block;
+  font-size:12px;
+  font-weight:500;
+  color:var(--sage-deep);
+  margin-bottom:20px;
+  letter-spacing:0.05em;
+  text-transform:uppercase;
+}
+.treatments-header h2{
+  font-size:clamp(40px, 5vw, 72px);
+  font-weight:300;
+  line-height:1;
+  letter-spacing:-0.035em;
+  color:var(--graphite);
+}
+.treatments-header h2 strong{font-weight:500;color:var(--sage-deep)}
+.treatments-header .intro{
+  font-size:16px;
+  line-height:1.7;
+  color:var(--graphite-soft);
+  max-width:440px;
+  padding-bottom:8px;
+}
+
+.treatments-list{
+  max-width:1240px;
+  margin:0 auto;
+}
+
+.treatment{
+  background:var(--cream-pure);
+  border:1px solid var(--line);
+  border-radius:8px;
+  margin-bottom:14px;
+  overflow:hidden;
+  transition:all 0.4s ease;
+}
+.treatment:hover{
+  border-color:var(--sage-soft);
+  background:#fff;
+}
+
+.treatment-header{
+  padding:36px 40px;
+  display:grid;
+  grid-template-columns:60px 1fr auto auto;
+  gap:32px;
+  align-items:center;
+  cursor:pointer;
+}
+.treatment-num{
+  font-size:13px;
+  font-weight:500;
+  color:var(--sage-deep);
+  letter-spacing:-0.01em;
+}
+.treatment-title h3{
+  font-size:24px;
+  font-weight:400;
+  color:var(--graphite);
+  letter-spacing:-0.02em;
+  margin-bottom:4px;
+}
+.treatment-title .sub{
+  font-size:13px;
+  color:var(--muted);
+}
+.treatment-tags{
+  display:flex;
+  gap:8px;
+}
+.tag{
+  font-size:11px;
+  font-weight:500;
+  padding:5px 11px;
+  background:var(--sage-tint);
+  color:var(--sage-deep);
+  border-radius:100px;
+  letter-spacing:-0.005em;
+}
+.treatment-toggle{
+  width:36px;height:36px;
+  border-radius:50%;
+  background:var(--cream);
+  border:1px solid var(--line);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  transition:all 0.4s;
+  font-size:18px;
+  color:var(--graphite);
+  cursor:pointer;
+  font-weight:300;
+}
+.treatment.open .treatment-toggle{
+  background:var(--sage);
+  color:var(--cream);
+  border-color:var(--sage);
+  transform:rotate(45deg);
+}
+
+.treatment-body{
+  max-height:0;
+  overflow:hidden;
+  transition:max-height 0.6s cubic-bezier(0.22,1,0.36,1);
+}
+.treatment.open .treatment-body{
+  max-height:600px;
+}
+.treatment-body-inner{
+  padding:0 40px 40px;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:48px;
+  border-top:1px solid var(--line);
+  padding-top:32px;
+}
+.treatment-body p{
+  font-size:14.5px;
+  line-height:1.7;
+  color:var(--graphite-soft);
+}
+.treatment-includes h5{
+  font-size:11px;
+  text-transform:uppercase;
+  letter-spacing:0.1em;
+  color:var(--sage-deep);
+  margin-bottom:16px;
+  font-weight:600;
+}
+.treatment-includes ul{
+  list-style:none;
+}
+.treatment-includes li{
+  font-size:13.5px;
+  color:var(--graphite-soft);
+  padding:8px 0;
+  border-bottom:1px solid var(--line);
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+.treatment-includes li::before{
+  content:'';
+  width:6px;height:6px;
+  background:var(--sage);
+  border-radius:50%;
+  flex-shrink:0;
+}
+.treatment-includes li:last-child{border-bottom:none}
+
+/* ============== APPROACH (manifesto verde) ============== */
+.approach{
+  background:var(--sage-deep);
+  color:var(--cream);
+  padding:140px 48px;
+  position:relative;
+}
+.approach-inner{
+  max-width:1080px;
+  margin:0 auto;
+  text-align:center;
+}
+.approach-tag{
+  display:inline-block;
+  font-size:12px;
+  font-weight:500;
+  margin-bottom:32px;
+  color:var(--sage-soft);
+  letter-spacing:0.05em;
+  text-transform:uppercase;
+}
+.approach h2{
+  font-size:clamp(36px, 4.5vw, 64px);
+  font-weight:300;
+  line-height:1.1;
+  letter-spacing:-0.025em;
+  margin-bottom:48px;
+}
+.approach h2 strong{font-weight:500;color:var(--cream-warm)}
+.approach h2 em{
+  font-style:normal;
+  color:var(--sage-soft);
+  font-weight:400;
+}
+
+.approach-quote{
+  font-size:20px;
+  line-height:1.7;
+  font-weight:300;
+  max-width:720px;
+  margin:0 auto;
+  color:rgba(242,239,230,0.85);
+}
+
+.approach-sig{
+  margin-top:48px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:8px;
+}
+.approach-sig-name{
+  font-size:15px;
+  font-weight:500;
+  letter-spacing:-0.01em;
+}
+.approach-sig-role{
+  font-size:12px;
+  color:var(--sage-soft);
+}
+
+/* ============== DEPOIMENTOS ============== */
+.testimonials{
+  background:var(--cream);
+  padding:140px 48px;
+}
+.testimonials-header{
+  max-width:1240px;
+  margin:0 auto 64px;
+  text-align:center;
+}
+.testimonials h2{
+  font-size:clamp(36px, 4.5vw, 60px);
+  font-weight:300;
+  line-height:1.05;
+  letter-spacing:-0.03em;
+  color:var(--graphite);
+}
+.testimonials h2 strong{font-weight:500;color:var(--sage-deep)}
+
+.testimonials-grid{
+  max-width:1240px;
+  margin:0 auto;
+  display:grid;
+  grid-template-columns:repeat(3, 1fr);
+  gap:24px;
+}
+.testimonial{
+  background:var(--cream-pure);
+  border:1px solid var(--line);
+  border-radius:12px;
+  overflow:hidden;
+  transition:all 0.4s;
+}
+.testimonial:hover{
+  border-color:var(--sage-soft);
+  transform:translateY(-4px);
+}
+.testimonial-video{
+  position:relative;
+  aspect-ratio:3/4;
+  overflow:hidden;
+  cursor:pointer;
+  background:var(--sage-tint);
+}
+.testimonial-video img{
+  width:100%;height:100%;
+  object-fit:cover;
+  transition:transform 0.8s;
+}
+.testimonial:hover .testimonial-video img{transform:scale(1.05)}
+.testimonial-video::after{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:linear-gradient(180deg, transparent 60%, rgba(42,45,42,0.5) 100%);
+}
+.play-btn{
+  position:absolute;
+  top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  width:60px;height:60px;
+  border-radius:50%;
+  background:rgba(250,247,239,0.92);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:2;
+  transition:all 0.4s;
+  backdrop-filter:blur(8px);
+}
+.testimonial:hover .play-btn{
+  background:var(--sage);
+  transform:translate(-50%,-50%) scale(1.1);
+}
+.play-btn::before{
+  content:'';
+  width:0;height:0;
+  border-left:13px solid var(--graphite);
+  border-top:8px solid transparent;
+  border-bottom:8px solid transparent;
+  margin-left:3px;
+  transition:border-left-color 0.4s;
+}
+.testimonial:hover .play-btn::before{border-left-color:var(--cream)}
+.video-duration{
+  position:absolute;
+  bottom:14px;
+  right:14px;
+  font-size:11px;
+  color:var(--cream);
+  background:rgba(42,45,42,0.6);
+  padding:4px 10px;
+  border-radius:100px;
+  z-index:2;
+  backdrop-filter:blur(6px);
+  font-weight:500;
+}
+
+.testimonial-meta{
+  padding:24px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+.testimonial-name{
+  font-size:15px;
+  font-weight:500;
+  color:var(--graphite);
+  letter-spacing:-0.01em;
+  margin-bottom:2px;
+}
+.testimonial-treatment{
+  font-size:12px;
+  color:var(--muted);
+}
+.testimonial-arrow{
+  width:32px;height:32px;
+  border-radius:50%;
+  background:var(--cream-warm);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:14px;
+  color:var(--graphite);
+  transition:all 0.3s;
+}
+.testimonial:hover .testimonial-arrow{
+  background:var(--sage);
+  color:var(--cream);
+}
+
+/* ============== CTA ============== */
+.cta{
+  background:var(--cream);
+  padding:80px 48px 140px;
+}
+.cta-card{
+  max-width:1240px;
+  margin:0 auto;
+  background:var(--graphite);
+  color:var(--cream);
+  border-radius:24px;
+  padding:80px 64px;
+  display:grid;
+  grid-template-columns:1.4fr 1fr;
+  gap:64px;
+  align-items:center;
+  position:relative;
+  overflow:hidden;
+}
+.cta-card::after{
+  content:'';
+  position:absolute;
+  bottom:-100px;
+  right:-100px;
+  width:400px;height:400px;
+  border-radius:50%;
+  background:radial-gradient(circle, rgba(168,180,154,0.18), transparent 70%);
+}
+.cta h3{
+  font-size:clamp(32px, 3.8vw, 52px);
+  font-weight:300;
+  line-height:1.05;
+  letter-spacing:-0.03em;
+  margin-bottom:20px;
+  position:relative;
+  z-index:1;
+}
+.cta h3 strong{font-weight:500;color:var(--sage-soft)}
+.cta-card p{
+  font-size:15px;
+  line-height:1.7;
+  color:rgba(242,239,230,0.75);
+  max-width:440px;
+  position:relative;
+  z-index:1;
+}
+.cta-card-actions{
+  position:relative;
+  z-index:1;
+  display:flex;
+  flex-direction:column;
+  gap:16px;
+  align-items:flex-end;
+}
+.cta-card-actions .btn-primary{
+  background:var(--cream);
+  color:var(--graphite);
+  padding:18px 32px;
+  font-size:14px;
+}
+.cta-card-actions .btn-primary:hover{
+  background:var(--sage);
+  color:var(--cream);
+}
+.cta-card-meta{
+  font-size:12px;
+  color:rgba(242,239,230,0.55);
+  text-align:right;
+}
+
+/* ============== CONTATO ============== */
+.contact{
+  background:var(--cream-warm);
+  padding:140px 48px;
+}
+.contact-inner{
+  max-width:1240px;
+  margin:0 auto;
+  display:grid;
+  grid-template-columns:1fr 1.3fr;
+  gap:80px;
+  align-items:start;
+}
+
+.contact-side .section-tag{margin-bottom:24px}
+.contact-side h2{
+  font-size:clamp(36px, 4vw, 52px);
+  font-weight:300;
+  line-height:1.05;
+  letter-spacing:-0.03em;
+  color:var(--graphite);
+  margin-bottom:24px;
+}
+.contact-side h2 strong{font-weight:500;color:var(--sage-deep)}
+
+.contact-side > p{
+  font-size:15px;
+  line-height:1.7;
+  color:var(--graphite-soft);
+  margin-bottom:48px;
+}
+
+.contact-details{
+  display:flex;
+  flex-direction:column;
+  gap:24px;
+}
+.contact-item{
+  display:flex;
+  gap:16px;
+  align-items:flex-start;
+  padding:20px 0;
+  border-bottom:1px solid var(--line);
+}
+.contact-item:last-child{border-bottom:none}
+.contact-item-icon{
+  width:40px;height:40px;
+  border-radius:50%;
+  background:var(--sage-tint);
+  color:var(--sage-deep);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-shrink:0;
+  font-weight:500;
+  font-size:14px;
+}
+.contact-item-body .label{
+  font-size:12px;
+  color:var(--muted);
+  margin-bottom:4px;
+}
+.contact-item-body .value{
+  font-size:15.5px;
+  font-weight:500;
+  color:var(--graphite);
+  letter-spacing:-0.01em;
+}
+.contact-item-body .extra{
+  font-size:13px;
+  color:var(--muted);
+  margin-top:2px;
+}
+
+/* form */
+.form{
+  background:var(--cream-pure);
+  padding:48px;
+  border-radius:16px;
+  border:1px solid var(--line);
+}
+.form-row{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:18px;
+  margin-bottom:18px;
+}
+.field{
+  display:flex;
+  flex-direction:column;
+}
+.field.full{grid-column:span 2}
+.field label{
+  font-size:12px;
+  font-weight:500;
+  color:var(--graphite);
+  margin-bottom:8px;
+  letter-spacing:-0.005em;
+}
+.field input,
+.field select,
+.field textarea{
+  background:var(--cream);
+  border:1px solid var(--line);
+  padding:14px 16px;
+  font-family:'Inter',sans-serif;
+  font-size:14.5px;
+  color:var(--graphite);
+  font-weight:400;
+  outline:none;
+  transition:all 0.25s;
+  border-radius:8px;
+  width:100%;
+  letter-spacing:-0.005em;
+}
+.field input:focus,
+.field select:focus,
+.field textarea:focus{
+  border-color:var(--sage);
+  background:var(--cream-pure);
+  box-shadow:0 0 0 3px rgba(126,141,111,0.12);
+}
+.field input::placeholder,
+.field textarea::placeholder{
+  color:rgba(42,45,42,0.4);
+}
+.field textarea{
+  resize:none;
+  min-height:100px;
+  line-height:1.5;
+}
+.field select{
+  appearance:none;
+  cursor:pointer;
+  background-image:url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%237E8D6F' stroke-width='1.5'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;
+  background-position:right 16px center;
+  padding-right:36px;
+}
+
+.form-bottom{
+  margin-top:24px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:20px;
+  flex-wrap:wrap;
+}
+.form-disclaimer{
+  font-size:12px;
+  color:var(--muted);
+  line-height:1.5;
+  max-width:280px;
+}
+.submit-btn{
+  background:var(--graphite);
+  color:var(--cream);
+  border:none;
+  padding:16px 28px;
+  font-family:'Inter',sans-serif;
+  font-size:14px;
+  font-weight:500;
+  cursor:pointer;
+  border-radius:100px;
+  transition:all 0.3s;
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  letter-spacing:-0.005em;
+}
+.submit-btn:hover{
+  background:var(--sage);
+  gap:14px;
+}
+.submit-btn::after{
+  content:'→';
+  font-size:16px;
+}
+
+/* ============== FOOTER ============== */
+footer{
+  background:var(--graphite);
+  color:rgba(242,239,230,0.65);
+  padding:80px 48px 32px;
+}
+.footer-inner{
+  max-width:1240px;
+  margin:0 auto;
+}
+.footer-top{
+  display:grid;
+  grid-template-columns:1.6fr 1fr 1fr 1fr;
+  gap:48px;
+  padding-bottom:48px;
+  border-bottom:1px solid rgba(242,239,230,0.12);
+}
+.footer-brand{
+  display:flex;
+  align-items:flex-start;
+  gap:14px;
+  margin-bottom:20px;
+}
+.footer-brand .mark{
+  width:40px;height:40px;
+  border:1px solid var(--sage-soft);
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:var(--sage-soft);
+  font-size:15px;
+  flex-shrink:0;
+}
+.footer-brand .name{
+  font-size:18px;
+  font-weight:500;
+  color:var(--cream);
+  letter-spacing:-0.01em;
+  margin-bottom:2px;
+}
+.footer-brand .tagline{
+  font-size:12px;
+  color:rgba(242,239,230,0.55);
+  letter-spacing:0.02em;
+}
+.footer-brand-text p{
+  font-size:13px;
+  line-height:1.65;
+  color:rgba(242,239,230,0.6);
+  max-width:300px;
+  margin-top:14px;
+}
+.footer-col h5{
+  font-size:12px;
+  font-weight:500;
+  color:var(--sage-soft);
+  margin-bottom:18px;
+  letter-spacing:-0.005em;
+}
+.footer-col ul{list-style:none}
+.footer-col li{margin-bottom:10px}
+.footer-col a{
+  color:rgba(242,239,230,0.65);
+  text-decoration:none;
+  font-size:14px;
+  transition:color 0.3s;
+  letter-spacing:-0.005em;
+}
+.footer-col a:hover{color:var(--sage-soft)}
+
+.footer-bottom{
+  margin-top:28px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  font-size:12px;
+  color:rgba(242,239,230,0.4);
+}
+
+/* ============== ANIMAÇÕES ============== */
+.reveal{
+  opacity:0;
+  transform:translateY(24px);
+  transition:opacity 0.9s cubic-bezier(0.22,1,0.36,1), transform 0.9s cubic-bezier(0.22,1,0.36,1);
+}
+.reveal.in{opacity:1;transform:translateY(0)}
+
+.hero-content > *{
+  opacity:0;
+  transform:translateY(20px);
+  animation:fadeUp 0.9s cubic-bezier(0.22,1,0.36,1) forwards;
+}
+.hero-content > *:nth-child(1){animation-delay:0.2s}
+.hero-content > *:nth-child(2){animation-delay:0.35s}
+.hero-content > *:nth-child(3){animation-delay:0.5s}
+@keyframes fadeUp{
+  to{opacity:1;transform:translateY(0)}
+}
+
+/* ============== RESPONSIVE ============== */
+@media (max-width: 1024px){
+  nav{padding:18px 28px}
+  nav.scrolled{padding:14px 28px}
+  nav ul{gap:20px}
+  .hero-content{padding:32px 28px 48px}
+  .hero-bottom{grid-template-columns:1fr;gap:32px;align-items:flex-start}
+  .hallmarks{grid-template-columns:1fr 1fr;gap:32px;padding:48px 28px}
+  .about, .treatments, .approach, .testimonials, .cta, .contact{padding:80px 28px}
+  .about-inner{grid-template-columns:1fr;gap:48px}
+  .treatments-header{grid-template-columns:1fr;gap:32px}
+  .treatment-header{grid-template-columns:40px 1fr auto;gap:20px;padding:24px 24px}
+  .treatment-tags{display:none}
+  .treatment-body-inner{grid-template-columns:1fr;gap:24px;padding:0 24px 32px}
+  .testimonials-grid{grid-template-columns:1fr 1fr;gap:18px}
+  .cta-card{grid-template-columns:1fr;gap:32px;padding:48px 32px}
+  .cta-card-actions{align-items:flex-start}
+  .cta-card-meta{text-align:left}
+  .contact-inner{grid-template-columns:1fr;gap:48px}
+  .form{padding:32px 24px}
+  .form-row{grid-template-columns:1fr;gap:14px}
+  .field.full{grid-column:span 1}
+  footer{padding:60px 28px 24px}
+  .footer-top{grid-template-columns:1fr 1fr;gap:36px}
+}
+@media (max-width: 600px){
+  nav ul{display:none}
+  nav{padding:14px 20px}
+  nav .logo-text{font-size:13px}
+  .hero-content{padding:24px 20px 36px}
+  .hero-actions{flex-direction:column;width:100%;align-items:stretch}
+  .btn{justify-content:center}
+  .hallmarks{grid-template-columns:1fr;gap:24px;padding:40px 20px}
+  .about, .treatments, .approach, .testimonials, .cta, .contact{padding:60px 20px}
+  .testimonials-grid{grid-template-columns:1fr}
+  .footer-top{grid-template-columns:1fr;gap:32px}
+  .footer-bottom{flex-direction:column;gap:10px;text-align:center}
+  .about-stats{grid-template-columns:1fr 1fr;gap:20px}
+}
+</style>
+</head>
+<body>
+
+<!-- ============ NAV ============ -->
+<nav id="nav">
+  <a href="#" class="logo">
+    <span class="logo-mark">F</span>
+    <span class="logo-text">
+      Folha & Co.
+      <span>Odontologia Integrativa</span>
+    </span>
+  </a>
+  <ul>
+    <li><a href="#sobre">Sobre</a></li>
+    <li><a href="#tratamentos">Tratamentos</a></li>
+    <li><a href="#abordagem">Abordagem</a></li>
+    <li><a href="#pacientes">Pacientes</a></li>
+  </ul>
+  <a href="#contato" class="nav-cta">Agendar</a>
+</nav>
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <div class="hero-bg">
+    <img src="https://images.unsplash.com/photo-1606811971618-4486d14f3f99?q=80&w=2000&auto=format&fit=crop" alt="">
+  </div>
+  <div class="hero-content">
+    <h1 class="hero-title">
+      Cuidar do sorriso é também<br>
+      <strong>cuidar de quem o usa.</strong>
+    </h1>
+    <div class="hero-bottom">
+      <p class="hero-desc">
+        Odontologia integrativa em estética, implantes e harmonização facial — pensada para acompanhar você por anos, não por consultas.
+      </p>
+      <div class="hero-actions">
+        <a href="#contato" class="btn btn-primary">Agendar avaliação</a>
+        <a href="#sobre" class="btn btn-ghost">Sobre a casa</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ HALLMARKS ============ -->
+<section class="hallmarks">
+  <div class="hallmark">
+    <div class="hallmark-num">01</div>
+    <div>
+      <h4>Tempo como protocolo</h4>
+      <p>Primeira consulta de 60 minutos, sem pressa para escutar.</p>
+    </div>
+  </div>
+  <div class="hallmark">
+    <div class="hallmark-num">02</div>
+    <div>
+      <h4>Equipe pequena</h4>
+      <p>Quatro especialistas, um plano para cada paciente.</p>
+    </div>
+  </div>
+  <div class="hallmark">
+    <div class="hallmark-num">03</div>
+    <div>
+      <h4>Tecnologia silenciosa</h4>
+      <p>Scanner 3D, DSD e tomografia — sem fazer disso espetáculo.</p>
+    </div>
+  </div>
+  <div class="hallmark">
+    <div class="hallmark-num">04</div>
+    <div>
+      <h4>Acompanhamento longo</h4>
+      <p>Follow-up programado por anos, sem custo adicional.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SOBRE ============ -->
+<section class="about" id="sobre">
+  <div class="about-inner">
+    <div class="about-image reveal">
+      <img src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?q=80&w=1200&auto=format&fit=crop" alt="Dra. Marina Folha">
+      <div class="about-image-label">
+        <span>●</span> Dra. Marina Folha · CRO 24.119
+      </div>
+    </div>
+
+    <div class="about-content reveal">
+      <div class="about-tag">Sobre a casa</div>
+      <h2>
+        Uma odontologia que <strong>respira no mesmo ritmo</strong> de quem ela atende.
+      </h2>
+      <p>
+        A Folha & Co. nasceu da inquietação de uma odontologia que tratava sorrisos como produtos. Aqui, atendemos um número intencionalmente pequeno de pacientes por mês — porque o cuidado que oferecemos depende de tempo, e tempo não escala.
+      </p>
+      <p>
+        Trabalhamos em estética dental, implantes e harmonização facial, mas o que define nossa prática não é o catálogo. É o jeito de olhar para cada caso como se fosse o único — porque, para quem chega, ele é.
+      </p>
+
+      <div class="about-stats">
+        <div>
+          <div class="stat-num">14<span>anos</span></div>
+          <div class="stat-label">de prática contínua</div>
+        </div>
+        <div>
+          <div class="stat-num">2.400<span>+</span></div>
+          <div class="stat-label">sorrisos acompanhados</div>
+        </div>
+        <div>
+          <div class="stat-num">04</div>
+          <div class="stat-label">especialistas em equipe</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TRATAMENTOS ============ -->
+<section class="treatments" id="tratamentos">
+  <div class="treatments-header reveal">
+    <div>
+      <div class="section-tag">Tratamentos</div>
+      <h2>
+        Oito especialidades,<br>
+        <strong>um só cuidado.</strong>
+      </h2>
+    </div>
+    <p class="intro">
+      Reunimos sob o mesmo teto todas as áreas necessárias para acompanhar você do começo ao fim — sem precisar buscar outro consultório a cada nova etapa.
+    </p>
+  </div>
+
+  <div class="treatments-list">
+
+    <div class="treatment reveal" data-treatment>
+      <div class="treatment-header" data-toggle>
+        <div class="treatment-num">/ 01</div>
+        <div class="treatment-title">
+          <h3>Dentística</h3>
+          <div class="sub">Restaurações e facetas que devolvem o brilho natural</div>
+        </div>
+        <div class="treatment-tags">
+          <span class="tag">Facetas</span>
+          <span class="tag">Estética</span>
+        </div>
+        <button class="treatment-toggle">+</button>
+      </div>
+      <div class="treatment-body">
+        <div class="treatment-body-inner">
+          <p>
+            A arte de devolver ao dente sua forma, cor e função originais — quase sem que ninguém perceba. Trabalhamos com restaurações invisíveis e facetas em resina e porcelana, sempre planejadas para se integrar perfeitamente ao seu sorriso, respeitando a anatomia que já é sua.
+          </p>
+          <div class="treatment-includes">
+            <h5>O tratamento inclui</h5>
+            <ul>
+              <li>Restaurações estéticas em resina</li>
+              <li>Facetas em resina e porcelana</li>
+              <li>Planejamento de cor e forma</li>
+              <li>Acompanhamento pós-tratamento</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="treatment reveal" data-treatment>
+      <div class="treatment-header" data-toggle>
+        <div class="treatment-num">/ 02</div>
+        <div class="treatment-title">
+          <h3>Ortodontia e Ortopedia</h3>
+          <div class="sub">O alinhamento certo, no tempo certo</div>
+        </div>
+        <div class="treatment-tags">
+          <span class="tag">Alinhadores</span>
+          <span class="tag">Aparelho fixo</span>
+        </div>
+        <button class="treatment-toggle">+</button>
+      </div>
+      <div class="treatment-body">
+        <div class="treatment-body-inner">
+          <p>
+            Cada sorriso pede um caminho diferente para encontrar seu equilíbrio. Atendemos crianças, adolescentes e adultos com aparelhos fixos convencionais, alinhadores transparentes e aparelhos ortopédicos — sempre escolhidos a partir do que faz mais sentido para o seu caso e seu estilo de vida.
+            </p>
+          <div class="treatment-includes">
+            <h5>O tratamento inclui</h5>
+            <ul>
+              <li>Aparelhos fixos (metálicos e estéticos)</li>
+              <li>Alinhadores transparentes</li>
+              <li>Aparelhos ortopédicos</li>
+              <li>Acompanhamento mensal</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="treatment reveal" data-treatment>
+      <div class="treatment-header" data-toggle>
+        <div class="treatment-num">/ 03</div>
+        <div class="treatment-title">
+          <h3>Cirurgia</h3>
+          <div class="sub">Técnica precisa, recuperação tranquila</div>
+        </div>
+        <div class="treatment-tags">
+          <span class="tag">Exodontia</span>
+          <span class="tag">Enxertos</span>
+        </div>
+        <button class="treatment-toggle">+</button>
+      </div>
+      <div class="treatment-body">
+        <div class="treatment-body-inner">
+          <p>
+            Procedimentos cirúrgicos realizados com técnica minimamente invasiva e atenção total ao seu conforto. Da extração de um siso à reconstrução do contorno gengival, cada cirurgia é planejada para garantir o melhor resultado clínico e a recuperação mais rápida e tranquila possível.
+          </p>
+          <div class="treatment-includes">
+            <h5>O tratamento inclui</h5>
+            <ul>
+              <li>Exodontias simples e de sisos</li>
+              <li>Frenectomia (freio labial e lingual)</li>
+              <li>Gengivoplastia e gengivectomia</li>
+              <li>Enxertos ósseos e gengivais</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="treatment reveal" data-treatment>
+      <div class="treatment-header" data-toggle>
+        <div class="treatment-num">/ 04</div>
+        <div class="treatment-title">
+          <h3>Prótese</h3>
+          <div class="sub">Reabilitar com naturalidade e firmeza</div>
+        </div>
+        <div class="treatment-tags">
+          <span class="tag">Coroas</span>
+          <span class="tag">Protocolo</span>
+        </div>
+        <button class="treatment-toggle">+</button>
+      </div>
+      <div class="treatment-body">
+        <div class="treatment-body-inner">
+          <p>
+            Reabilitamos sorrisos com próteses planejadas digitalmente e confeccionadas com materiais de alta performance. De uma coroa unitária à reabilitação total sobre implantes, o objetivo é sempre o mesmo: devolver função, estética e a segurança de mastigar, falar e sorrir sem pensar.
+          </p>
+          <div class="treatment-includes">
+            <h5>O tratamento inclui</h5>
+            <ul>
+              <li>Blocos e coroas cerâmicas</li>
+              <li>Prótese total e parcial removível</li>
+              <li>Prótese protocolo sobre implantes</li>
+              <li>Planejamento digital completo</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="treatment reveal" data-treatment>
+      <div class="treatment-header" data-toggle>
+        <div class="treatment-num">/ 05</div>
+        <div class="treatment-title">
+          <h3>Implantes</h3>
+          <div class="sub">A base sólida para um sorriso completo</div>
+        </div>
+        <div class="treatment-tags">
+          <span class="tag">Unitários</span>
+          <span class="tag">Protocolo</span>
+        </div>
+        <button class="treatment-toggle">+</button>
+      </div>
+      <div class="treatment-body">
+        <div class="treatment-body-inner">
+          <p>
+            A solução mais moderna, segura e duradoura para a perda dentária. Trabalhamos com implantes unitários para substituir um único dente e com protocolos completos para reabilitações totais — tudo planejado digitalmente para uma cirurgia precisa e um resultado natural.
+          </p>
+          <div class="treatment-includes">
+            <h5>O tratamento inclui</h5>
+            <ul>
+              <li>Implantes unitários</li>
+              <li>Protocolo sobre implantes</li>
+              <li>Planejamento digital 3D</li>
+              <li>Implantes de alta performance</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="treatment reveal" data-treatment>
+      <div class="treatment-header" data-toggle>
+        <div class="treatment-num">/ 06</div>
+        <div class="treatment-title">
+          <h3>Endodontia</h3>
+          <div class="sub">Salvar o dente é sempre a primeira escolha</div>
+        </div>
+        <div class="treatment-tags">
+          <span class="tag">Canal</span>
+        </div>
+        <button class="treatment-toggle">+</button>
+      </div>
+      <div class="treatment-body">
+        <div class="treatment-body-inner">
+          <p>
+            Antes de pensar em substituir, fazemos de tudo para preservar. O tratamento de canal moderno é confortável, eficaz e devolve ao dente toda a sua função — sem dor, sem desgaste excessivo, e com a tranquilidade de saber que aquele dente continuará sendo seu por muitos anos.
+          </p>
+          <div class="treatment-includes">
+            <h5>O tratamento inclui</h5>
+            <ul>
+              <li>Tratamento de canal completo</li>
+              <li>Retratamento endodôntico</li>
+              <li>Anestesia confortável</li>
+              <li>Acompanhamento radiográfico</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="treatment reveal" data-treatment>
+      <div class="treatment-header" data-toggle>
+        <div class="treatment-num">/ 07</div>
+        <div class="treatment-title">
+          <h3>Periodontia</h3>
+          <div class="sub">A saúde do sorriso começa pela gengiva</div>
+        </div>
+        <div class="treatment-tags">
+          <span class="tag">Raspagem</span>
+        </div>
+        <button class="treatment-toggle">+</button>
+      </div>
+      <div class="treatment-body">
+        <div class="treatment-body-inner">
+          <p>
+            Sorrisos bonitos começam por gengivas saudáveis. Cuidamos dos tecidos que sustentam os seus dentes com tratamentos periodontais que previnem, controlam e revertem doenças gengivais — a base silenciosa para tudo o que vem depois, da estética ao implante.
+          </p>
+          <div class="treatment-includes">
+            <h5>O tratamento inclui</h5>
+            <ul>
+              <li>Raspagem supragengival</li>
+              <li>Raspagem infragengival (subradicular)</li>
+              <li>Avaliação periodontal completa</li>
+              <li>Manutenção preventiva</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="treatment reveal" data-treatment>
+      <div class="treatment-header" data-toggle>
+        <div class="treatment-num">/ 08</div>
+        <div class="treatment-title">
+          <h3>Clínico Geral</h3>
+          <div class="sub">O cuidado que mantém tudo em equilíbrio</div>
+        </div>
+        <div class="treatment-tags">
+          <span class="tag">Profilaxia</span>
+          <span class="tag">Clareamento</span>
+        </div>
+        <button class="treatment-toggle">+</button>
+      </div>
+      <div class="treatment-body">
+        <div class="treatment-body-inner">
+          <p>
+            A consulta de rotina é onde tudo começa — e o que evita que tudo precise começar do zero depois. Profilaxia profissional, clareamento dental e avaliações periódicas são os gestos simples que mantêm seu sorriso saudável, brilhante e fora do consultório quando o assunto é tratamento de urgência.
+          </p>
+          <div class="treatment-includes">
+            <h5>O tratamento inclui</h5>
+            <ul>
+              <li>Profilaxia profissional</li>
+              <li>Clareamento dental</li>
+              <li>Avaliação de rotina</li>
+              <li>Orientação preventiva</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============ APPROACH ============ -->
+<section class="approach" id="abordagem">
+  <div class="approach-inner reveal">
+    <div class="approach-tag">Nossa abordagem</div>
+    <h2>
+      Acreditamos que o cuidado começa onde o <em>padrão</em> termina, e dura <strong>mais tempo do que a consulta</strong>.
+    </h2>
+    <p class="approach-quote">
+      "Por isso atendemos no máximo 8 pacientes novos por mês. Não é uma estratégia comercial — é a única forma que conhecemos de oferecer o que prometemos: tempo, escuta e refinamento."
+    </p>
+    <div class="approach-sig">
+      <div class="approach-sig-name">Dra. Marina Folha</div>
+      <div class="approach-sig-role">Diretora clínica · CRO/SP 24.119</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ DEPOIMENTOS ============ -->
+<section class="testimonials" id="pacientes">
+  <div class="testimonials-header reveal">
+    <div class="section-tag" style="margin-bottom:20px">Pacientes</div>
+    <h2>
+      Quem passou pela casa<br>
+      <strong>conta em primeira pessoa.</strong>
+    </h2>
+  </div>
+
+  <div class="testimonials-grid">
+
+    <div class="testimonial reveal">
+      <div class="testimonial-video">
+        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=900&auto=format&fit=crop" alt="">
+        <div class="play-btn"></div>
+        <div class="video-duration">2:14</div>
+      </div>
+      <div class="testimonial-meta">
+        <div>
+          <div class="testimonial-name">Camila R.</div>
+          <div class="testimonial-treatment">Estética autoral · 2024</div>
+        </div>
+        <div class="testimonial-arrow">↗</div>
+      </div>
+    </div>
+
+    <div class="testimonial reveal">
+      <div class="testimonial-video">
+        <img src="https://images.unsplash.com/photo-1531123897727-8f129e1688ce?q=80&w=900&auto=format&fit=crop" alt="">
+        <div class="play-btn"></div>
+        <div class="video-duration">3:42</div>
+      </div>
+      <div class="testimonial-meta">
+        <div>
+          <div class="testimonial-name">Fernanda O.</div>
+          <div class="testimonial-treatment">Harmonização · 2023</div>
+        </div>
+        <div class="testimonial-arrow">↗</div>
+      </div>
+    </div>
+
+    <div class="testimonial reveal">
+      <div class="testimonial-video">
+        <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=900&auto=format&fit=crop" alt="">
+        <div class="play-btn"></div>
+        <div class="video-duration">1:58</div>
+      </div>
+      <div class="testimonial-meta">
+        <div>
+          <div class="testimonial-name">Mariana C.</div>
+          <div class="testimonial-treatment">Implantes · 2024</div>
+        </div>
+        <div class="testimonial-arrow">↗</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============ CTA ============ -->
+<section class="cta">
+  <div class="cta-card reveal">
+    <div>
+      <h3>
+        Três vagas abertas<br>
+        <strong>para o próximo ciclo.</strong>
+      </h3>
+      <p>
+        Agende uma avaliação de 60 minutos. Conversamos sem pressa, analisamos seu caso e desenhamos juntos o caminho — sem compromisso, sem fórmulas prontas.
+      </p>
+    </div>
+    <div class="cta-card-actions">
+      <a href="#contato" class="btn btn-primary">Agendar avaliação</a>
+      <div class="cta-card-meta">Próximo ciclo: junho/2026</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CONTATO ============ -->
+<section class="contact" id="contato">
+  <div class="contact-inner">
+
+    <div class="contact-side reveal">
+      <div class="section-tag">Contato</div>
+      <h2>
+        Vamos <strong>conversar?</strong>
+      </h2>
+      <p>
+        Preencha o formulário ao lado e nossa equipe entra em contato em até 4 horas úteis, com toda a discrição que cada caso pede.
+      </p>
+
+      <div class="contact-details">
+        <div class="contact-item">
+          <div class="contact-item-icon">W</div>
+          <div class="contact-item-body">
+            <div class="label">WhatsApp</div>
+            <div class="value">+55 11 4002·8922</div>
+            <div class="extra">Resposta em até 4h úteis</div>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-item-icon">L</div>
+          <div class="contact-item-body">
+            <div class="label">Localização</div>
+            <div class="value">Rua das Acácias, 1240</div>
+            <div class="extra">Jardins · São Paulo · 2º andar</div>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-item-icon">H</div>
+          <div class="contact-item-body">
+            <div class="label">Horário</div>
+            <div class="value">Seg. a Sex. · 9h às 19h</div>
+            <div class="extra">Sábados sob agendamento</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form reveal">
+      <form onsubmit="event.preventDefault();this.querySelector('.submit-btn').innerHTML='Recebido com cuidado ✓'">
+        <div class="form-row">
+          <div class="field full">
+            <label>Nome completo</label>
+            <input type="text" placeholder="Como devemos chamá-lo" required>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="field">
+            <label>Telefone</label>
+            <input type="tel" placeholder="+55 (11)" required>
+          </div>
+          <div class="field">
+            <label>E-mail</label>
+            <input type="email" placeholder="seu@email.com" required>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="field full">
+            <label>Tratamento de interesse</label>
+            <select>
+              <option>Selecione o tratamento</option>
+              <option>Dentística</option>
+              <option>Ortodontia e Ortopedia</option>
+              <option>Cirurgia</option>
+              <option>Prótese</option>
+              <option>Implantes</option>
+              <option>Endodontia</option>
+              <option>Periodontia</option>
+              <option>Clínico Geral</option>
+              <option>Ainda estou descobrindo</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="field full">
+            <label>Mensagem</label>
+            <textarea placeholder="Conte um pouco sobre o que você procura..."></textarea>
+          </div>
+        </div>
+
+        <div class="form-bottom">
+          <p class="form-disclaimer">
+            Sua mensagem é lida pessoalmente pela equipe e respondida com a mesma discrição que tratamos cada paciente.
+          </p>
+          <button type="submit" class="submit-btn">Enviar</button>
+        </div>
+      </form>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand-text">
+        <div class="footer-brand">
+          <div class="mark">F</div>
+          <div>
+            <div class="name">Folha & Co.</div>
+            <div class="tagline">Odontologia Integrativa</div>
+          </div>
+        </div>
+        <p>Casa de odontologia dedicada à arte do detalhe em estética dental, implantes e harmonização facial. Atendimento por reserva.</p>
+      </div>
+      <div class="footer-col">
+        <h5>Navegação</h5>
+        <ul>
+          <li><a href="#sobre">Sobre</a></li>
+          <li><a href="#tratamentos">Tratamentos</a></li>
+          <li><a href="#abordagem">Abordagem</a></li>
+          <li><a href="#pacientes">Pacientes</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Tratamentos</h5>
+        <ul>
+          <li><a href="#tratamentos">Dentística</a></li>
+          <li><a href="#tratamentos">Ortodontia</a></li>
+          <li><a href="#tratamentos">Implantes</a></li>
+          <li><a href="#tratamentos">Prótese</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Canais</h5>
+        <ul>
+          <li><a href="#">Instagram</a></li>
+          <li><a href="#">WhatsApp</a></li>
+          <li><a href="#">LinkedIn</a></li>
+          <li><a href="#contato">Agendar</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div>© 2026 Folha & Co. · CRO/SP 24.119</div>
+      <div>São Paulo, Brasil</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+// Nav scroll
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => {
+  if(window.scrollY > 60){
+    nav.classList.add('scrolled');
+  } else {
+    nav.classList.remove('scrolled');
+  }
+});
+
+// Reveal on scroll
+const reveals = document.querySelectorAll('.reveal');
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if(e.isIntersecting){
+      e.target.classList.add('in');
+      io.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
+reveals.forEach(el => io.observe(el));
+
+// Treatments accordion
+document.querySelectorAll('[data-toggle]').forEach(header => {
+  header.addEventListener('click', () => {
+    const parent = header.closest('[data-treatment]');
+    const isOpen = parent.classList.contains('open');
+    document.querySelectorAll('[data-treatment]').forEach(t => t.classList.remove('open'));
+    if(!isOpen) parent.classList.add('open');
+  });
+});
+
+// Abre o primeiro tratamento por padrão
+document.querySelector('[data-treatment]')?.classList.add('open');
+</script>
+
+</body>
+</html>

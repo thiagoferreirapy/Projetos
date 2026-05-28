@@ -1,0 +1,2590 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>MARQUEE — Arquitetura & Inteligência Construtiva</title>
+<meta name="description" content="Marquee Arquitetura — Inteligência construtiva, metodologia BIM e compatibilização de projetos. Brasília, DF." />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+<!-- GSAP + ScrollTrigger for smooth scroll-driven animations -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+<!-- BULLETPROOF LOADER REMOVAL — runs in HEAD, no dependencies -->
+<script>
+  (function(){
+    // Hide loader after 1800ms no matter what
+    var SPLASH_MS = 1800;
+    function killLoader(){
+      var l = document.getElementById('loader');
+      if (!l) return;
+      l.style.transition = 'opacity .6s ease, visibility .6s ease';
+      l.style.opacity = '0';
+      l.style.visibility = 'hidden';
+      l.style.pointerEvents = 'none';
+      if (document.body) document.body.style.overflow = '';
+      // Hard-remove after fade
+      setTimeout(function(){
+        if (l && l.parentNode) l.parentNode.removeChild(l);
+      }, 700);
+    }
+    // Multiple triggers so SOMETHING always fires:
+    setTimeout(killLoader, SPLASH_MS);
+    setTimeout(killLoader, 4000); // safety net
+    if (document.readyState === 'complete') {
+      setTimeout(killLoader, SPLASH_MS);
+    } else {
+      window.addEventListener('load', function(){ setTimeout(killLoader, 300); });
+    }
+    // Tap-to-dismiss: if user gets impatient
+    document.addEventListener('DOMContentLoaded', function(){
+      var l = document.getElementById('loader');
+      if (l) {
+        l.addEventListener('click', killLoader);
+        l.addEventListener('touchstart', killLoader);
+      }
+    });
+  })();
+</script>
+
+<style>
+/* ===============================================
+   FOUNDATION
+=============================================== */
+:root{
+  --bone: #efeae1;
+  --bone-soft: #f4f0e8;
+  --bone-deep: #e6dfd2;
+  --ink: #1a1816;
+  --ink-soft: #2a2724;
+  --graphite: #6b655d;
+  --stone: #b7ad9e;
+  --terra: #8e6a4a;
+  --terra-deep: #6f5034;
+  --line: rgba(26,24,22,0.12);
+  --line-soft: rgba(26,24,22,0.06);
+
+  --serif: "Fraunces", "Times New Roman", serif;
+  --sans: "Manrope", system-ui, sans-serif;
+
+  --ease: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+*,*::before,*::after{ box-sizing:border-box; margin:0; padding:0; }
+
+html{
+  scroll-behavior:smooth;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+}
+
+body{
+  font-family:var(--sans);
+  background:var(--bone);
+  color:var(--ink);
+  font-weight:400;
+  line-height:1.6;
+  overflow-x:hidden;
+  font-size:16px;
+}
+
+img{ display:block; max-width:100%; height:auto; }
+
+a{ color:inherit; text-decoration:none; }
+
+::selection{ background:var(--ink); color:var(--bone); }
+
+/* Custom scrollbar */
+::-webkit-scrollbar{ width:8px; }
+::-webkit-scrollbar-track{ background:var(--bone); }
+::-webkit-scrollbar-thumb{ background:var(--graphite); }
+
+/* ===============================================
+   LOADER
+=============================================== */
+.loader{
+  position:fixed; inset:0; z-index:9999;
+  background:var(--ink);
+  display:flex; align-items:center; justify-content:center;
+  transition: opacity 1.1s var(--ease), visibility 1.1s var(--ease);
+}
+.loader.is-done{ opacity:0; visibility:hidden; }
+
+.loader-mark{
+  font-family:var(--serif);
+  font-size:clamp(2.2rem, 6vw, 3.4rem);
+  font-weight:300;
+  color:var(--bone);
+  letter-spacing:0.18em;
+  font-feature-settings: "ss01";
+  position:relative;
+  overflow:hidden;
+}
+.loader-mark span{
+  display:inline-block;
+  transform:translateY(110%);
+  animation: rise 1.1s var(--ease-out) forwards;
+}
+.loader-mark span:nth-child(1){ animation-delay:.05s; }
+.loader-mark span:nth-child(2){ animation-delay:.12s; }
+.loader-mark span:nth-child(3){ animation-delay:.19s; }
+.loader-mark span:nth-child(4){ animation-delay:.26s; }
+.loader-mark span:nth-child(5){ animation-delay:.33s; }
+.loader-mark span:nth-child(6){ animation-delay:.40s; }
+.loader-mark span:nth-child(7){ animation-delay:.47s; }
+
+@keyframes rise{
+  to{ transform:translateY(0); }
+}
+
+.loader-bar{
+  position:absolute; bottom:0; left:0; height:1px;
+  background:var(--bone);
+  width:0;
+  animation: loaderBar 1.6s var(--ease) forwards;
+}
+@keyframes loaderBar{
+  to{ width:100%; }
+}
+
+/* ===============================================
+   NAVIGATION
+=============================================== */
+.nav{
+  position:fixed; top:0; left:0; right:0; z-index:100;
+  padding:1.8rem 2.4rem;
+  display:flex; justify-content:space-between; align-items:center;
+  color:var(--bone);
+  background:transparent;
+  border-bottom:1px solid transparent;
+  transition:
+    padding .6s var(--ease),
+    background-color .6s var(--ease),
+    color .6s var(--ease),
+    border-color .6s var(--ease),
+    box-shadow .6s var(--ease),
+    backdrop-filter .6s var(--ease);
+}
+.nav.is-scrolled{
+  padding:1rem 2.4rem;
+  background:rgba(244, 240, 232, 0.92);
+  backdrop-filter: blur(14px) saturate(1.05);
+  -webkit-backdrop-filter: blur(14px) saturate(1.05);
+  color:var(--ink);
+  border-bottom-color:var(--line-soft);
+  box-shadow: 0 1px 30px -10px rgba(26,24,22,0.08);
+}
+@media (max-width:720px){
+  .nav.is-scrolled{ padding:.85rem 1.4rem; }
+}
+
+.nav-brand{
+  font-family:var(--serif);
+  font-size:1.35rem;
+  font-weight:300;
+  letter-spacing:0.22em;
+  font-feature-settings:"ss01";
+  display:flex;
+  align-items:center;
+  gap:.8rem;
+}
+.nav-brand .dot{
+  display:inline-block;
+  width:5px; height:5px; border-radius:50%;
+  background:currentColor;
+  vertical-align:middle;
+  margin:0 .25em;
+  transform:translateY(-2px);
+}
+
+/* Logo do nav — dois SVGs sobrepostos, alterna conforme o estado */
+.nav-logo-wrap{
+  position:relative;
+  width:2.6rem;
+  height:1.8rem;
+  flex-shrink:0;
+}
+.nav-logo{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  display:block;
+  transition: opacity .6s var(--ease);
+}
+.nav-logo--dark{ opacity:0; }
+.nav.is-scrolled .nav-logo--light{ opacity:0; }
+.nav.is-scrolled .nav-logo--dark{ opacity:1; }
+@media (max-width:720px){
+  .nav-logo-wrap{ width:2.1rem; height:1.45rem; }
+  .nav-brand{ gap:.6rem; }
+}
+
+.nav-right{
+  display:flex; align-items:center; gap:2rem;
+}
+.nav-meta{
+  font-size:.72rem;
+  letter-spacing:0.25em;
+  text-transform:uppercase;
+  font-weight:400;
+}
+@media (max-width:720px){
+  .nav-meta{ display:none; }
+  .nav{ padding:1.2rem 1.4rem; }
+}
+
+.menu-btn{
+  background:none; border:none; cursor:pointer;
+  color:inherit;
+  display:flex; align-items:center; gap:.7rem;
+  font-family:var(--sans);
+  font-size:.72rem;
+  letter-spacing:0.28em;
+  text-transform:uppercase;
+  padding:.5rem 0;
+}
+.menu-btn-lines{
+  display:flex; flex-direction:column; gap:5px;
+  width:24px;
+}
+.menu-btn-lines span{
+  height:1px; background:currentColor;
+  display:block;
+  transition: transform .4s var(--ease);
+}
+.menu-btn-lines span:nth-child(1){ width:24px; }
+.menu-btn-lines span:nth-child(2){ width:16px; margin-left:auto; }
+
+.menu-btn:hover .menu-btn-lines span:nth-child(2){ width:24px; }
+
+/* Menu overlay */
+.menu-overlay{
+  position:fixed; inset:0; z-index:200;
+  background:var(--ink);
+  color:var(--bone);
+  pointer-events:none;
+  opacity:0;
+  transition: opacity .6s var(--ease);
+}
+.menu-overlay.is-open{
+  opacity:1;
+  pointer-events:auto;
+}
+
+.menu-inner{
+  height:100%;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  padding:2.4rem;
+  gap:3rem;
+}
+@media (max-width:880px){
+  .menu-inner{ grid-template-columns:1fr; padding-top:5rem; }
+}
+
+.menu-left{
+  display:flex; flex-direction:column; justify-content:space-between;
+}
+.menu-close{
+  align-self:flex-start;
+  background:none; border:none; color:var(--bone);
+  cursor:pointer;
+  font-size:.72rem; letter-spacing:0.28em; text-transform:uppercase;
+  display:flex; align-items:center; gap:.7rem;
+  padding:.5rem 0;
+}
+.menu-close .x{
+  width:18px; height:18px; position:relative;
+}
+.menu-close .x::before,
+.menu-close .x::after{
+  content:""; position:absolute; left:0; top:50%;
+  width:100%; height:1px; background:currentColor;
+}
+.menu-close .x::before{ transform:rotate(45deg); }
+.menu-close .x::after{ transform:rotate(-45deg); }
+
+.menu-footer{
+  font-size:.78rem;
+  letter-spacing:0.06em;
+  color:rgba(239,234,225,0.55);
+  line-height:1.7;
+}
+.menu-footer strong{
+  display:block;
+  font-weight:500;
+  font-size:.7rem;
+  letter-spacing:0.28em;
+  text-transform:uppercase;
+  color:var(--bone);
+  margin-bottom:.7rem;
+}
+
+.menu-nav{
+  display:flex; flex-direction:column; justify-content:center;
+}
+.menu-nav ol{
+  list-style:none;
+  display:flex; flex-direction:column;
+  gap:.4rem;
+}
+.menu-nav li{
+  overflow:hidden;
+}
+.menu-nav a{
+  font-family:var(--serif);
+  font-size:clamp(2.4rem, 6.5vw, 5rem);
+  font-weight:300;
+  line-height:1.1;
+  letter-spacing:-0.02em;
+  display:inline-block;
+  position:relative;
+  transition: transform .6s var(--ease), color .4s ease;
+  padding:.1em 0;
+  font-feature-settings:"ss01";
+}
+.menu-nav a .num{
+  font-family:var(--sans);
+  font-size:.7rem;
+  font-weight:400;
+  letter-spacing:0.3em;
+  vertical-align:super;
+  margin-right:.6em;
+  color:rgba(239,234,225,0.4);
+  position:relative;
+  top:-1.3em;
+}
+.menu-nav a em{
+  font-style:italic;
+  font-variation-settings:"SOFT" 100, "WONK" 1;
+}
+.menu-nav a:hover{
+  transform: translateX(20px);
+  color:var(--stone);
+}
+
+/* Stagger menu items */
+.menu-overlay.is-open .menu-nav li > a{
+  animation: menuRise .9s var(--ease-out) backwards;
+}
+.menu-overlay.is-open .menu-nav li:nth-child(1) > a{ animation-delay:.15s; }
+.menu-overlay.is-open .menu-nav li:nth-child(2) > a{ animation-delay:.22s; }
+.menu-overlay.is-open .menu-nav li:nth-child(3) > a{ animation-delay:.29s; }
+.menu-overlay.is-open .menu-nav li:nth-child(4) > a{ animation-delay:.36s; }
+.menu-overlay.is-open .menu-nav li:nth-child(5) > a{ animation-delay:.43s; }
+@keyframes menuRise{
+  from{ transform:translateY(110%); opacity:0; }
+  to{ transform:translateY(0); opacity:1; }
+}
+
+/* ===============================================
+   HERO
+=============================================== */
+.hero{
+  position:relative;
+  height:100vh;
+  min-height:640px;
+  overflow:hidden;
+  background:var(--ink);
+}
+.hero-media{
+  position:absolute; inset:-10% 0 -10% 0;
+  z-index:1;
+  will-change:transform;
+}
+.hero-media img{
+  width:100%; height:100%;
+  object-fit:cover;
+  filter:brightness(.7) contrast(1.05);
+}
+.hero-media::after{
+  content:"";
+  position:absolute; inset:0;
+  background: linear-gradient(180deg, rgba(0,0,0,0.25) 0%, rgba(0,0,0,0) 35%, rgba(0,0,0,0) 60%, rgba(0,0,0,0.5) 100%);
+  pointer-events:none;
+}
+
+.hero-content{
+  position:relative; z-index:2;
+  height:100%;
+  display:flex; flex-direction:column; justify-content:center;
+  padding:6rem 2.4rem 9rem;
+  color:var(--bone);
+}
+
+.hero-eyebrow{
+  font-size:.72rem;
+  letter-spacing:0.32em;
+  text-transform:uppercase;
+  margin-bottom:1.6rem;
+  display:flex; align-items:center; gap:1rem;
+  opacity:0;
+  animation: fadeUp 1.1s var(--ease-out) 1.6s forwards;
+}
+.hero-eyebrow::before{
+  content:""; display:block;
+  width:50px; height:1px; background:currentColor;
+}
+
+.hero-title{
+  font-family:var(--serif);
+  font-weight:300;
+  font-size:clamp(2.6rem, 8vw, 7.5rem);
+  line-height:1;
+  letter-spacing:-0.025em;
+  max-width:14ch;
+  font-feature-settings:"ss01";
+}
+.hero-title .line{
+  display:block;
+  overflow:hidden;
+  padding-bottom: 0.2em; /* descender clearance — g, p, q, ç */
+}
+.hero-title .line span{
+  display:inline-block;
+  transform:translateY(120%);  /* matches expanded .line height so start stays fully hidden */
+  animation: rise 1.2s var(--ease-out) forwards;
+}
+.hero-title .line:nth-child(1) span{ animation-delay:1.7s; }
+.hero-title .line:nth-child(2) span{ animation-delay:1.85s; }
+.hero-title .line:nth-child(3) span{ animation-delay:2.0s; }
+
+.hero-title em{
+  font-style:italic;
+  font-variation-settings:"SOFT" 100, "WONK" 1;
+  color:var(--stone);
+}
+
+.hero-foot{
+  position:absolute;
+  bottom:2rem; left:0; right:0;
+  padding:0 2.4rem;
+  display:flex; justify-content:space-between; align-items:flex-end;
+  color:var(--bone);
+  z-index:3;
+  pointer-events:none;
+  opacity:0;
+  animation: fadeUp 1.1s var(--ease-out) 2.4s forwards;
+}
+.hero-foot-item{
+  font-size:.72rem;
+  letter-spacing:0.22em;
+  text-transform:uppercase;
+  max-width:280px;
+  line-height:1.7;
+}
+.hero-foot-item strong{
+  display:block;
+  font-weight:500;
+  font-family:var(--serif);
+  font-size:2.4rem;
+  letter-spacing:-0.02em;
+  text-transform:none;
+  margin-bottom:.2rem;
+  line-height:1;
+}
+
+.scroll-cue{
+  position:absolute;
+  bottom:2rem; left:50%;
+  transform:translateX(-50%);
+  color:var(--bone);
+  z-index:3;
+  font-size:.7rem;
+  letter-spacing:0.32em;
+  text-transform:uppercase;
+  display:flex; flex-direction:column; align-items:center; gap:.8rem;
+  opacity:0;
+  animation: fadeUp 1.1s var(--ease-out) 2.6s forwards;
+  pointer-events:none;
+}
+.scroll-cue-line{
+  width:1px; height:50px;
+  background:linear-gradient(180deg, var(--bone) 50%, transparent 50%);
+  background-size:100% 200%;
+  animation: scrollLine 2.4s ease-in-out infinite;
+}
+@keyframes scrollLine{
+  0%{ background-position: 0 -100%; }
+  100%{ background-position: 0 100%; }
+}
+@media (max-width:720px){
+  .scroll-cue{ display:none; }
+  .hero-content{ padding: 5rem 1.4rem 15rem; }
+  .hero-eyebrow{ margin-bottom: 1rem; }
+  .hero-foot{
+    flex-direction:column;
+    gap:1.2rem;
+    align-items:flex-start;
+    padding: 0 1.4rem;
+    bottom: 2.5rem;
+  }
+  .hero-foot-item{
+    max-width: none;
+    line-height: 1.6;
+    font-size: .65rem;
+  }
+  .hero-foot-item strong{
+    font-size: 1.7rem;
+    margin-bottom: .15rem;
+  }
+  .hero-foot-item:last-child{ text-align: left !important; }
+}
+
+@keyframes fadeUp{
+  from{ opacity:0; transform:translateY(30px); }
+  to{ opacity:1; transform:translateY(0); }
+}
+
+/* ===============================================
+   MANIFESTO / INTRO
+=============================================== */
+.section{
+  position:relative;
+  padding:8rem 2.4rem;
+}
+@media (max-width:720px){
+  .section{ padding:5rem 1.4rem; }
+}
+
+.section-marker{
+  display:flex; align-items:center; gap:1rem;
+  font-size:.7rem;
+  letter-spacing:0.28em;
+  text-transform:uppercase;
+  color:var(--graphite);
+  margin-bottom:3rem;
+}
+.section-marker .num{
+  font-family:var(--serif);
+  font-style:italic;
+  font-size:1rem;
+  letter-spacing:0;
+  text-transform:none;
+  color:var(--terra-deep);
+  font-variation-settings:"SOFT" 100, "WONK" 1;
+}
+.section-marker::after{
+  content:""; flex:1; height:1px; background:var(--line);
+}
+
+.manifesto{
+  display:grid;
+  grid-template-columns: 1fr 1.4fr;
+  gap:6rem;
+  align-items:start;
+}
+@media (max-width:880px){
+  .manifesto{ grid-template-columns:1fr; gap:2.5rem; }
+}
+
+.manifesto-aside{
+  position:sticky; top:8rem;
+}
+@media (max-width:880px){
+  .manifesto-aside{ position:static; top:auto; }
+}
+.manifesto-aside p{
+  font-size:.8rem;
+  letter-spacing:0.06em;
+  color:var(--graphite);
+  line-height:1.8;
+  max-width:32ch;
+}
+
+.manifesto-body{
+  font-family:var(--serif);
+  font-weight:300;
+  font-size:clamp(1.6rem, 3.4vw, 2.7rem);
+  line-height:1.25;
+  letter-spacing:-0.015em;
+  color:var(--ink);
+  max-width:24ch;
+  font-feature-settings:"ss01";
+}
+.manifesto-body em{
+  font-style:italic;
+  color:var(--terra-deep);
+  font-variation-settings:"SOFT" 100, "WONK" 1;
+}
+.manifesto-body .reveal-word{
+  display:inline-block;
+  overflow:hidden;
+}
+.manifesto-body .reveal-word span{
+  display:inline-block;
+  transform:translateY(110%);
+  transition: transform 1s var(--ease-out);
+}
+.manifesto.is-visible .reveal-word span{
+  transform:translateY(0);
+}
+
+.signature{
+  margin-top:3rem;
+  display:flex; gap:2rem; align-items:center;
+  padding-top:2rem;
+  border-top:1px solid var(--line);
+}
+.signature-mark{
+  font-family:var(--serif);
+  font-style:italic;
+  font-size:1.6rem;
+  font-weight:400;
+  color:var(--terra-deep);
+  font-variation-settings:"SOFT" 100, "WONK" 1;
+}
+.signature-text{
+  font-size:.74rem;
+  letter-spacing:0.18em;
+  text-transform:uppercase;
+  color:var(--graphite);
+  line-height:1.6;
+}
+
+/* ===============================================
+   PROJECTS — Sticky text + parallax images
+=============================================== */
+.projects{
+  background:var(--bone-soft);
+  padding-bottom:8rem;
+}
+
+.projects-head{
+  display:flex; justify-content:space-between; align-items:flex-end;
+  margin-bottom:6rem;
+  gap:2rem;
+  flex-wrap:wrap;
+}
+.projects-title{
+  font-family:var(--serif);
+  font-weight:300;
+  font-size:clamp(2.4rem, 6vw, 5.4rem);
+  line-height:1;
+  letter-spacing:-0.025em;
+  font-feature-settings:"ss01";
+}
+.projects-title em{
+  font-style:italic;
+  font-variation-settings:"SOFT" 100, "WONK" 1;
+  color:var(--terra-deep);
+}
+.projects-count{
+  font-size:.72rem;
+  letter-spacing:0.28em;
+  text-transform:uppercase;
+  color:var(--graphite);
+  font-family:var(--sans);
+  padding-bottom:.5rem;
+}
+
+/* Stories container */
+.project-stories{
+  display:flex;
+  flex-direction:column;
+  gap:5rem;
+}
+@media (max-width:880px){
+  .project-stories{ gap:4rem; }
+}
+
+.project-story{
+  display:grid;
+  grid-template-columns: 1fr 1.1fr;
+  gap:5rem;
+  align-items:start;
+  position:relative;
+  /* tall enough for image stack to scroll through */
+  min-height: 220vh;
+}
+@media (max-width:880px){
+  .project-story{
+    grid-template-columns: 1fr;
+    gap:2.5rem;
+    min-height:0;
+  }
+}
+
+/* LEFT — sticky text column */
+.project-story-text{
+  position:sticky;
+  top:18vh;
+  padding-right:1rem;
+}
+@media (max-width:880px){
+  .project-story-text{
+    position:static;
+    padding-right:0;
+  }
+}
+
+.story-num{
+  font-family:var(--serif);
+  font-style:italic;
+  font-size:1rem;
+  color:var(--terra-deep);
+  font-variation-settings:"SOFT" 100, "WONK" 1;
+  display:block;
+  margin-bottom:1.2rem;
+}
+.story-cat{
+  font-size:.7rem;
+  letter-spacing:0.28em;
+  text-transform:uppercase;
+  color:var(--graphite);
+  display:block;
+  margin-bottom:1.2rem;
+}
+.story-title{
+  font-family:var(--serif);
+  font-weight:300;
+  font-size:clamp(2.2rem, 4.4vw, 3.6rem);
+  line-height:1.0;
+  letter-spacing:-0.025em;
+  margin-bottom:2rem;
+  font-feature-settings:"ss01";
+}
+.story-title em{
+  font-style:italic;
+  color:var(--terra-deep);
+  font-variation-settings:"SOFT" 100, "WONK" 1;
+}
+.story-desc{
+  font-size:1rem;
+  color:var(--ink-soft);
+  line-height:1.75;
+  margin-bottom:2.4rem;
+  max-width:42ch;
+}
+.story-specs{
+  list-style:none;
+  display:grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap:1.2rem;
+  border-top:1px solid var(--line);
+  border-bottom:1px solid var(--line);
+  padding:1.6rem 0;
+  margin-bottom:2.2rem;
+}
+.story-specs li strong{
+  display:block;
+  font-size:.62rem;
+  letter-spacing:0.28em;
+  text-transform:uppercase;
+  color:var(--graphite);
+  margin-bottom:.5rem;
+  font-weight:500;
+}
+.story-specs li span{
+  font-family:var(--serif);
+  font-size:.95rem;
+  font-weight:400;
+  font-feature-settings:"ss01";
+  color:var(--ink);
+}
+.story-btn{
+  background:none;
+  border:none;
+  cursor:pointer;
+  font-family:var(--sans);
+  font-size:.72rem;
+  letter-spacing:0.3em;
+  text-transform:uppercase;
+  color:var(--ink);
+  display:inline-flex;
+  align-items:center;
+  gap:1rem;
+  padding:.8rem 0;
+  position:relative;
+  transition: gap .4s var(--ease);
+}
+.story-btn::after{
+  content:"";
+  position:absolute;
+  bottom:0; left:0; right:0;
+  height:1px;
+  background:var(--ink);
+  transform-origin:left;
+  transition: transform .5s var(--ease);
+}
+.story-btn:hover{ gap:1.5rem; }
+.story-btn:hover::after{ transform: scaleX(0); transform-origin:right; }
+.story-btn svg{
+  width:18px; height:12px;
+  transition: transform .4s var(--ease);
+}
+.story-btn:hover svg{ transform: translateX(4px); }
+
+/* RIGHT — sticky image stack */
+.project-story-images{
+  position:sticky;
+  top:12vh;
+  width:100%;
+  height:76vh;
+  overflow:hidden;
+  background:var(--bone-deep);
+}
+@media (max-width:880px){
+  .project-story-images{
+    position:static;
+    height:auto;
+    overflow:visible;
+    display:flex;
+    flex-direction:column;
+    gap:1rem;
+  }
+}
+
+.story-img{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  overflow:hidden;
+  cursor:pointer;
+  will-change: transform;
+}
+/* Stack order — later images sit on top to slide over earlier ones */
+.story-img:nth-child(1){ z-index:1; }
+.story-img:nth-child(2){ z-index:2; }
+.story-img:nth-child(3){ z-index:3; }
+.story-img:nth-child(4){ z-index:4; }
+
+@media (max-width:880px){
+  .story-img{
+    position:relative;
+    inset:auto;
+    height:auto;
+    aspect-ratio: 4/3;
+    transform:none !important;
+  }
+}
+
+.story-img img{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  filter: saturate(0.95);
+  transition: filter .6s ease;
+}
+.story-img:hover img{ filter: saturate(1.05); }
+
+/* Image caption */
+.story-img-caption{
+  position:absolute;
+  bottom:1rem; left:1rem;
+  z-index:5;
+  font-size:.6rem;
+  letter-spacing:0.28em;
+  text-transform:uppercase;
+  color:var(--bone);
+  background:rgba(26,24,22,0.55);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  padding:.5rem .8rem;
+  opacity:0;
+  transform: translateY(8px);
+  transition: opacity .5s ease, transform .5s var(--ease);
+}
+.story-img:hover .story-img-caption{
+  opacity:1; transform: translateY(0);
+}
+
+/* Counter overlay */
+.story-counter{
+  position:absolute;
+  top:1.2rem; right:1.2rem;
+  z-index:50;
+  font-family:var(--serif);
+  font-size:.95rem;
+  color:var(--bone);
+  background:rgba(26,24,22,0.55);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  padding:.5rem .9rem;
+  letter-spacing:0.12em;
+  font-feature-settings:"ss01";
+  font-weight:400;
+  display:flex; align-items:center; gap:.3rem;
+  pointer-events:none;
+}
+.story-counter-divider{
+  opacity:.5;
+  margin: 0 .1rem;
+}
+.story-counter-total{ opacity:.7; }
+@media (max-width:880px){
+  .story-counter{ display:none; }
+}
+
+/* ===============================================
+   ABOUT / PHILOSOPHY
+=============================================== */
+.about{
+  position:relative;
+  overflow:hidden;
+}
+
+.about-grid{
+  display:grid;
+  grid-template-columns: 1.05fr 1fr;
+  gap:5rem;
+  align-items:start;
+}
+@media (max-width:880px){
+  .about-grid{ grid-template-columns:1fr; gap:3rem; }
+}
+
+/* LEFT — dual image stack with editorial offset */
+.about-media-stack{
+  position:relative;
+  display:flex;
+  flex-direction:column;
+  gap:2.4rem;
+}
+
+.about-media{
+  position:relative;
+  overflow:hidden;
+}
+.about-media--main{
+  height:68vh;
+  max-height:620px;
+}
+.about-media--secondary{
+  height:38vh;
+  max-height:340px;
+  width:72%;
+  margin-left:28%;  /* offset to the right, pokes toward text */
+}
+@media (max-width:880px){
+  .about-media--main{ height:55vh; }
+  .about-media--secondary{ height:35vh; width:100%; margin-left:0; }
+}
+
+.about-media-inner{
+  position:absolute; inset:-10% 0;
+  will-change:transform;
+}
+.about-media-inner img{
+  width:100%; height:100%;
+  object-fit:cover;
+  filter:saturate(.9) contrast(1.04);
+}
+
+.about-caption{
+  position:absolute;
+  bottom:1.2rem; left:1.2rem;
+  background:var(--bone);
+  padding:.7rem 1.1rem;
+  font-size:.64rem;
+  letter-spacing:0.24em;
+  text-transform:uppercase;
+  color:var(--ink);
+  font-family:var(--sans);
+  z-index:3;
+}
+
+/* RIGHT — content */
+.about-content{
+  padding-top:1rem;
+}
+
+.about-content h3{
+  font-family:var(--serif);
+  font-weight:300;
+  font-size:clamp(2rem, 4.4vw, 3.6rem);
+  line-height:1.1;
+  letter-spacing:-0.02em;
+  margin-bottom:2rem;
+  font-feature-settings:"ss01";
+  max-width:18ch;
+}
+.about-content h3 em{
+  font-style:italic;
+  color:var(--terra-deep);
+  font-variation-settings:"SOFT" 100, "WONK" 1;
+}
+
+.about-content p{
+  font-size:1rem;
+  color:var(--ink-soft);
+  line-height:1.8;
+  margin-bottom:1.2rem;
+  max-width:46ch;
+}
+.about-content p.drop::first-letter{
+  font-family:var(--serif);
+  font-size:3.6em;
+  float:left;
+  line-height:1;
+  margin: .05em .15em -.05em -.02em;
+  color:var(--terra-deep);
+  font-weight:400;
+  font-feature-settings:"ss01";
+}
+
+/* Editorial pull quote */
+.about-quote{
+  margin:3rem 0 2rem;
+  padding:2.2rem 0 2.2rem 2rem;
+  border-left:2px solid var(--terra-deep);
+  font-family:var(--serif);
+  font-weight:300;
+  font-size:clamp(1.3rem, 2.2vw, 1.7rem);
+  line-height:1.4;
+  letter-spacing:-0.01em;
+  color:var(--ink);
+  font-feature-settings:"ss01";
+  max-width:48ch;
+}
+.about-quote em{
+  font-style:italic;
+  color:var(--terra-deep);
+  font-variation-settings:"SOFT" 100, "WONK" 1;
+}
+.about-quote cite{
+  display:block;
+  margin-top:1.2rem;
+  font-family:var(--sans);
+  font-size:.66rem;
+  font-style:normal;
+  letter-spacing:0.28em;
+  text-transform:uppercase;
+  color:var(--graphite);
+}
+
+.about-stats{
+  margin-top:3rem;
+  display:grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap:1.5rem;
+  border-top:1px solid var(--line);
+  padding-top:2rem;
+}
+.about-stat .num{
+  font-family:var(--serif);
+  font-size:clamp(2rem, 4.2vw, 3.2rem);
+  font-weight:300;
+  line-height:1;
+  color:var(--ink);
+  letter-spacing:-0.02em;
+  display:block;
+  margin-bottom:.4rem;
+}
+.about-stat .num em{
+  font-style:italic;
+  color:var(--terra-deep);
+  font-variation-settings:"SOFT" 100, "WONK" 1;
+}
+.about-stat .lbl{
+  font-size:.66rem;
+  letter-spacing:0.22em;
+  text-transform:uppercase;
+  color:var(--graphite);
+  line-height:1.5;
+}
+
+/* ===============================================
+   SERVICES
+=============================================== */
+.services{
+  background:var(--ink);
+  color:var(--bone);
+  padding:9rem 2.4rem;
+}
+@media (max-width:720px){
+  .services{ padding:5rem 1.4rem; }
+}
+.services .section-marker{ color:rgba(239,234,225,0.55); }
+.services .section-marker::after{ background:rgba(239,234,225,0.15); }
+.services .section-marker .num{ color:var(--stone); }
+
+.services-head{
+  font-family:var(--serif);
+  font-weight:300;
+  font-size:clamp(2.4rem, 6vw, 5.4rem);
+  line-height:1.05;
+  letter-spacing:-0.025em;
+  margin-bottom:5rem;
+  font-feature-settings:"ss01";
+  max-width:18ch;
+}
+.services-head em{
+  font-style:italic;
+  color:var(--stone);
+  font-variation-settings:"SOFT" 100, "WONK" 1;
+}
+
+.service-list{
+  list-style:none;
+  border-top:1px solid rgba(239,234,225,0.15);
+}
+.service{
+  border-bottom:1px solid rgba(239,234,225,0.15);
+  display:grid;
+  grid-template-columns: 80px 1fr 2fr auto;
+  gap:2rem;
+  padding:2.4rem 0;
+  align-items:center;
+  position:relative;
+  cursor:pointer;
+}
+@media (max-width:880px){
+  .service{
+    grid-template-columns: 36px 1fr auto;
+    grid-template-rows: auto auto;
+    column-gap: .9rem;
+    row-gap: .1rem;
+    padding: 1.6rem 0;
+    align-items: start;
+  }
+  .service-num{
+    grid-row: 1;
+    grid-column: 1;
+    padding-top: .35rem;
+    font-size: .85rem;
+  }
+  .service-name{
+    grid-row: 1;
+    grid-column: 2;
+  }
+  .service-arrow{
+    grid-row: 1;
+    grid-column: 3;
+    width: 36px;
+    height: 36px;
+    margin-top: .2rem;
+  }
+  .service-arrow svg{
+    width: 11px; height: 11px;
+  }
+  .service-desc{
+    grid-row: 2;
+    grid-column: 2 / 4;
+    margin-top: .8rem;
+    font-size: .82rem;
+    line-height: 1.6;
+    max-width: none;
+  }
+}
+
+/* === Color transitions (no size changes) === */
+.service-num,
+.service-name,
+.service-name em,
+.service-desc,
+.service-arrow{
+  transition: color .55s var(--ease), background-color .55s var(--ease), border-color .55s var(--ease);
+}
+
+/* --- Idle state (no hover anywhere) — medium brightness --- */
+.service-num{
+  font-family:var(--serif);
+  font-size:1rem;
+  font-style:italic;
+  color:rgba(239,234,225,0.55);
+  font-variation-settings:"SOFT" 100, "WONK" 1;
+}
+
+.service-name{
+  font-family:var(--serif);
+  font-weight:300;
+  font-size:clamp(1.5rem, 3vw, 2.4rem);
+  line-height:1.1;
+  letter-spacing:-0.015em;
+  font-feature-settings:"ss01";
+  color:rgba(239,234,225,0.78);
+}
+.service-name em{
+  font-style:italic;
+  font-variation-settings:"SOFT" 100, "WONK" 1;
+  color:var(--stone);
+}
+
+.service-desc{
+  font-size:.88rem;
+  line-height:1.7;
+  max-width:38ch;
+  color:rgba(239,234,225,0.45);
+}
+
+.service-arrow{
+  width:46px; height:46px;
+  border:1px solid rgba(239,234,225,0.25);
+  border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  flex-shrink:0;
+  color:rgba(239,234,225,0.65);
+}
+.service-arrow svg{
+  width:14px; height:14px;
+  transition: transform .45s var(--ease);
+}
+
+/* --- When list is being hovered → dim ALL items --- */
+.service-list:hover .service .service-num{ color:rgba(239,234,225,0.18); }
+.service-list:hover .service .service-name{ color:rgba(239,234,225,0.28); }
+.service-list:hover .service .service-name em{ color:rgba(239,234,225,0.28); }
+.service-list:hover .service .service-desc{ color:rgba(239,234,225,0.18); }
+.service-list:hover .service .service-arrow{
+  border-color:rgba(239,234,225,0.08);
+  color:rgba(239,234,225,0.22);
+  background:transparent;
+}
+
+/* --- The actively hovered item → brightest --- */
+.service-list:hover .service:hover .service-num{ color:var(--stone); }
+.service-list:hover .service:hover .service-name{ color:var(--bone); }
+.service-list:hover .service:hover .service-name em{ color:var(--stone); }
+.service-list:hover .service:hover .service-desc{ color:rgba(239,234,225,0.92); }
+.service-list:hover .service:hover .service-arrow{
+  background:var(--bone);
+  border-color:var(--bone);
+  color:var(--ink);
+}
+.service-list:hover .service:hover .service-arrow svg{
+  transform: translate(2px,-2px);
+}
+
+/* ===============================================
+   METODOLOGIA BIM
+=============================================== */
+.method{
+  background:var(--bone-soft);
+  padding:9rem 2.4rem;
+}
+@media (max-width:720px){ .method{ padding:5rem 1.4rem; } }
+.method-head{
+  font-family:var(--serif);
+  font-weight:300;
+  font-size:clamp(2.4rem, 6vw, 5.4rem);
+  line-height:1.05;
+  letter-spacing:-0.025em;
+  margin-bottom:1.5rem;
+  font-feature-settings:"ss01";
+  max-width:18ch;
+}
+.method-head em{
+  font-style:italic;
+  color:var(--terra-deep);
+  font-variation-settings:"SOFT" 100, "WONK" 1;
+}
+.method-lead{
+  font-size:1.05rem;
+  color:var(--ink-soft);
+  line-height:1.75;
+  max-width:60ch;
+  margin-bottom:4rem;
+}
+.method-grid{
+  display:grid;
+  grid-template-columns:repeat(3, 1fr);
+  gap:2.5rem;
+  border-top:1px solid var(--line);
+  padding-top:3rem;
+}
+@media (max-width:880px){
+  .method-grid{ grid-template-columns:1fr; gap:2.5rem; }
+}
+.method-item{
+  display:flex; flex-direction:column;
+  gap:1.2rem;
+}
+.method-item .num{
+  font-family:var(--serif);
+  font-style:italic;
+  font-size:1rem;
+  color:var(--terra-deep);
+  font-variation-settings:"SOFT" 100, "WONK" 1;
+}
+.method-item h4{
+  font-family:var(--serif);
+  font-weight:300;
+  font-size:clamp(1.4rem, 2.4vw, 1.9rem);
+  line-height:1.15;
+  letter-spacing:-0.015em;
+  font-feature-settings:"ss01";
+}
+.method-item h4 em{
+  font-style:italic;
+  color:var(--terra-deep);
+  font-variation-settings:"SOFT" 100, "WONK" 1;
+}
+.method-item p{
+  font-size:.94rem;
+  color:var(--ink-soft);
+  line-height:1.7;
+}
+.method-cta{
+  margin-top:3.5rem;
+  display:inline-flex;
+  align-items:center;
+  gap:1rem;
+  padding:1.2rem 2.4rem;
+  background:var(--ink);
+  color:var(--bone);
+  font-family:var(--sans);
+  font-size:.72rem;
+  letter-spacing:0.3em;
+  text-transform:uppercase;
+  transition: gap .4s var(--ease), background .4s ease;
+  cursor:pointer;
+  border:none;
+}
+.method-cta:hover{ gap:1.5rem; background:var(--terra-deep); }
+.method-cta svg{ width:16px; height:16px; }
+
+/* ===============================================
+   PARCEIROS
+=============================================== */
+.partners{
+  background:var(--bone);
+  padding:7rem 2.4rem;
+  border-top:1px solid var(--line);
+}
+@media (max-width:720px){ .partners{ padding:4rem 1.4rem; } }
+.partners-head{
+  font-family:var(--serif);
+  font-weight:300;
+  font-size:clamp(1.8rem, 4vw, 3rem);
+  letter-spacing:-0.02em;
+  font-feature-settings:"ss01";
+  margin-bottom:1rem;
+}
+.partners-head em{
+  font-style:italic;
+  color:var(--terra-deep);
+  font-variation-settings:"SOFT" 100, "WONK" 1;
+}
+.partners-lead{
+  font-size:.95rem;
+  color:var(--graphite);
+  max-width:54ch;
+  margin-bottom:3rem;
+  line-height:1.7;
+}
+/* Marquee infinito */
+.partners-marquee{
+  position:relative;
+  overflow:hidden;
+  border-top:1px solid var(--line);
+  border-bottom:1px solid var(--line);
+  padding:2.5rem 0;
+  /* fades nas laterais para o loop parecer infinito sem corte */
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 8%, #000 92%, transparent 100%);
+          mask-image: linear-gradient(90deg, transparent 0, #000 8%, #000 92%, transparent 100%);
+}
+.partners-track{
+  display:flex;
+  width:max-content;
+  gap:1.5rem;
+  animation: partnersScroll 32s linear infinite;
+  will-change: transform;
+}
+.partners-marquee:hover .partners-track{
+  animation-play-state: paused;
+}
+@keyframes partnersScroll{
+  from{ transform: translateX(0); }
+  to  { transform: translateX(-50%); }   /* metade da track = 1 ciclo dos itens originais */
+}
+.partner-card{
+  flex:0 0 auto;
+  width:160px; height:160px;
+  display:flex; align-items:center; justify-content:center;
+  border:1px solid var(--line);
+  font-family:var(--serif);
+  font-weight:300;
+  font-size:2rem;
+  color:var(--graphite);
+  background:var(--bone);
+  transition: color .4s var(--ease), border-color .4s var(--ease), background .4s var(--ease);
+  font-feature-settings:"ss01";
+}
+.partner-card:hover{
+  color:var(--ink);
+  border-color:var(--ink);
+  background:var(--bone-soft);
+}
+@media (max-width:720px){
+  .partner-card{ width:120px; height:120px; font-size:1.5rem; }
+  .partners-track{ gap:1rem; animation-duration:24s; }
+}
+@media (prefers-reduced-motion: reduce){
+  .partners-track{ animation: none; }
+}
+
+/* ===============================================
+   PARALLAX SHOWCASE
+=============================================== */
+.showcase{
+  position:relative;
+  height:90vh; min-height:600px;
+  overflow:hidden;
+}
+.showcase-media{
+  position:absolute; inset:-15% 0;
+  will-change:transform;
+}
+.showcase-media img{
+  width:100%; height:100%;
+  object-fit:cover;
+}
+.showcase-media::after{
+  content:"";
+  position:absolute; inset:0;
+  background:linear-gradient(135deg, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0) 50%, rgba(0,0,0,0.3) 100%);
+}
+
+.showcase-overlay{
+  position:absolute; inset:0; z-index:2;
+  display:flex; align-items:center; justify-content:center;
+  padding:2rem;
+  text-align:center;
+  color:var(--bone);
+}
+.showcase-overlay-text{
+  font-family:var(--serif);
+  font-weight:300;
+  font-size:clamp(2rem, 5.5vw, 4.6rem);
+  line-height:1.15;
+  letter-spacing:-0.02em;
+  max-width:18ch;
+  font-feature-settings:"ss01";
+}
+.showcase-overlay-text em{
+  font-style:italic;
+  font-variation-settings:"SOFT" 100, "WONK" 1;
+}
+.showcase-byline{
+  position:absolute; bottom:1.5rem; left:2.4rem;
+  z-index:3;
+  font-size:.7rem;
+  letter-spacing:0.28em;
+  text-transform:uppercase;
+  color:rgba(239,234,225,0.7);
+}
+
+/* ===============================================
+   CONTACT
+=============================================== */
+.contact{
+  background:var(--bone);
+  padding:9rem 2.4rem 4rem;
+}
+@media (max-width:720px){
+  .contact{ padding:5rem 1.4rem 3rem; }
+}
+
+.contact-head{
+  font-family:var(--serif);
+  font-weight:300;
+  font-size:clamp(2.6rem, 8vw, 7rem);
+  line-height:0.95;
+  letter-spacing:-0.025em;
+  margin-bottom:5rem;
+  font-feature-settings:"ss01";
+}
+.contact-head em{
+  font-style:italic;
+  color:var(--terra-deep);
+  font-variation-settings:"SOFT" 100, "WONK" 1;
+}
+
+.contact-grid{
+  display:grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap:5rem;
+  margin-bottom:5rem;
+}
+@media (max-width:880px){
+  .contact-grid{ grid-template-columns:1fr; gap:3rem; }
+}
+
+.contact-form{
+  display:flex; flex-direction:column;
+  gap:.4rem;
+}
+.field{
+  border-bottom:1px solid var(--line);
+  padding:1.2rem 0;
+  position:relative;
+}
+.field label{
+  display:block;
+  font-size:.66rem;
+  letter-spacing:0.28em;
+  text-transform:uppercase;
+  color:var(--graphite);
+  margin-bottom:.5rem;
+}
+.field input,
+.field textarea,
+.field select{
+  width:100%;
+  background:transparent;
+  border:none;
+  outline:none;
+  font-family:var(--serif);
+  font-size:1.4rem;
+  font-weight:300;
+  color:var(--ink);
+  resize:none;
+  padding:.2rem 0;
+  font-feature-settings:"ss01";
+}
+.field select{ font-family:var(--sans); font-size:1rem; }
+.field textarea{ min-height:90px; line-height:1.5; }
+.field input::placeholder,
+.field textarea::placeholder{
+  color:var(--stone);
+  opacity:.7;
+  font-style:italic;
+  font-variation-settings:"SOFT" 100, "WONK" 1;
+}
+.field::after{
+  content:""; position:absolute; bottom:-1px; left:0;
+  height:1px; background:var(--ink);
+  width:0; transition: width .5s var(--ease);
+}
+.field:focus-within::after{ width:100%; }
+
+.submit{
+  margin-top:2rem;
+  align-self:flex-start;
+  background:var(--ink);
+  color:var(--bone);
+  border:none;
+  font-family:var(--sans);
+  font-size:.74rem;
+  letter-spacing:0.3em;
+  text-transform:uppercase;
+  padding:1.3rem 2.6rem;
+  cursor:pointer;
+  display:inline-flex; align-items:center; gap:1rem;
+  transition: gap .4s var(--ease), background .4s ease;
+  position:relative;
+  overflow:hidden;
+}
+.submit::before{
+  content:""; position:absolute; inset:0;
+  background:var(--terra-deep);
+  transform:translateY(100%);
+  transition: transform .5s var(--ease);
+  z-index:0;
+}
+.submit:hover::before{ transform:translateY(0); }
+.submit span{ position:relative; z-index:1; }
+.submit:hover{ gap:1.4rem; }
+.submit svg{ width:16px; height:16px; position:relative; z-index:1; }
+
+.contact-info{
+  display:flex; flex-direction:column; gap:2.4rem;
+}
+.contact-block strong{
+  display:block;
+  font-size:.7rem;
+  letter-spacing:0.3em;
+  text-transform:uppercase;
+  color:var(--graphite);
+  margin-bottom:.7rem;
+}
+.contact-block p, .contact-block a{
+  font-family:var(--serif);
+  font-size:1.2rem;
+  font-weight:400;
+  line-height:1.5;
+  letter-spacing:-0.005em;
+  font-feature-settings:"ss01";
+  color:var(--ink);
+}
+.contact-block a{
+  border-bottom:1px solid transparent;
+  transition:border-color .3s ease;
+}
+.contact-block a:hover{ border-bottom-color:var(--ink); }
+.contact-block em{
+  font-style:italic;
+  color:var(--terra-deep);
+  font-variation-settings:"SOFT" 100, "WONK" 1;
+}
+
+/* ===============================================
+   FOOTER
+=============================================== */
+.footer{
+  background:var(--bone);
+  padding:2rem 2.4rem 2rem;
+  border-top:1px solid var(--line);
+  display:flex; justify-content:space-between; align-items:flex-end;
+  gap:2rem;
+  flex-wrap:wrap;
+  font-size:.7rem;
+  letter-spacing:0.22em;
+  text-transform:uppercase;
+  color:var(--graphite);
+}
+@media (max-width:720px){
+  .footer{ padding:1.5rem 1.4rem; }
+}
+.footer-mark{
+  font-family:var(--serif);
+  font-size:clamp(4rem, 16vw, 12rem);
+  font-weight:300;
+  line-height:.9;
+  letter-spacing:-0.04em;
+  color:var(--ink);
+  width:100%;
+  font-feature-settings:"ss01";
+  margin-bottom:1.5rem;
+  overflow:hidden;
+}
+.footer-mark em{
+  font-style:italic;
+  color:var(--terra-deep);
+  font-variation-settings:"SOFT" 100, "WONK" 1;
+}
+
+/* ===============================================
+   REVEAL ANIMATIONS
+=============================================== */
+.reveal{
+  opacity:0;
+  transform:translateY(40px);
+  transition: opacity 1s var(--ease-out), transform 1s var(--ease-out);
+}
+.reveal.is-visible{
+  opacity:1; transform:translateY(0);
+}
+.reveal-delay-1{ transition-delay: .1s; }
+.reveal-delay-2{ transition-delay: .2s; }
+.reveal-delay-3{ transition-delay: .3s; }
+
+/* ===============================================
+   PROJECT MODAL
+=============================================== */
+.project-modal{
+  position:fixed; inset:0; z-index:300;
+  background:var(--bone);
+  overflow-y:auto;
+  opacity:0;
+  pointer-events:none;
+  transition: opacity .6s var(--ease);
+}
+.project-modal.is-open{
+  opacity:1;
+  pointer-events:auto;
+}
+
+.modal-close{
+  position:fixed; top:1.5rem; right:1.5rem;
+  z-index:10;
+  background:var(--ink); color:var(--bone);
+  border:none;
+  width:48px; height:48px;
+  border-radius:50%;
+  cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+  font-size:1.2rem;
+  transition: transform .4s var(--ease);
+}
+.modal-close:hover{ transform:rotate(90deg); }
+
+.modal-inner{
+  max-width:1200px;
+  margin:0 auto;
+  padding:5rem 2.4rem;
+}
+@media (max-width:720px){
+  .modal-inner{ padding:4rem 1.4rem; }
+}
+
+.modal-hero{
+  height:70vh; min-height:480px;
+  overflow:hidden;
+  margin-bottom:3rem;
+}
+.modal-hero img{ width:100%; height:100%; object-fit:cover; }
+
+.modal-meta-grid{
+  display:grid;
+  grid-template-columns: 2fr 1fr;
+  gap:4rem;
+  margin-bottom:5rem;
+}
+@media (max-width:720px){
+  .modal-meta-grid{ grid-template-columns:1fr; gap:2rem; }
+}
+
+.modal-title{
+  font-family:var(--serif);
+  font-weight:300;
+  font-size:clamp(2.4rem, 6vw, 4.8rem);
+  line-height:1;
+  letter-spacing:-0.025em;
+  margin-bottom:1.5rem;
+  font-feature-settings:"ss01";
+}
+.modal-title em{
+  font-style:italic;
+  color:var(--terra-deep);
+  font-variation-settings:"SOFT" 100, "WONK" 1;
+}
+.modal-desc{
+  font-size:1.05rem;
+  line-height:1.75;
+  color:var(--ink-soft);
+  max-width:55ch;
+}
+
+.modal-specs{
+  display:flex; flex-direction:column; gap:1.4rem;
+}
+.spec strong{
+  display:block;
+  font-size:.66rem;
+  letter-spacing:0.28em;
+  text-transform:uppercase;
+  color:var(--graphite);
+  margin-bottom:.3rem;
+}
+.spec p{
+  font-family:var(--serif);
+  font-size:1rem;
+  font-feature-settings:"ss01";
+}
+
+.modal-gallery{
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap:1.5rem;
+}
+@media (max-width:720px){
+  .modal-gallery{ grid-template-columns:1fr; }
+}
+.modal-gallery > *:first-child{ grid-column: 1 / -1; }
+.modal-gallery img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  aspect-ratio: 4/3;
+}
+
+/* ===============================================
+   UTILS
+=============================================== */
+.split-line{
+  overflow:hidden;
+  display:block;
+}
+.split-line > span{
+  display:inline-block;
+  transform:translateY(110%);
+  transition: transform 1s var(--ease-out);
+}
+.is-visible .split-line > span{ transform:translateY(0); }
+
+/* Cursor (subtle, desktop only) */
+@media (hover: hover) and (pointer: fine){
+  .cursor{
+    position:fixed;
+    pointer-events:none;
+    width:8px; height:8px;
+    border-radius:50%;
+    background:var(--ink);
+    transform:translate(-50%,-50%);
+    z-index:1000;
+    mix-blend-mode:difference;
+    transition: width .3s ease, height .3s ease, background .3s ease;
+    will-change:transform;
+  }
+  .cursor.is-hovering{
+    width:60px; height:60px;
+    background:var(--bone);
+    mix-blend-mode:difference;
+  }
+}
+@media (hover: none){
+  .cursor{ display:none; }
+}
+
+</style>
+</head>
+<body>
+
+<!-- Custom cursor -->
+<div class="cursor" id="cursor"></div>
+
+<!-- Loader -->
+<div class="loader" id="loader">
+  <div class="loader-mark">
+    <span>M</span><span>A</span><span>R</span><span>Q</span><span>U</span><span>E</span><span>E</span>
+  </div>
+  <div class="loader-bar"></div>
+</div>
+
+<!-- Navigation -->
+<nav class="nav" id="nav">
+  <a href="#" class="nav-brand">
+    <span class="nav-logo-wrap" aria-hidden="true">
+      <img src="assets/logo-white.svg" alt="" class="nav-logo nav-logo--light"/>
+      <img src="assets/logo-dark.svg" alt="" class="nav-logo nav-logo--dark"/>
+    </span>
+    <span>MARQUEE<span class="dot"></span>ARQUITETURA</span>
+  </a>
+  <div class="nav-right">
+    <span class="nav-meta">Brasília · DF</span>
+    <button class="menu-btn" id="menuOpen" aria-label="Abrir menu">
+      <span>Menu</span>
+      <span class="menu-btn-lines"><span></span><span></span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- Menu overlay -->
+<div class="menu-overlay" id="menuOverlay">
+  <div class="menu-inner">
+    <div class="menu-left">
+      <button class="menu-close" id="menuClose">
+        <span>Fechar</span>
+        <span class="x"></span>
+      </button>
+      <div class="menu-footer">
+        <strong>Contato</strong>
+        contato@marquee.arq.br<br>
+        (61) 99633·0939<br><br>
+        <strong>Endereço</strong>
+        Av. Jacarandá, 47 · Ed. Águas Claras Center<br>
+        Águas Claras, Brasília · DF
+      </div>
+    </div>
+    <nav class="menu-nav">
+      <ol>
+        <li><a href="#experiencia" data-menu><span class="num">01</span>Experi<em>ê</em>ncia</a></li>
+        <li><a href="#equipe" data-menu><span class="num">02</span>Equipe</a></li>
+        <li><a href="#servicos" data-menu><span class="num">03</span>Servi<em>ç</em>os</a></li>
+        <li><a href="#metodologia" data-menu><span class="num">04</span><em>Metodologia</em></a></li>
+        <li><a href="#contato" data-menu><span class="num">05</span>Contato</a></li>
+      </ol>
+    </nav>
+  </div>
+</div>
+
+<!-- ===== HERO ===== -->
+<section class="hero" id="hero">
+  <div class="hero-media" data-parallax="0.4">
+    <img src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=2000&q=85&auto=format" alt="Projeto arquitetônico em compatibilização BIM" loading="eager"/>
+  </div>
+  <div class="hero-content">
+    <p class="hero-eyebrow">Marquee Arquitetura · Inteligência Construtiva</p>
+    <h1 class="hero-title">
+      <span class="line"><span>Inteligência</span></span>
+      <span class="line"><span><em>construtiva</em> para</span></span>
+      <span class="line"><span>projetos sem improviso.</span></span>
+    </h1>
+  </div>
+  <div class="hero-foot">
+    <div class="hero-foot-item">
+      <strong>75+</strong>
+      Projetos<br>entregues
+    </div>
+    <div class="hero-foot-item" style="text-align:right;">
+      <strong>1MM+</strong>
+      m²<br>projetados
+    </div>
+  </div>
+  <div class="scroll-cue">
+    <span>Conheça quem resolve</span>
+    <span class="scroll-cue-line"></span>
+  </div>
+</section>
+
+<!-- ===== MANIFESTO ===== -->
+<section class="section">
+  <div class="section-marker"><span class="num">01</span><span>Manifesto</span></div>
+  <div class="manifesto" data-reveal>
+    <aside class="manifesto-aside">
+      <p>Transformamos a complexidade da obra em previsibilidade técnica. Seja para o seu novo lar ou para o seu negócio, atuamos com rigor normativo e antecipação de problemas — para assegurar que o que foi desenhado seja exatamente o que será construído.</p>
+    </aside>
+    <div>
+      <p class="manifesto-body">
+        <span class="reveal-word"><span>Compatibilizar</span></span>
+        <span class="reveal-word"><span>não é</span></span>
+        <span class="reveal-word"><span>uma <em>etapa</em>,</span></span>
+        <span class="reveal-word"><span>é um</span></span>
+        <span class="reveal-word"><span><em>método</em>.</span></span>
+      </p>
+      <div class="signature">
+        <span class="signature-mark">Marquee Arquitetura</span>
+        <span class="signature-text">Arquitetos · Engenheiros<br>BIM Managers</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== EXPERIÊNCIA ===== -->
+<section class="section projects" id="experiencia">
+  <div class="section-marker"><span class="num">02</span><span>Experiência</span></div>
+  <div class="projects-head">
+    <h2 class="projects-title">Design para um mundo<br>em <em>transformação</em></h2>
+    <span class="projects-count">+ de 75 obras · +1.000.000 m²</span>
+  </div>
+
+  <div class="project-stories">
+
+    <!-- ÁREA 01 — Residencial -->
+    <article class="project-story"
+      data-project='{"title":"Residencial de Alto Padrão","loc":"Brasília · DF","year":"2024","cat":"Residencial","desc":"Projetos completos para o seu novo lar — da concepção arquitetônica à entrega da obra. Atuamos com modelagem BIM integrada, compatibilizando arquitetura, estrutura e instalações para que cada metro quadrado desenhado seja construído com eficiência e zero retrabalho.","area":"até 2.000 m²","status":"Atuação contínua","img":"https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1800&q=85&auto=format","gallery":["https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=1400&q=80","https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?w=1400&q=80","https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=1400&q=80"]}'>
+      <div class="project-story-text">
+        <span class="story-num">01 / 04</span>
+        <span class="story-cat">Residencial</span>
+        <h3 class="story-title">Residencial de<br><em>alto padrão</em></h3>
+        <p class="story-desc">Projetos completos para o seu novo lar — da concepção arquitetônica à entrega da obra. Atuamos com modelagem BIM integrada, compatibilizando arquitetura, estrutura e instalações para que cada metro quadrado desenhado seja construído com eficiência.</p>
+        <ul class="story-specs">
+          <li><strong>Escopo</strong><span>Arquitetura + BIM</span></li>
+          <li><strong>Escala</strong><span>até 2.000 m²</span></li>
+          <li><strong>Entregas</strong><span>+30 obras</span></li>
+        </ul>
+        <button class="story-btn">
+          Ver área completa
+          <svg viewBox="0 0 24 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 8h20M16 2l6 6-6 6"/></svg>
+        </button>
+      </div>
+      <div class="project-story-images">
+        <div class="story-counter">
+          <span class="story-counter-current">01</span>
+          <span class="story-counter-divider">/</span>
+          <span class="story-counter-total">03</span>
+        </div>
+        <div class="story-img">
+          <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1600&q=85&auto=format" alt="Residência de alto padrão — fachada"/>
+          <span class="story-img-caption">Fachada · concreto e vidro</span>
+        </div>
+        <div class="story-img">
+          <img src="https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=1600&q=85&auto=format" alt="Residência — sala integrada"/>
+          <span class="story-img-caption">Living integrado · marcenaria sob medida</span>
+        </div>
+        <div class="story-img">
+          <img src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?w=1600&q=85&auto=format" alt="Residência — área externa"/>
+          <span class="story-img-caption">Área de lazer · piscina e jardim</span>
+        </div>
+      </div>
+    </article>
+
+    <!-- ÁREA 02 — Corporativo -->
+    <article class="project-story"
+      data-project='{"title":"Corporativo & Comercial","loc":"Brasília · DF","year":"2024","cat":"Corporativo","desc":"Edifícios corporativos, escritórios e empreendimentos comerciais com rigor normativo e antecipação de gargalos. Nossa metodologia BIM extrai quantitativos exatos antes da obra começar, transformando incerteza orçamentária em previsibilidade.","area":"até 25.000 m²","status":"Atuação contínua","img":"https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=1400&q=85&auto=format","gallery":["https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?w=1400&q=80","https://images.unsplash.com/photo-1600210491892-03d54c0aaf87?w=1400&q=80"]}'>
+      <div class="project-story-text">
+        <span class="story-num">02 / 04</span>
+        <span class="story-cat">Corporativo · Comercial</span>
+        <h3 class="story-title">Corporativo &amp;<br><em>comercial</em></h3>
+        <p class="story-desc">Edifícios corporativos, escritórios e empreendimentos comerciais com rigor normativo e antecipação de gargalos. Nossa metodologia BIM extrai quantitativos exatos antes da obra começar, transformando incerteza orçamentária em previsibilidade.</p>
+        <ul class="story-specs">
+          <li><strong>Escopo</strong><span>Projeto + Coord.</span></li>
+          <li><strong>Escala</strong><span>até 25.000 m²</span></li>
+          <li><strong>Entregas</strong><span>+20 obras</span></li>
+        </ul>
+        <button class="story-btn">
+          Ver área completa
+          <svg viewBox="0 0 24 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 8h20M16 2l6 6-6 6"/></svg>
+        </button>
+      </div>
+      <div class="project-story-images">
+        <div class="story-counter">
+          <span class="story-counter-current">01</span>
+          <span class="story-counter-divider">/</span>
+          <span class="story-counter-total">03</span>
+        </div>
+        <div class="story-img">
+          <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=1600&q=85&auto=format" alt="Edifício corporativo — fachada"/>
+          <span class="story-img-caption">Fachada corporativa · vidro estrutural</span>
+        </div>
+        <div class="story-img">
+          <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=1600&q=85&auto=format" alt="Escritório corporativo"/>
+          <span class="story-img-caption">Escritório · planta livre</span>
+        </div>
+        <div class="story-img">
+          <img src="https://images.unsplash.com/photo-1600210491892-03d54c0aaf87?w=1600&q=85&auto=format" alt="Empreendimento comercial — átrio"/>
+          <span class="story-img-caption">Átrio comercial · iluminação zenital</span>
+        </div>
+      </div>
+    </article>
+
+    <!-- ÁREA 03 — Hospitalidade & Saúde -->
+    <article class="project-story"
+      data-project='{"title":"Hospitalidade & Saúde","loc":"Brasília · DF","year":"2024","cat":"Hospitalidade · Saúde","desc":"Hotéis, clínicas, hospitais e empreendimentos com altíssima complexidade técnica. Aqui o detalhe operacional é tudo — coordenamos disciplinas críticas (hidráulica, gases, climatização) com clash detection digital para eliminar conflitos no canteiro.","area":"até 15.000 m²","status":"Atuação contínua","img":"https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?w=1400&q=85&auto=format","gallery":["https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=1400&q=80","https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1400&q=80"]}'>
+      <div class="project-story-text">
+        <span class="story-num">03 / 04</span>
+        <span class="story-cat">Hospitalidade · Saúde</span>
+        <h3 class="story-title">Hospitalidade<br>&amp; <em>Saúde</em></h3>
+        <p class="story-desc">Hotéis, clínicas e hospitais com altíssima complexidade técnica. Aqui o detalhe operacional é tudo — coordenamos disciplinas críticas (hidráulica, gases, climatização) com clash detection digital para eliminar conflitos no canteiro.</p>
+        <ul class="story-specs">
+          <li><strong>Escopo</strong><span>Projeto + BIM</span></li>
+          <li><strong>Escala</strong><span>até 15.000 m²</span></li>
+          <li><strong>Disciplinas</strong><span>8+ integradas</span></li>
+        </ul>
+        <button class="story-btn">
+          Ver área completa
+          <svg viewBox="0 0 24 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 8h20M16 2l6 6-6 6"/></svg>
+        </button>
+      </div>
+      <div class="project-story-images">
+        <div class="story-counter">
+          <span class="story-counter-current">01</span>
+          <span class="story-counter-divider">/</span>
+          <span class="story-counter-total">03</span>
+        </div>
+        <div class="story-img">
+          <img src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?w=1600&q=85&auto=format" alt="Hospitalidade — lobby"/>
+          <span class="story-img-caption">Lobby · iluminação cênica</span>
+        </div>
+        <div class="story-img">
+          <img src="https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=1600&q=85&auto=format" alt="Hospitalidade — corredor"/>
+          <span class="story-img-caption">Eixo de circulação</span>
+        </div>
+        <div class="story-img">
+          <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1600&q=85&auto=format" alt="Suíte de hotel"/>
+          <span class="story-img-caption">Suíte · acabamentos premium</span>
+        </div>
+      </div>
+    </article>
+
+    <!-- ÁREA 04 — Industrial & Infraestrutura -->
+    <article class="project-story"
+      data-project='{"title":"Industrial & Infraestrutura","loc":"Brasil","year":"2024","cat":"Industrial · Infraestrutura","desc":"Galpões logísticos, plantas industriais e infraestrutura de grande porte. Coordenamos a interface entre estrutura, instalações e processo produtivo, resolvendo choques entre disciplinas (estrutura × hidráulica × ar-condicionado) antes do início da obra física.","area":"até 50.000 m²","status":"Atuação contínua","img":"https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?w=1800&q=85&auto=format","gallery":["https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1400&q=80","https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1400&q=80"]}'>
+      <div class="project-story-text">
+        <span class="story-num">04 / 04</span>
+        <span class="story-cat">Industrial · Infraestrutura</span>
+        <h3 class="story-title">Industrial &amp;<br><em>infraestrutura</em></h3>
+        <p class="story-desc">Galpões logísticos, plantas industriais e infraestrutura de grande porte. Coordenamos a interface entre estrutura, instalações e processo produtivo, resolvendo choques entre disciplinas antes do início da obra física.</p>
+        <ul class="story-specs">
+          <li><strong>Escopo</strong><span>BIM + Coord.</span></li>
+          <li><strong>Escala</strong><span>até 50.000 m²</span></li>
+          <li><strong>Compatibiliz.</strong><span>100% digital</span></li>
+        </ul>
+        <button class="story-btn">
+          Ver área completa
+          <svg viewBox="0 0 24 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 8h20M16 2l6 6-6 6"/></svg>
+        </button>
+      </div>
+      <div class="project-story-images">
+        <div class="story-counter">
+          <span class="story-counter-current">01</span>
+          <span class="story-counter-divider">/</span>
+          <span class="story-counter-total">03</span>
+        </div>
+        <div class="story-img">
+          <img src="https://images.unsplash.com/photo-1565514020179-026b92b84bb6?w=1600&q=85&auto=format" alt="Galpão industrial — estrutura metálica"/>
+          <span class="story-img-caption">Estrutura metálica · galpão logístico</span>
+        </div>
+        <div class="story-img">
+          <img src="https://images.unsplash.com/photo-1581094288338-2314dddb7ece?w=1600&q=85&auto=format" alt="Planta industrial — interior"/>
+          <span class="story-img-caption">Interior · instalações coordenadas</span>
+        </div>
+        <div class="story-img">
+          <img src="https://images.unsplash.com/photo-1600573472556-e636c2acda88?w=1600&q=85&auto=format" alt="Modelo BIM — vista isométrica"/>
+          <span class="story-img-caption">Modelo BIM · clash detection</span>
+        </div>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+<!-- ===== PARALLAX SHOWCASE ===== -->
+<section class="showcase">
+  <div class="showcase-media" data-parallax="0.35">
+    <img src="https://images.unsplash.com/photo-1581094288338-2314dddb7ece?w=2000&q=85&auto=format" alt="Detalhe técnico arquitetônico"/>
+  </div>
+  <div class="showcase-overlay">
+    <h2 class="showcase-overlay-text">
+      Onde muitos veem complexidade,<br>nós enxergamos <em>lógica</em>.
+    </h2>
+  </div>
+  <div class="showcase-byline">Modelo BIM · compatibilização preventiva · clash detection</div>
+</section>
+
+<!-- ===== EQUIPE ===== -->
+<section class="section about" id="equipe">
+  <div class="section-marker"><span class="num">03</span><span>Equipe</span></div>
+
+  <div class="about-grid">
+    <div class="about-media-stack">
+      <div class="about-media about-media--main">
+        <div class="about-media-inner" data-parallax="0.2">
+          <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=1600&q=85&auto=format" alt="Time multidisciplinar Marquee" loading="lazy"/>
+        </div>
+        <span class="about-caption">Ateliê · Águas Claras · DF</span>
+      </div>
+      <div class="about-media about-media--secondary">
+        <div class="about-media-inner" data-parallax="0.14">
+          <img src="https://images.unsplash.com/photo-1554995207-c18c203602cb?w=1400&q=85&auto=format" alt="Mesa de trabalho · prancha técnica" loading="lazy"/>
+        </div>
+        <span class="about-caption">Coordenação BIM · clash detection</span>
+      </div>
+    </div>
+
+    <div class="about-content reveal">
+      <h3>A ponte segura entre a <em>concepção</em> e a construção.</h3>
+      <p class="drop">Nossa expertise está em traduzir a visão arquitetônica em engenharia de precisão. Preenchemos as lacunas técnicas que costumam encarecer obras, assegurando que cada metro quadrado desenhado possa ser construído com eficiência.</p>
+      <p>Trazemos a segurança de quem já resolveu desafios complexos em centenas de empreendimentos. Atuamos como um time multidisciplinar de arquitetos, engenheiros e BIM Managers — especialistas em compatibilização, transformando conflitos complexos em soluções claras e já resolvidas.</p>
+
+      <blockquote class="about-quote">
+        “Transformar um desenho bonito em um edifício real exige mais do que criatividade — exige <em>vivência de obra</em>.”
+        <cite>— Marquee Arquitetura</cite>
+      </blockquote>
+
+      <div class="about-stats">
+        <div class="about-stat">
+          <span class="num"><em>75+</em></span>
+          <span class="lbl">Projetos<br>entregues</span>
+        </div>
+        <div class="about-stat">
+          <span class="num">1MM+</span>
+          <span class="lbl">m²<br>projetados</span>
+        </div>
+        <div class="about-stat">
+          <span class="num">5+</span>
+          <span class="lbl">Anos em<br>BIM</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== BASTIDORES / SERVIÇOS ===== -->
+<section class="services" id="servicos">
+  <div class="section-marker"><span class="num">04</span><span>Bastidores</span></div>
+  <h2 class="services-head">Uma <em>usina</em> de soluções técnicas.</h2>
+
+  <ul class="service-list">
+    <li class="service reveal">
+      <span class="service-num">01 —</span>
+      <h3 class="service-name"><em>Apoio</em> Técnico</h3>
+      <p class="service-desc">Análise crítica de viabilidade e normas. Revisamos e adequamos projetos para garantir total conformidade com a legislação e eliminar riscos técnicos antes da aprovação.</p>
+      <span class="service-arrow">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 18L18 6M18 6H8M18 6V16"/></svg>
+      </span>
+    </li>
+    <li class="service reveal">
+      <span class="service-num">02 —</span>
+      <h3 class="service-name">Metodologia <em>BIM</em></h3>
+      <p class="service-desc">Implementamos a construção virtual do seu empreendimento. Criamos modelos digitais ricos em dados para extrair quantitativos exatos e simular a obra antes do início físico.</p>
+      <span class="service-arrow">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 18L18 6M18 6H8M18 6V16"/></svg>
+      </span>
+    </li>
+    <li class="service reveal">
+      <span class="service-num">03 —</span>
+      <h3 class="service-name">Arquitetura &amp; <em>Complementares</em></h3>
+      <p class="service-desc">Projeto completo de ponta a ponta. Integramos arquitetura, estrutura e instalações em um único modelo, garantindo que a estética converse perfeitamente com a engenharia.</p>
+      <span class="service-arrow">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 18L18 6M18 6H8M18 6V16"/></svg>
+      </span>
+    </li>
+    <li class="service reveal">
+      <span class="service-num">04 —</span>
+      <h3 class="service-name"><em>Terceirização</em> de Projetos</h3>
+      <p class="service-desc">Atuamos como a "fábrica" do seu escritório. Sua equipe foca na criação e no cliente, enquanto nós assumimos a produção pesada de desenhos técnicos e modelagem 3D.</p>
+      <span class="service-arrow">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 18L18 6M18 6H8M18 6V16"/></svg>
+      </span>
+    </li>
+    <li class="service reveal">
+      <span class="service-num">05 —</span>
+      <h3 class="service-name">Coordenação de <em>Projetos</em></h3>
+      <p class="service-desc">Gerenciamos a interface entre todas as disciplinas. Identificamos choques entre projetos (como estrutura × hidráulica) e resolvemos os conflitos para evitar paradas na obra.</p>
+      <span class="service-arrow">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 18L18 6M18 6H8M18 6V16"/></svg>
+      </span>
+    </li>
+    <li class="service reveal">
+      <span class="service-num">06 —</span>
+      <h3 class="service-name">Consultoria &amp; <em>Cursos</em></h3>
+      <p class="service-desc">Treinamento prático e diagnóstico de processos. Ensinamos sua equipe a utilizar novas tecnologias e otimizamos o fluxo de trabalho do seu escritório para aumentar a produtividade.</p>
+      <span class="service-arrow">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 18L18 6M18 6H8M18 6V16"/></svg>
+      </span>
+    </li>
+  </ul>
+</section>
+
+<!-- ===== METODOLOGIA BIM ===== -->
+<section class="section method" id="metodologia">
+  <div class="section-marker"><span class="num">05</span><span>Metodologia BIM</span></div>
+  <h2 class="method-head">Metodologia BIM <em>completa</em>.</h2>
+  <p class="method-lead">Não somos apenas desenhistas. Somos um time multidisciplinar de arquitetos, engenheiros e BIM Managers comprometidos com a compatibilização total dos projetos. Onde muitos veem complexidade, nós enxergamos lógica, estratégia e soluções já definidas.</p>
+
+  <div class="method-grid">
+    <div class="method-item reveal">
+      <span class="num">i.</span>
+      <h4>Compatibilização <em>Preventiva</em><br>(Clash Detection)</h4>
+      <p>Cruzamos digitalmente os projetos de todas as disciplinas — estrutura, elétrica, hidráulica e ar-condicionado — para identificar interferências físicas. Resolvemos os conflitos no computador, eliminando a necessidade de quebras e improvisos no canteiro de obras.</p>
+    </div>
+    <div class="method-item reveal">
+      <span class="num">ii.</span>
+      <h4>Construção <em>Virtual</em><br>e extração de dados</h4>
+      <p>Simulamos a obra antes da obra. O modelo digital entrega quantitativos exatos, cronogramas confiáveis e visualizações realistas — transformando o orçamento em previsibilidade e o canteiro em sequência lógica de etapas.</p>
+    </div>
+    <div class="method-item reveal">
+      <span class="num">iii.</span>
+      <h4>Refinamento <em>Técnico</em><br>e executivo</h4>
+      <p>Detalhamos cada interface construtiva até o nível executivo. Notas técnicas, especificações de materiais e detalhes de montagem que permitem ao construtor seguir o desenho sem decisões em campo.</p>
+    </div>
+  </div>
+
+  <a href="#contato" class="method-cta" data-menu>
+    Quero conhecer a metodologia
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+  </a>
+</section>
+
+<!-- ===== PARCEIROS ===== -->
+<section class="partners" id="parceiros">
+  <div class="section-marker"><span class="num">06</span><span>Parceiros</span></div>
+  <h3 class="partners-head">Nossos <em>parceiros</em></h3>
+  <p class="partners-lead">Trabalhamos ao lado de parceiros que compartilham dos nossos valores de qualidade, confiança e excelência.</p>
+
+  <div class="partners-marquee" aria-label="Parceiros">
+    <div class="partners-track">
+      <!-- Set 1 -->
+      <div class="partner-card">08</div>
+      <div class="partner-card">14</div>
+      <div class="partner-card">04</div>
+      <div class="partner-card">19</div>
+      <div class="partner-card">15</div>
+      <div class="partner-card">17</div>
+      <!-- Set 2 — duplicata exata p/ loop sem corte -->
+      <div class="partner-card" aria-hidden="true">08</div>
+      <div class="partner-card" aria-hidden="true">14</div>
+      <div class="partner-card" aria-hidden="true">04</div>
+      <div class="partner-card" aria-hidden="true">19</div>
+      <div class="partner-card" aria-hidden="true">15</div>
+      <div class="partner-card" aria-hidden="true">17</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CONTACT ===== -->
+<section class="contact" id="contato">
+  <div class="section-marker"><span class="num">07</span><span>Conversemos</span></div>
+  <h2 class="contact-head">Tem algum <em>projeto</em><br>em mente?</h2>
+
+  <div class="contact-grid">
+    <form class="contact-form" onsubmit="event.preventDefault(); handleSubmit();">
+      <div class="field">
+        <label>Nome</label>
+        <input type="text" placeholder="seu nome completo" required/>
+      </div>
+      <div class="field">
+        <label>E-mail</label>
+        <input type="email" placeholder="seu@email.com" required/>
+      </div>
+      <div class="field">
+        <label>Telefone / Whatsapp</label>
+        <input type="tel" placeholder="(00) 00000-0000" required/>
+      </div>
+      <div class="field">
+        <label>Assunto</label>
+        <input type="text" placeholder="sobre o que deseja falar"/>
+      </div>
+      <div class="field">
+        <label>Mensagem</label>
+        <textarea placeholder="conte-nos brevemente sobre o projeto…" required></textarea>
+      </div>
+      <button type="submit" class="submit">
+        <span>Falar com a Marquee</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </button>
+    </form>
+
+    <aside class="contact-info">
+      <div class="contact-block">
+        <strong>Endereço</strong>
+        <p>Av. Jacarandá Nº 47<br>Ed. Águas Claras Center<br>Águas Claras, Brasília · DF<br>CEP 71.927·540</p>
+      </div>
+      <div class="contact-block">
+        <strong>Contato direto</strong>
+        <p><a href="mailto:contato@marquee.arq.br">contato@marquee.arq.br</a></p>
+        <p>(61) 99633·0939</p>
+      </div>
+      <div class="contact-block">
+        <strong>Compatibilizar não é uma etapa</strong>
+        <p><em>É um método.</em></p>
+      </div>
+      <div class="contact-block">
+        <strong>CNPJ</strong>
+        <p>43.069.252/0001·80</p>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer">
+  <div class="footer-mark">Marquee<em>.</em></div>
+  <div>A Marquee Arquitetura só utiliza softwares originais e legalizados</div>
+  <div>CNPJ 43.069.252/0001·80 · (61) 99633·0939 · contato@marquee.arq.br</div>
+  <div>Av. Jacarandá 47 · Águas Claras · Brasília · DF · CEP 71.927·540</div>
+</footer>
+
+<!-- ===== PROJECT MODAL ===== -->
+<div class="project-modal" id="projectModal">
+  <button class="modal-close" id="modalClose" aria-label="Fechar">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="18" height="18"><path d="M6 6l12 12M6 18L18 6"/></svg>
+  </button>
+  <div class="modal-inner">
+    <div class="modal-hero">
+      <img id="modalHero" src="" alt=""/>
+    </div>
+    <div class="modal-meta-grid">
+      <div>
+        <h2 class="modal-title" id="modalTitle"></h2>
+        <p class="modal-desc" id="modalDesc"></p>
+      </div>
+      <div class="modal-specs">
+        <div class="spec"><strong>Localização</strong><p id="modalLoc"></p></div>
+        <div class="spec"><strong>Ano</strong><p id="modalYear"></p></div>
+        <div class="spec"><strong>Categoria</strong><p id="modalCat"></p></div>
+        <div class="spec"><strong>Área</strong><p id="modalArea"></p></div>
+        <div class="spec"><strong>Status</strong><p id="modalStatus"></p></div>
+      </div>
+    </div>
+    <div class="modal-gallery" id="modalGallery"></div>
+  </div>
+</div>
+
+<script>
+/* ===============================================
+   LOADER is handled by head script (bulletproof)
+=============================================== */
+document.body.style.overflow = 'hidden';
+// Body overflow gets reset by killLoader() in head script
+
+/* ===============================================
+   CUSTOM CURSOR
+=============================================== */
+const cursor = document.getElementById('cursor');
+let mx = 0, my = 0, cx = 0, cy = 0;
+window.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+function loopCursor(){
+  cx += (mx - cx) * 0.18;
+  cy += (my - cy) * 0.18;
+  cursor.style.transform = `translate(${cx}px, ${cy}px) translate(-50%,-50%)`;
+  requestAnimationFrame(loopCursor);
+}
+loopCursor();
+
+document.querySelectorAll('a, button, .story-img, .service, input, textarea, select').forEach(el => {
+  el.addEventListener('mouseenter', () => cursor.classList.add('is-hovering'));
+  el.addEventListener('mouseleave', () => cursor.classList.remove('is-hovering'));
+});
+
+/* ===============================================
+   NAVIGATION SCROLL STATE
+=============================================== */
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => {
+  if (window.scrollY > 60) nav.classList.add('is-scrolled');
+  else nav.classList.remove('is-scrolled');
+});
+
+/* ===============================================
+   MENU OVERLAY
+=============================================== */
+const menuOverlay = document.getElementById('menuOverlay');
+const openMenu = () => {
+  menuOverlay.classList.add('is-open');
+  document.body.style.overflow = 'hidden';
+};
+const closeMenu = () => {
+  menuOverlay.classList.remove('is-open');
+  document.body.style.overflow = '';
+};
+document.getElementById('menuOpen').addEventListener('click', openMenu);
+document.getElementById('menuClose').addEventListener('click', closeMenu);
+document.querySelectorAll('[data-menu]').forEach(a => {
+  a.addEventListener('click', () => setTimeout(closeMenu, 200));
+});
+
+/* ===============================================
+   PARALLAX (smooth, RAF based)
+=============================================== */
+const parallaxEls = document.querySelectorAll('[data-parallax]');
+function updateParallax(){
+  const sy = window.scrollY;
+  const wh = window.innerHeight;
+  parallaxEls.forEach(el => {
+    const rect = el.getBoundingClientRect();
+    const elTop = rect.top + sy;
+    const elH = rect.height;
+    if (rect.bottom < 0 || rect.top > wh) return;
+    const speed = parseFloat(el.dataset.parallax) || 0.3;
+    const offsetFromCenter = (sy + wh/2) - (elTop + elH/2);
+    const translate = offsetFromCenter * speed;
+    el.style.transform = `translate3d(0, ${translate}px, 0)`;
+  });
+}
+
+/* ===============================================
+   PROJECT STORY — GSAP ScrollTrigger (smooth scrub)
+   Each project section pins via CSS sticky; GSAP drives
+   the image stack with smoothed scroll progress.
+=============================================== */
+if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+  gsap.registerPlugin(ScrollTrigger);
+
+  ScrollTrigger.matchMedia({
+    // Desktop only — mobile shows images stacked vertically (no animation)
+    '(min-width: 881px)': function() {
+      document.querySelectorAll('.project-story').forEach(story => {
+        const images = story.querySelectorAll('.story-img');
+        const counter = story.querySelector('.story-counter-current');
+        const n = images.length;
+        if (n < 2) return;
+
+        // Initial state: first image in place, others positioned 100% below
+        gsap.set(images, { yPercent: (i) => i === 0 ? 0 : 100 });
+
+        // Build timeline — each subsequent image slides up to cover the previous
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: story,
+            start: 'top top',
+            end: 'bottom bottom',
+            scrub: 1.2,                 // 1.2s of smoothing — buttery lag
+            invalidateOnRefresh: true,
+            onUpdate: (self) => {
+              if (counter) {
+                const current = Math.min(n, Math.floor(self.progress * n) + 1);
+                const next = String(current).padStart(2, '0');
+                if (counter.textContent !== next) counter.textContent = next;
+              }
+            }
+          }
+        });
+
+        for (let i = 1; i < n; i++) {
+          tl.to(images[i], {
+            yPercent: 0,
+            ease: 'none',               // linear — scrub handles smoothing
+            duration: 1
+          }, i - 1);
+        }
+      });
+
+      return function cleanup() {
+        // Called when matchMedia no longer matches (e.g. resize to mobile)
+        // ScrollTrigger automatically kills triggers, but reset transforms:
+        document.querySelectorAll('.project-story .story-img').forEach(img => {
+          gsap.set(img, { clearProps: 'transform' });
+        });
+      };
+    }
+  });
+}
+
+let ticking = false;
+window.addEventListener('scroll', () => {
+  if (!ticking) {
+    window.requestAnimationFrame(() => {
+      updateParallax();
+      ticking = false;
+    });
+    ticking = true;
+  }
+});
+window.addEventListener('resize', () => { updateParallax(); });
+updateParallax();
+
+/* ===============================================
+   REVEAL ON SCROLL
+=============================================== */
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('is-visible');
+    }
+  });
+}, { threshold: 0.15, rootMargin: '0px 0px -8% 0px' });
+
+document.querySelectorAll('.reveal, [data-reveal]').forEach(el => observer.observe(el));
+
+/* ===============================================
+   PROJECT MODAL
+=============================================== */
+const modal = document.getElementById('projectModal');
+const modalClose = document.getElementById('modalClose');
+
+document.querySelectorAll('.project-story').forEach(project => {
+  const openWithData = () => {
+    const data = JSON.parse(project.dataset.project);
+    document.getElementById('modalHero').src = data.img;
+    document.getElementById('modalTitle').innerHTML = data.title.replace(/(\w+)$/, '<em>$1</em>');
+    document.getElementById('modalDesc').textContent = data.desc;
+    document.getElementById('modalLoc').textContent = data.loc;
+    document.getElementById('modalYear').textContent = data.year;
+    document.getElementById('modalCat').textContent = data.cat;
+    document.getElementById('modalArea').textContent = data.area;
+    document.getElementById('modalStatus').textContent = data.status;
+
+    const gallery = document.getElementById('modalGallery');
+    gallery.innerHTML = '';
+    data.gallery.forEach(src => {
+      const img = document.createElement('img');
+      img.src = src;
+      img.loading = 'lazy';
+      img.alt = data.title;
+      gallery.appendChild(img);
+    });
+
+    modal.classList.add('is-open');
+    modal.scrollTop = 0;
+    document.body.style.overflow = 'hidden';
+  };
+
+  // Open from button OR from clicking any image
+  const btn = project.querySelector('.story-btn');
+  if (btn) btn.addEventListener('click', openWithData);
+
+  project.querySelectorAll('.story-img').forEach(img => {
+    img.addEventListener('click', openWithData);
+  });
+});
+
+const closeModal = () => {
+  modal.classList.remove('is-open');
+  document.body.style.overflow = '';
+};
+modalClose.addEventListener('click', closeModal);
+modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    closeModal();
+    closeMenu();
+  }
+});
+
+/* ===============================================
+   FORM SUBMIT (visual feedback only)
+=============================================== */
+function handleSubmit(){
+  const btn = document.querySelector('.submit span');
+  const original = btn.textContent;
+  btn.textContent = 'Mensagem enviada ·';
+  document.querySelector('.contact-form').reset();
+  setTimeout(() => { btn.textContent = original; }, 3500);
+}
+</script>
+
+</body>
+</html>
